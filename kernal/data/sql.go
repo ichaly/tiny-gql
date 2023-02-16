@@ -10,12 +10,3 @@ var postgresColumns string
 
 //go:embed sql/postgres_functions.sql
 var postgresFunctions string
-
-//go:embed sql/mysql_info.sql
-var mysqlInfo string
-
-//go:embed sql/mysql_columns.sql
-var mysqlColumns string
-
-//go:embed sql/mysql_functions.sql
-var mysqlFunctions string

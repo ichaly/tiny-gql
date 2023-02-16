@@ -62,27 +62,13 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 	var dbSchema, dbName string
 
 	// get db info
-	var sqlSchema string
-	switch dialect {
-	case "mysql":
-		sqlSchema = mysqlInfo
-	default:
-		sqlSchema = postgresInfo
-	}
-	row := db.QueryRow(sqlSchema)
+	row := db.QueryRow(postgresInfo)
 	if row.Scan(&dbVersion, &dbSchema, &dbName) != nil {
 		return nil, err
 	}
 
 	// get columns from db
-	var sqlColumn string
-	switch dialect {
-	case "mysql":
-		sqlColumn = mysqlColumns
-	default:
-		sqlColumn = postgresColumns
-	}
-	rows, err := db.Query(sqlColumn)
+	rows, err := db.Query(postgresColumns)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching columns: %s", err)
 	}
