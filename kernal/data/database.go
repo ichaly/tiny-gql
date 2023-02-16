@@ -7,23 +7,12 @@ import (
 	"strings"
 )
 
-//type tableKey struct {
-//	schema string
-//	table  string
-//}
-//
-//type columnKey struct {
-//	schema string
-//	table  string
-//	column string
-//}
-
 type DBInfo struct {
 	Dialect string
 	Version int
 	Schema  string
 	Name    string
-	Tables  map[string]DBTable
+	Tables  map[string]*DBTable
 	VTables []VirtualTable `json:"-"` // for polymorphic relationships
 
 	hash int
@@ -104,7 +93,7 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 		Version: dbVersion,
 		Schema:  dbSchema,
 		Name:    dbName,
-		Tables:  make(map[string]DBTable),
+		Tables:  make(map[string]*DBTable),
 	}
 
 	// we have to rescan and update columns to overcome
@@ -136,9 +125,10 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 
 		// fill data
 		tk := fmt.Sprintf("%s:%s", c.Schema, c.Table)
+		ck := fmt.Sprintf("%s:%s:%s", c.Schema, c.Table, c.Name)
 		t, ok := di.Tables[tk]
 		if !ok {
-			t = DBTable{
+			t = &DBTable{
 				Name:     c.Table,
 				Schema:   c.Schema,
 				Comment:  c.Description,
@@ -146,19 +136,19 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 				FullText: make(map[string]DBColumn),
 				//Type         string
 			}
+			if isBlock(c.Table, blockList) {
+				t.Blocked = true
+			}
+			di.Tables[tk] = t
 		}
-		if c.PrimaryKey {
-			t.PrimaryCol = c
-		}
-		if isBlock(c.Table, blockList) {
-			t.Blocked = true
-		}
-		ck := fmt.Sprintf("%s:%s:%s", c.Schema, c.Table, c.Name)
-		t.Columns[ck] = c
 		if c.FullText {
 			t.FullText[ck] = c
 		}
-		di.Tables[tk] = t
+		if c.PrimaryKey {
+			t.PrimaryCol = c
+		} else {
+			t.Columns[ck] = c
+		}
 	}
 	return di, nil
 }
