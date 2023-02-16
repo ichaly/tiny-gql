@@ -1,7 +1,7 @@
 go 1.18
 
 use (
-	./kernal
-	./portal
+	./core
+	./serv
 	./test
 )

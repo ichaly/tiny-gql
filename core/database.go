@@ -1,8 +1,9 @@
-package data
+package core
 
 import (
 	"database/sql"
 	"fmt"
+	"github.com/ichaly/tiny-go/core/internal"
 	"regexp"
 	"strings"
 )
@@ -62,13 +63,13 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 	var dbSchema, dbName string
 
 	// get db info
-	row := db.QueryRow(postgresInfo)
+	row := db.QueryRow(internal.PostgresInfo)
 	if row.Scan(&dbVersion, &dbSchema, &dbName) != nil {
 		return nil, err
 	}
 
 	// get columns from db
-	rows, err := db.Query(postgresColumns)
+	rows, err := db.Query(internal.PostgresColumns)
 	if err != nil {
 		return nil, fmt.Errorf("error fetching columns: %s", err)
 	}

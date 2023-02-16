@@ -1,12 +1,12 @@
-package data
+package internal
 
 import _ "embed"
 
 //go:embed sql/postgres_info.sql
-var postgresInfo string
+var PostgresInfo string
 
 //go:embed sql/postgres_columns.sql
-var postgresColumns string
+var PostgresColumns string
 
 //go:embed sql/postgres_functions.sql
-var postgresFunctions string
+var PostgresFunctions string
