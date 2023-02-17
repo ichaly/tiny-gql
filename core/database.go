@@ -37,6 +37,10 @@ type DBTable struct {
 	Blocked    bool
 }
 
+func (my *DBTable) String() string {
+	return my.Schema + "." + my.Name
+}
+
 type DBColumn struct {
 	Comment     *string
 	Name        string
@@ -55,6 +59,21 @@ type DBColumn struct {
 	Schema      string
 	Table       string
 	Description *string
+}
+
+func (my DBColumn) String() string {
+	var sb strings.Builder
+
+	sb.WriteString(fmt.Sprintf("%s.%s.%s", my.Schema, my.Table, my.Name))
+	sb.WriteString(fmt.Sprintf(
+		" [type:%v, array:%t, notNull:%t, fullText:%t]",
+		my.Type, my.Array, my.NotNull, my.FullText,
+	))
+
+	if my.FKeyCol != "" {
+		sb.WriteString(fmt.Sprintf(" -> %s.%s.%s", my.FKeySchema, my.FKeyTable, my.FKeyCol))
+	}
+	return sb.String()
 }
 
 func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) {
