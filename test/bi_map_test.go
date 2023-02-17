@@ -1,15 +1,15 @@
 package test
 
 import (
-	"github.com/ichaly/tiny-go/kernal/base"
+	"github.com/ichaly/tiny-go/core"
 	"strconv"
 	"testing"
 )
 
-var m *base.BiMap[string, int]
+var m *core.BiMap[string, int]
 
 func init() {
-	m = base.NewBiMap[string, int]()
+	m = core.NewBiMap[string, int]()
 	for i := 0; i < 10; i++ {
 		_ = m.Put(strconv.Itoa(i), i)
 	}

@@ -2,8 +2,8 @@ package test
 
 import (
 	"database/sql"
-	"github.com/ichaly/tiny-go/kernal/data"
-	"github.com/json-iterator/go"
+	"github.com/ichaly/tiny-go/core"
+	jsoniter "github.com/json-iterator/go"
 	"testing"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -26,7 +26,7 @@ func init() {
 }
 
 func TestGetDBInfo(t *testing.T) {
-	info, err := data.GetDBInfo(db, dialect, nil)
+	info, err := core.GetDBInfo(db, dialect, nil)
 	if err != nil {
 		panic(err)
 	}
