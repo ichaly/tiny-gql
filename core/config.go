@@ -11,8 +11,6 @@ import (
 )
 
 type Config struct {
-	vi *viper.Viper
-
 	Debug     bool             `jsonschema:"title=Debug,default=false"`
 	Tables    []Table          `jsonschema:"title=Tables"`
 	Resolvers []ResolverConfig `jsonschema:"-"`
@@ -81,6 +79,10 @@ type Delete struct {
 	Block   bool
 }
 
+func ReadInConfig(configFile string) (*Config, error) {
+	return readInConfig(configFile, nil)
+}
+
 func readInConfig(configFile string, fs afero.Fs) (*Config, error) {
 	cp := filepath.Dir(configFile)
 	vi := newViper(cp, filepath.Base(configFile))
@@ -122,7 +124,7 @@ func readInConfig(configFile string, fs afero.Fs) (*Config, error) {
 		}
 	}
 
-	c := &Config{vi: vi}
+	c := &Config{}
 	c.ConfigPath = cp
 
 	if err := vi.Unmarshal(&c); err != nil {
