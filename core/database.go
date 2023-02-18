@@ -19,6 +19,10 @@ type DBInfo struct {
 	hash int
 }
 
+func (my *DBInfo) Hash() int {
+	return my.hash
+}
+
 type VirtualTable struct {
 	Name       string
 	IDColumn   string

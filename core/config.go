@@ -8,14 +8,17 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type Config struct {
-	Debug     bool             `jsonschema:"title=Debug,default=false"`
-	Tables    []Table          `jsonschema:"title=Tables"`
-	Resolvers []ResolverConfig `jsonschema:"-"`
-
-	ConfigPath string `mapstructure:"config_path" jsonschema:"title=Config Path"`
+	Debug        bool             `jsonschema:"title=Debug,default=false"`
+	Tables       []Table          `jsonschema:"title=Tables"`
+	Resolvers    []ResolverConfig `jsonschema:"-"`
+	Blocklist    []string         `jsonschema:"title=Block List"`
+	ConfigPath   string           `mapstructure:"config_path" jsonschema:"title=Config Path"`
+	PollDuration time.Duration    `mapstructure:"poll_duration" json:"poll_duration" yaml:"poll_duration" jsonschema:"title=Schema Change Detection Polling Duration,default=10s"`
+	FS           interface{}      `mapstructure:"-" jsonschema:"-" json:"-"`
 }
 
 type Table struct {
