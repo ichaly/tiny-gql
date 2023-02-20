@@ -1,5 +1,9 @@
 package core
 
+import (
+	"encoding/json"
+)
+
 //
 // Types represent:
 // https://spec.graphql.org/draft/#sec-Schema-Introspection
@@ -7,10 +11,10 @@ package core
 
 type __Schema struct {
 	Types            func() []__Type `json:"-"`
-	Description      string          `json:"description"`
+	Description      string          `json:"description,omitempty"`
 	QueryType        __Type          `json:"queryType"`
-	MutationType     *__Type         `json:"mutationType"`
-	SubscriptionType *__Type         `json:"subscriptionType"`
+	MutationType     *__Type         `json:"mutationType,omitempty"`
+	SubscriptionType *__Type         `json:"subscriptionType,omitempty"`
 	Directives       []__Directive   `json:"directives"`
 
 	JSONTypes []__Type `json:"types"`
@@ -18,8 +22,8 @@ type __Schema struct {
 
 type __Type struct {
 	Kind        __TypeKind `json:"-"`
-	Name        *string    `json:"name"`
-	Description *string    `json:"description"`
+	Name        string     `json:"name,omitempty"`
+	Description string     `json:"description,omitempty"`
 	// must be non-null for OBJECT and INTERFACE, otherwise null.
 	Fields func(isDeprecatedArgs) []__Field `json:"-"`
 	// must be non-null for OBJECT and INTERFACE, otherwise null.
@@ -33,7 +37,7 @@ type __Type struct {
 	// must be non-null for NON_NULL and LIST, otherwise null.
 	OfType *__Type `json:"ofType"`
 	// may be non-null for custom SCALAR, otherwise null.
-	SpecifiedByURL *string `json:"specifiedByUrl"`
+	SpecifiedByURL string `json:"specifiedByUrl"`
 
 	JSONKind        string    `json:"kind"`
 	JSONFields      []__Field `json:"fields"`
@@ -43,34 +47,34 @@ type __Type struct {
 
 type __Field struct {
 	Name              string                                `json:"name"`
-	Description       *string                               `json:"description"`
+	Description       string                                `json:"description,omitempty"`
 	Args              func(isDeprecatedArgs) []__InputValue `json:"-"`
 	Type              __Type                                `json:"type"`
-	IsDeprecated      bool                                  `json:"isDeprecated"`
-	DeprecationReason *string                               `json:"deprecationReason"`
+	IsDeprecated      bool                                  `json:"isDeprecated,omitempty"`
+	DeprecationReason string                                `json:"deprecationReason"`
 
 	JSONArgs []__Field `json:"args"`
 }
 
 type __InputValue struct {
-	Name              string  `json:"name"`
-	Description       *string `json:"description"`
-	Type              __Type  `json:"type"`
-	DefaultValue      *string `json:"defaultValue"`
-	IsDeprecated      bool    `json:"isDeprecated"`
-	DeprecationReason *string `json:"deprecationReason"`
+	Name              string `json:"name"`
+	Description       string `json:"description,omitempty"`
+	Type              __Type `json:"type"`
+	DefaultValue      string `json:"defaultValue,omitempty"`
+	IsDeprecated      bool   `json:"isDeprecated"`
+	DeprecationReason string `json:"deprecationReason,omitempty"`
 }
 
 type __EnumValue struct {
-	Name              string  `json:"name"`
-	Description       *string `json:"description"`
-	IsDeprecated      bool    `json:"isDeprecated"`
-	DeprecationReason *string `json:"deprecationReason"`
+	Name              string `json:"name"`
+	Description       string `json:"description,omitempty"`
+	IsDeprecated      bool   `json:"isDeprecated,omitempty"`
+	DeprecationReason string `json:"deprecationReason,omitempty"`
 }
 
 type __Directive struct {
 	Name         string                                `json:"name"`
-	Description  *string                               `json:"description"`
+	Description  string                                `json:"description,omitempty"`
 	Locations    []__DirectiveLocation                 `json:"-"`
 	Args         func(isDeprecatedArgs) []__InputValue `json:"-"`
 	IsRepeatable bool                                  `json:"isRepeatable"`
@@ -165,4 +169,14 @@ func (my __DirectiveLocation) String() string {
 		return v
 	}
 	return ""
+}
+
+func introspection() (res json.RawMessage, err error) {
+	schema := __Schema{
+		QueryType:        __Type{Name: "Query"},
+		SubscriptionType: &__Type{Name: "Subscription"},
+		MutationType:     &__Type{Name: "Mutation"},
+	}
+	println(schema)
+	return
 }

@@ -17,7 +17,8 @@ type Config struct {
 	Tables    []Table          `jsonschema:"title=Tables"`
 	Resolvers []ResolverConfig `jsonschema:"-"`
 
-	ConfigPath string `mapstructure:"config_path" jsonschema:"title=Config Path"`
+	ConfigPath      string `mapstructure:"config_path" jsonschema:"title=Config Path"`
+	EnableCamelcase bool   `mapstructure:"enable_camelcase" json:"enable_camelcase" yaml:"enable_camelcase" jsonschema:"title=Enable Camel Case,default=false"`
 }
 
 type Table struct {
