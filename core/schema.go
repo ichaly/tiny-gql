@@ -124,6 +124,7 @@ const (
 	directiveLocationFragmentDefinition
 	directiveLocationFragmentSpread
 	directiveLocationInlineFragment
+	directiveLocationVariableDefinition
 	directiveLocationSchema
 	directiveLocationScalar
 	directiveLocationObject
@@ -145,6 +146,7 @@ var directiveLocationMap = NewBiMap[string, __DirectiveLocation](WithInitialMap(
 	"FRAGMENT_DEFINITION":    directiveLocationFragmentDefinition,
 	"FRAGMENT_SPREAD":        directiveLocationFragmentSpread,
 	"INLINE_FRAGMENT":        directiveLocationInlineFragment,
+	"VARIABLE_DEFINITION":    directiveLocationVariableDefinition,
 	"SCHEMA":                 directiveLocationSchema,
 	"SCALAR":                 directiveLocationScalar,
 	"OBJECT":                 directiveLocationObject,
