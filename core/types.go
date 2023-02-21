@@ -1,5 +1,27 @@
 package core
 
+const (
+	KIND_SCALAR      = "SCALAR"
+	KIND_OBJECT      = "OBJECT"
+	KIND_NONNULL     = "NON_NULL"
+	KIND_LIST        = "LIST"
+	KIND_UNION       = "UNION"
+	KIND_ENUM        = "ENUM"
+	KIND_INPUT_OBJ   = "INPUT_OBJECT"
+	LOC_QUERY        = "QUERY"
+	LOC_MUTATION     = "MUTATION"
+	LOC_SUBSCRIPTION = "SUBSCRIPTION"
+	LOC_FIELD        = "FIELD"
+
+	SUFFIX_EXP      = "Expression"
+	SUFFIX_LISTEXP  = "ListExpression"
+	SUFFIX_INPUT    = "Input"
+	SUFFIX_ORDER_BY = "OrderByInput"
+	SUFFIX_WHERE    = "WhereInput"
+	SUFFIX_ARGS     = "ArgsInput"
+	SUFFIX_ENUM     = "Enum"
+)
+
 var stdTypes = []__Type{
 	{
 		Kind:        TK_SCALAR,
@@ -52,8 +74,9 @@ var stdTypes = []__Type{
 		Name:       "Mutation",
 		Interfaces: []__Type{},
 	}, {
-		Kind: TK_ENUM,
-		Name: "SearchInput",
+		Kind:        TK_ENUM,
+		Name:        "Recursion",
+		Description: "Recursion relation types",
 		EnumValues: func(args isDeprecatedArgs) []__Field {
 			return []__Field{
 				{
@@ -67,7 +90,7 @@ var stdTypes = []__Type{
 		},
 	}, {
 		Kind:        TK_ENUM,
-		Name:        "OrderDirection",
+		Name:        "Direction",
 		Description: "Result ordering types",
 		EnumValues: func(args isDeprecatedArgs) []__Field {
 			return []__Field{
@@ -93,4 +116,45 @@ var stdTypes = []__Type{
 			}
 		},
 	},
+}
+
+var expAll = []__Type{
+	{
+		Kind:        TK_INPUT_OBJECT,
+		Name:        "isNull",
+		OfType:      &__Type{Kind: TK_SCALAR, Name: "Boolean"},
+		Description: "Is value null (true) or not null (false)",
+	},
+}
+
+var expScalar = []__Type{
+	{Name: "equals", Description: "Equals value"},
+	{Name: "notEquals", Description: "Does not equal value"},
+	{Name: "greaterThan", Description: "Is greater than value"},
+	{Name: "lesserThan", Description: "Is lesser than value"},
+	{Name: "greaterOrEquals", Description: "Is greater than or equals value"},
+	{Name: "lesserOrEquals", Description: "Is lesser than or equals value"},
+	{Name: "like", Description: "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position"},
+	{Name: "notLike", Description: "Value not matching pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position"},
+	{Name: "iLike", Description: "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position"},
+	{Name: "notILike", Description: "Value not matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position"},
+	{Name: "similar", Description: "Value matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must match entire value."},
+	{Name: "notSimilar", Description: "Value not matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must not match entire value."},
+	{Name: "regex", Description: "Value matches regex pattern"},
+	{Name: "notRegex", Description: "Value not matching regex pattern"},
+	{Name: "iRegex", Description: "Value matches (case-insensitive) regex pattern"},
+	{Name: "notIRegex", Description: "Value not matching (case-insensitive) regex pattern"},
+}
+
+var expList = []__Type{
+	{Name: "in", Description: "Is in list of values"},
+	{Name: "notIn", Description: "Is not in list of values"},
+}
+
+var expJSON = []__Type{
+	{Name: "hasKey", Description: "JSON value contains this key"},
+	{Name: "hasKeyAny", Description: "JSON value contains any of these keys"},
+	{Name: "hasKeyAll", Description: "JSON value contains all of these keys"},
+	{Name: "contains", Description: "JSON value matches any of they key/value pairs"},
+	{Name: "containedIn", Description: "JSON value contains all of they key/value pairs"},
 }
