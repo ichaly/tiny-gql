@@ -31,9 +31,9 @@ type __Type struct {
 	// must be non-null for INTERFACE and UNION, otherwise null.
 	PossibleTypes func() []__Type `json:"possibleTypes"`
 	// must be non-null for ENUM, otherwise null.
-	EnumValues func(isDeprecatedArgs) []__EnumValue `json:"-"`
+	EnumValues func(isDeprecatedArgs) []__Field `json:"-"`
 	// must be non-null for INPUT_OBJECT, otherwise null.
-	InputFields func(isDeprecatedArgs) []__InputValue `json:"-"`
+	InputFields func(isDeprecatedArgs) []__Field `json:"-"`
 	// must be non-null for NON_NULL and LIST, otherwise null.
 	OfType *__Type `json:"ofType"`
 	// may be non-null for custom SCALAR, otherwise null.
@@ -46,38 +46,23 @@ type __Type struct {
 }
 
 type __Field struct {
-	Name              string                                `json:"name"`
-	Description       string                                `json:"description,omitempty"`
-	Args              func(isDeprecatedArgs) []__InputValue `json:"-"`
-	Type              __Type                                `json:"type"`
-	IsDeprecated      bool                                  `json:"isDeprecated,omitempty"`
-	DeprecationReason string                                `json:"deprecationReason"`
+	Name              string                           `json:"name"`
+	Description       string                           `json:"description,omitempty"`
+	Args              func(isDeprecatedArgs) []__Field `json:"-"`
+	Type              __Type                           `json:"type"`
+	IsDeprecated      bool                             `json:"isDeprecated,omitempty"`
+	DeprecationReason string                           `json:"deprecationReason"`
+	DefaultValue      string                           `json:"defaultValue,omitempty"`
 
 	JSONArgs []__Field `json:"args"`
 }
 
-type __InputValue struct {
-	Name              string `json:"name"`
-	Description       string `json:"description,omitempty"`
-	Type              __Type `json:"type"`
-	DefaultValue      string `json:"defaultValue,omitempty"`
-	IsDeprecated      bool   `json:"isDeprecated"`
-	DeprecationReason string `json:"deprecationReason,omitempty"`
-}
-
-type __EnumValue struct {
-	Name              string `json:"name"`
-	Description       string `json:"description,omitempty"`
-	IsDeprecated      bool   `json:"isDeprecated,omitempty"`
-	DeprecationReason string `json:"deprecationReason,omitempty"`
-}
-
 type __Directive struct {
-	Name         string                                `json:"name"`
-	Description  string                                `json:"description,omitempty"`
-	Locations    []__DirectiveLocation                 `json:"-"`
-	Args         func(isDeprecatedArgs) []__InputValue `json:"-"`
-	IsRepeatable bool                                  `json:"isRepeatable"`
+	Name         string                           `json:"name"`
+	Description  string                           `json:"description,omitempty"`
+	Locations    []__DirectiveLocation            `json:"-"`
+	Args         func(isDeprecatedArgs) []__Field `json:"-"`
+	IsRepeatable bool                             `json:"isRepeatable"`
 
 	JSONLocations []string  `json:"locations"`
 	JSONArgs      []__Field `json:"args"`
@@ -87,96 +72,49 @@ type isDeprecatedArgs struct {
 	IncludeDeprecated bool `json:"includeDeprecated"`
 }
 
-type __TypeKind uint8
+type __TypeKind string
 
 const (
-	typeKindScalar __TypeKind = iota
-	typeKindObject
-	typeKindInterface
-	typeKindUnion
-	typeKindEnum
-	typeKindInputObject
-	typeKindList
-	typeKindNonNull
+	TK_SCALAR       __TypeKind = "SCALAR"
+	TK_OBJECT       __TypeKind = "OBJECT"
+	TK_INTERFACE    __TypeKind = "INTERFACE"
+	TK_UNION        __TypeKind = "UNION"
+	TK_ENUM         __TypeKind = "ENUM"
+	TK_INPUT_OBJECT __TypeKind = "INPUT_OBJECT"
+	TK_LIST         __TypeKind = "LIST"
+	TK_NON_NULL     __TypeKind = "NON_NULL"
 )
 
-var typeKindEnumMap = NewBiMap[string, __TypeKind](WithInitialMap(map[string]__TypeKind{
-	"SCALAR":       typeKindScalar,
-	"OBJECT":       typeKindObject,
-	"INTERFACE":    typeKindInterface,
-	"UNION":        typeKindUnion,
-	"ENUM":         typeKindEnum,
-	"INPUT_OBJECT": typeKindInputObject,
-	"LIST":         typeKindList,
-	"NON_NULL":     typeKindNonNull,
-}))
-
-func (my __TypeKind) String() string {
-	if v, ok := typeKindEnumMap.GetInverse(my); ok {
-		return v
-	}
-	return ""
-}
-
-type __DirectiveLocation uint8
+type __DirectiveLocation string
 
 const (
-	directiveLocationQuery __DirectiveLocation = iota
-	directiveLocationMutation
-	directiveLocationSubscription
-	directiveLocationField
-	directiveLocationFragmentDefinition
-	directiveLocationFragmentSpread
-	directiveLocationInlineFragment
-	directiveLocationVariableDefinition
-	directiveLocationSchema
-	directiveLocationScalar
-	directiveLocationObject
-	directiveLocationFieldDefinition
-	directiveLocationArgumentDefinition
-	directiveLocationInterface
-	directiveLocationUnion
-	directiveLocationEnum
-	directiveLocationEnumValue
-	directiveLocationInputObject
-	directiveLocationInputFieldDefinition
+	DL_QUERY                  __DirectiveLocation = "QUERY"
+	DL_MUTATION               __DirectiveLocation = "MUTATION"
+	DL_SUBSCRIPTION           __DirectiveLocation = "SUBSCRIPTION"
+	DL_FIELD                  __DirectiveLocation = "FIELD"
+	DL_FRAGMENT_DEFINITION    __DirectiveLocation = "FRAGMENT_DEFINITION"
+	DL_FRAGMENT_SPREAD        __DirectiveLocation = "FRAGMENT_SPREAD"
+	DL_INLINE_FRAGMENT        __DirectiveLocation = "INLINE_FRAGMENT"
+	DL_VARIABLE_DEFINITION    __DirectiveLocation = "VARIABLE_DEFINITION"
+	DL_SCHEMA                 __DirectiveLocation = "SCHEMA"
+	DL_SCALAR                 __DirectiveLocation = "SCALAR"
+	DL_OBJECT                 __DirectiveLocation = "OBJECT"
+	DL_FIELD_DEFINITION       __DirectiveLocation = "FIELD_DEFINITION"
+	DL_ARGUMENT_DEFINITION    __DirectiveLocation = "ARGUMENT_DEFINITION"
+	DL_INTERFACE              __DirectiveLocation = "INTERFACE"
+	DL_UNION                  __DirectiveLocation = "UNION"
+	DL_ENUM                   __DirectiveLocation = "ENUM"
+	DL_ENUM_VALUE             __DirectiveLocation = "ENUM_VALUE"
+	DL_INPUT_OBJECT           __DirectiveLocation = "INPUT_OBJECT"
+	DL_INPUT_FIELD_DEFINITION __DirectiveLocation = "INPUT_FIELD_DEFINITION"
 )
-
-var directiveLocationMap = NewBiMap[string, __DirectiveLocation](WithInitialMap(map[string]__DirectiveLocation{
-	"QUERY":                  directiveLocationQuery,
-	"MUTATION":               directiveLocationMutation,
-	"SUBSCRIPTION":           directiveLocationSubscription,
-	"FIELD":                  directiveLocationField,
-	"FRAGMENT_DEFINITION":    directiveLocationFragmentDefinition,
-	"FRAGMENT_SPREAD":        directiveLocationFragmentSpread,
-	"INLINE_FRAGMENT":        directiveLocationInlineFragment,
-	"VARIABLE_DEFINITION":    directiveLocationVariableDefinition,
-	"SCHEMA":                 directiveLocationSchema,
-	"SCALAR":                 directiveLocationScalar,
-	"OBJECT":                 directiveLocationObject,
-	"FIELD_DEFINITION":       directiveLocationFieldDefinition,
-	"ARGUMENT_DEFINITION":    directiveLocationArgumentDefinition,
-	"INTERFACE":              directiveLocationInterface,
-	"UNION":                  directiveLocationUnion,
-	"ENUM":                   directiveLocationEnum,
-	"ENUM_VALUE":             directiveLocationEnumValue,
-	"INPUT_OBJECT":           directiveLocationInputObject,
-	"INPUT_FIELD_DEFINITION": directiveLocationInputFieldDefinition,
-}))
-
-func (my __DirectiveLocation) String() string {
-	if v, ok := directiveLocationMap.GetInverse(my); ok {
-		return v
-	}
-	return ""
-}
 
 func introspection() (res json.RawMessage, err error) {
 	schema := __Schema{
 		QueryType:        __Type{Name: "Query"},
-		SubscriptionType: &__Type{Name: "Subscription"},
 		MutationType:     &__Type{Name: "Mutation"},
+		SubscriptionType: &__Type{Name: "Subscription"},
 	}
-	println(schema)
+	res, err = json.Marshal(schema)
 	return
 }
