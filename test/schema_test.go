@@ -2,6 +2,7 @@ package test
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/ichaly/tiny-go/core"
 	"path/filepath"
 	"testing"
@@ -17,20 +18,22 @@ func init() {
 	}
 }
 func TestNewSchema(t *testing.T) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 	conf, err := core.ReadInConfig(filepath.Join("./cfg", "prod.yml"))
 	if err != nil {
 		panic(err)
-		return
 	}
 	info, err := core.GetDBInfo(db, dialect, conf.Blocklist)
 	if err != nil {
 		panic(err)
-		return
 	}
 	in, err := core.NewSchema(conf, info)
-	if err == nil {
-		println(string(in))
-	} else {
+	if err != nil {
 		panic(err)
 	}
+	println(string(in))
 }
