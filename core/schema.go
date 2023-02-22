@@ -212,23 +212,26 @@ func getTypeFromColumn(col DBColumn) (gqlType string) {
 func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
 	f.Args = []__Field{}
 	f.Name = my.getName(c.Name)
-	typeValue := __Type{Name: "String"}
+	t := __Type{Name: "String"}
 
 	if v, ok := my.Types[getTypeFromColumn(c)]; ok {
-		typeValue.Name = v.Name
-		typeValue.Kind = v.Kind
+		t.Name = v.Name
+		t.Kind = v.Kind
 	}
 
 	if c.Array {
-		typeValue = __Type{Kind: TK_LIST, OfType: &typeValue}
+		t = __Type{Kind: TK_LIST, OfType: &__Type{
+			Name: t.Name, Kind: t.Kind,
+		}}
 	}
 
 	if c.NotNull {
-		// TODO:
-		//typeValue = __Type{Kind: TK_NON_NULL, OfType: &typeValue}
+		t = __Type{Kind: TK_NON_NULL, OfType: &__Type{
+			Name: t.Name, Kind: t.Kind,
+		}}
 	}
 
-	f.Type = &typeValue
+	f.Type = &t
 
 	f.Args = append(f.Args, __Field{
 		Name: "includeIf",
