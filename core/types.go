@@ -1,5 +1,7 @@
 package core
 
+import "strings"
+
 var dbTypes = map[string]string{
 	"timestamp without time zone": "Time",
 	"character varying":           "String",
@@ -18,26 +20,45 @@ var dbTypes = map[string]string{
 	"boolean":                     "Boolean",
 }
 
-const (
-	KIND_SCALAR      = "SCALAR"
-	KIND_OBJECT      = "OBJECT"
-	KIND_NONNULL     = "NON_NULL"
-	KIND_LIST        = "LIST"
-	KIND_UNION       = "UNION"
-	KIND_ENUM        = "ENUM"
-	KIND_INPUT_OBJ   = "INPUT_OBJECT"
-	LOC_QUERY        = "QUERY"
-	LOC_MUTATION     = "MUTATION"
-	LOC_SUBSCRIPTION = "SUBSCRIPTION"
-	LOC_FIELD        = "FIELD"
+func getType(t string) (gqlType string, list bool) {
+	if i := strings.IndexRune(t, '('); i != -1 {
+		t = t[:i]
+	}
+	if i := strings.IndexRune(t, '['); i != -1 {
+		list = true
+		t = t[:i]
+	}
+	if v, ok := dbTypes[t]; ok {
+		gqlType = v
+	} else if t == "json" || t == "jsonb" {
+		gqlType = "JSON"
+	} else {
+		gqlType = "String"
+	}
+	return
+}
 
-	SUFFIX_EXP      = "Expression"
-	SUFFIX_LISTEXP  = "ListExpression"
-	SUFFIX_INPUT    = "Input"
-	SUFFIX_ORDER_BY = "OrderByInput"
-	SUFFIX_WHERE    = "WhereInput"
-	SUFFIX_ARGS     = "ArgsInput"
+const (
+	//KIND_SCALAR      = "SCALAR"
+	//KIND_OBJECT      = "OBJECT"
+	//KIND_NONNULL     = "NON_NULL"
+	//KIND_LIST        = "LIST"
+	//KIND_UNION       = "UNION"
+	//KIND_ENUM        = "ENUM"
+	//KIND_INPUT_OBJ   = "INPUT_OBJECT"
+	//LOC_QUERY        = "QUERY"
+	//LOC_MUTATION     = "MUTATION"
+	//LOC_SUBSCRIPTION = "SUBSCRIPTION"
+	//LOC_FIELD        = "FIELD"
+
+	SUFFIX_EXP     = "Expression"
+	SUFFIX_LISTEXP = "ListExpression"
+
 	SUFFIX_ENUM     = "Enum"
+	SUFFIX_INPUT    = "Input"
+	SUFFIX_ARGS     = "ArgsInput"
+	SUFFIX_WHERE    = "WhereInput"
+	SUFFIX_ORDER_BY = "OrderByInput"
 )
 
 var stdTypes = []__Type{

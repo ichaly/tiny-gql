@@ -149,7 +149,7 @@ func (my *__Schema) addExpression(exps []__Field, name string, sub __Type) {
 
 func (my *__Schema) addTablesEnumType() {
 	te := __Type{
-		Kind:        KIND_ENUM,
+		Kind:        TK_ENUM,
 		Name:        "Tables" + SUFFIX_ENUM,
 		Description: "All available tables",
 	}
@@ -168,153 +168,10 @@ func (my *__Schema) addTablesEnumType() {
 	my.addType(te)
 }
 
-//func (my *__Schema) addTypeTo(op string, ft __Type) {
-//	qt := my.types[op]
-//	qt.Fields = append(qt.Fields, fieldObj{
-//		Name:        ft.Name,
-//		Description: ft.Description,
-//		Args:        ft.InputFields,
-//		Type:        newTR("", ft.Name, nil),
-//	})
-//	my.types[op] = qt
-//}
-//
-//func (my *__Schema) addTable(t *DBTable, alias string) (err error) {
-//	if t.Blocked || len(t.Columns) == 0 {
-//		return
-//	}
-//	var tq __Type
-//
-//	// add table type to query and subscription
-//	if tq, err = my.addTableType(t, alias, 0); err != nil {
-//		return
-//	}
-//	my.addTypeTo("Query", tq)
-//	my.addTypeTo("Subscription", tq)
-//
-//	var tm __Type
-//
-//	// add table type to mutation
-//	if tm, err = my.addInputType(t, tq); err != nil {
-//		return
-//	}
-//	my.addTypeTo("Mutation", tm)
-//	return
-//}
-//
-//func (my *__Schema) addTableType(t *DBTable, alias string, depth int) (ft __Type, err error) {
-//	ft = __Type{
-//		Kind:        KIND_OBJECT,
-//		InputFields: []__Field{},
-//		Interfaces:  []__Type{},
-//	}
-//
-//	name := t.Name
-//	if alias != "" {
-//		name = alias
-//	}
-//	name = my.getName(name)
-//
-//	ft.Name = name
-//	if t.Comment != nil {
-//		ft.Description = *t.Comment
-//	}
-//
-//	var hasSearch bool
-//	var hasRecursive bool
-//
-//	if err = my.addColumnsEnumType(t); err != nil {
-//		return
-//	}
-//
-//	for _, fn := range my.schema.GetFunctions() {
-//		ty := my.addArgsType(t, fn)
-//		my.addType(ty)
-//	}
-//
-//	for _, c := range t.Columns {
-//		if c.Blocked {
-//			continue
-//		}
-//		if c.FullText {
-//			hasSearch = true
-//		}
-//		if c.FKRecursive {
-//			hasRecursive = true
-//		}
-//		var f1 fieldObj
-//		f1, err = my.getColumnField(c)
-//		if err != nil {
-//			return
-//		}
-//		ft.Fields = append(ft.Fields, f1)
-//	}
-//
-//	for _, fn := range my.schema.GetFunctions() {
-//		f1 := my.getFunctionField(t, fn)
-//		ft.Fields = append(ft.Fields, f1)
-//	}
-//
-//	relNodes1, err := my.schema.GetFirstDegree(t)
-//	if err != nil {
-//		return
-//	}
-//
-//	relNodes2, err := my.schema.GetSecondDegree(t)
-//	if err != nil {
-//		return
-//	}
-//
-//	for _, relNode := range append(relNodes1, relNodes2...) {
-//		var f fieldObj
-//		var skip bool
-//		f, skip, err = my.getTableField(relNode)
-//		if err != nil {
-//			return
-//		}
-//		if !skip {
-//			ft.Fields = append(ft.Fields, f)
-//		}
-//	}
-//
-//	ft.addArg("id", newTR("", "ID", nil))
-//	ft.addArg("limit", newTR("", "Int", nil))
-//	ft.addArg("offset", newTR("", "Int", nil))
-//	ft.addArg("distinctOn", newTR("LIST", "", newTR("", "String", nil)))
-//	ft.addArg("first", newTR("", "Int", nil))
-//	ft.addArg("last", newTR("", "Int", nil))
-//	ft.addArg("after", newTR("", "Cursor", nil))
-//	ft.addArg("before", newTR("", "Cursor", nil))
-//
-//	my.addOrderByType(t, &ft)
-//	my.addWhereType(t, &ft)
-//	my.addTableArgsType(t, &ft)
-//
-//	if hasSearch {
-//		ft.addArg("search", newTR("", "String", nil))
-//	}
-//
-//	if depth > 1 {
-//		return
-//	}
-//	if depth > 0 {
-//		ft.addArg("find", newTR("", "FindSearchInput", nil))
-//	}
-//
-//	my.addType(ft)
-//
-//	if hasRecursive {
-//		_, err = my.addTableTypeWithDepth(t,
-//			(name + "Recursive"),
-//			(depth + 1))
-//	}
-//	return
-//}
-
 func (my *__Schema) addColumnsEnumType(t *DBTable) (err error) {
 	tableName := my.getName(t.Name)
 	ft := __Type{
-		Kind:        KIND_ENUM,
+		Kind:        TK_ENUM,
 		Name:        tableName + "Columns" + SUFFIX_ENUM,
 		Description: fmt.Sprintf("Table columns for '%s'", tableName),
 	}
@@ -329,6 +186,180 @@ func (my *__Schema) addColumnsEnumType(t *DBTable) (err error) {
 		ft.EnumValues = append(ft.EnumValues, f)
 	}
 	my.addType(ft)
+	return
+}
+
+func (my *__Schema) addTypeTo(op string, ft __Type) {
+	qt := my.Types[op]
+	qt.Fields = append(qt.Fields, __Field{
+		Name:        ft.Name,
+		Description: ft.Description,
+		Args:        ft.InputFields,
+		Type:        &__Type{Name: ft.Name},
+	})
+	my.Types[op] = qt
+}
+
+func getTypeFromColumn(col DBColumn) (gqlType string) {
+	if col.PrimaryKey {
+		gqlType = "ID"
+		return
+	}
+	gqlType, _ = getType(col.Type)
+	return
+}
+
+func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
+	f.Args = []__Field{}
+	f.Name = my.getName(c.Name)
+	typeValue := __Type{Name: "String"}
+
+	if v, ok := my.Types[getTypeFromColumn(c)]; ok {
+		typeValue.Name = v.Name
+		typeValue.Kind = v.Kind
+	}
+
+	if c.Array {
+		typeValue = __Type{Kind: TK_LIST, OfType: &typeValue}
+	}
+
+	if c.NotNull {
+		// TODO:
+		//typeValue = __Type{Kind: TK_NON_NULL, OfType: &typeValue}
+	}
+
+	f.Type = &typeValue
+
+	f.Args = append(f.Args, __Field{
+		Name: "includeIf",
+		Type: &__Type{Name: c.Table + SUFFIX_WHERE},
+	})
+
+	f.Args = append(f.Args, __Field{
+		Name: "skipIf",
+		Type: &__Type{Name: c.Table + SUFFIX_WHERE},
+	})
+	return
+}
+
+func (my *__Schema) addTable(t *DBTable, alias string) (err error) {
+	if t.Blocked || len(t.Columns) == 0 {
+		return
+	}
+	// add table type to query and subscription
+	var tq __Type
+	if tq, err = my.addTableType(t, alias, 0); err != nil {
+		return
+	}
+	my.addTypeTo("Query", tq)
+	my.addTypeTo("Subscription", tq)
+
+	// add table type to mutation
+	//var tm __Type
+	//if tm, err = my.addInputType(t, tq); err != nil {
+	//	return
+	//}
+	//my.addTypeTo("Mutation", tm)
+	return
+}
+
+func (my *__Schema) addTableType(t *DBTable, alias string, depth int) (ft __Type, err error) {
+	ft = __Type{
+		Kind:        TK_OBJECT,
+		InputFields: []__Field{},
+	}
+
+	name := t.Name
+	if alias != "" {
+		name = alias
+	}
+	ft.Name = name
+
+	if t.Comment != nil {
+		ft.Description = *t.Comment
+	}
+
+	var hasSearch bool
+	var hasRecursive bool
+
+	if err = my.addColumnsEnumType(t); err != nil {
+		return
+	}
+
+	for _, c := range t.Columns {
+		if c.Blocked {
+			continue
+		}
+		if c.FullText {
+			hasSearch = true
+		}
+		if c.FKRecursive {
+			hasRecursive = true
+		}
+		var f __Field
+		f, err = my.getColumnField(c)
+		if err != nil {
+			return
+		}
+		ft.Fields = append(ft.Fields, f)
+	}
+
+	//for _, fn := range my.schema.GetFunctions() {
+	//	f1 := my.getFunctionField(t, fn)
+	//	ft.Fields = append(ft.Fields, f1)
+	//}
+
+	//relNodes1, err := my.schema.GetFirstDegree(t)
+	//if err != nil {
+	//	return
+	//}
+	//
+	//relNodes2, err := my.schema.GetSecondDegree(t)
+	//if err != nil {
+	//	return
+	//}
+	//
+	//for _, relNode := range append(relNodes1, relNodes2...) {
+	//	var f fieldObj
+	//	var skip bool
+	//	f, skip, err = my.getTableField(relNode)
+	//	if err != nil {
+	//		return
+	//	}
+	//	if !skip {
+	//		ft.Fields = append(ft.Fields, f)
+	//	}
+	//}
+
+	ft.InputFields = append(ft.InputFields, __Field{Name: "id", Type: &__Type{Name: "ID"}})
+	ft.InputFields = append(ft.InputFields, __Field{Name: "limit", Type: &__Type{Name: "Int"}})
+	ft.InputFields = append(ft.InputFields, __Field{Name: "offset", Type: &__Type{Name: "Int"}})
+	ft.InputFields = append(ft.InputFields, __Field{Name: "distinctOn", Type: &__Type{Kind: TK_LIST, OfType: &__Type{Name: "String"}}})
+	ft.InputFields = append(ft.InputFields, __Field{Name: "first", Type: &__Type{Name: "Int"}})
+	ft.InputFields = append(ft.InputFields, __Field{Name: "last", Type: &__Type{Name: "Int"}})
+	ft.InputFields = append(ft.InputFields, __Field{Name: "after", Type: &__Type{Name: "Cursor"}})
+	ft.InputFields = append(ft.InputFields, __Field{Name: "before", Type: &__Type{Name: "Cursor"}})
+
+	//my.addOrderByType(t, &ft)
+	//my.addWhereType(t, &ft)
+	//my.addTableArgsType(t, &ft)
+
+	if hasSearch {
+		ft.InputFields = append(ft.InputFields, __Field{Name: "search", Type: &__Type{Name: "String"}})
+	}
+
+	if depth > 1 {
+		return
+	}
+	if depth > 0 {
+		ft.InputFields = append(ft.InputFields, __Field{Name: "find", Type: &__Type{Name: "Recursion"}})
+	}
+
+	my.addType(ft)
+
+	if hasRecursive {
+		_, err = my.addTableType(t, name+"Recursive", depth+1)
+	}
 	return
 }
 
@@ -368,11 +399,11 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 
 	schema.addTablesEnumType()
 
-	//for _, t := range schema.info.Tables {
-	//	if err = schema.addTable(t, ""); err != nil {
-	//		return
-	//	}
-	//}
+	for _, t := range schema.info.Tables {
+		if err = schema.addTable(t, ""); err != nil {
+			return
+		}
+	}
 
 	return json.Marshal(schema)
 }
