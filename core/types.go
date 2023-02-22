@@ -1,5 +1,23 @@
 package core
 
+var dbTypes = map[string]string{
+	"timestamp without time zone": "Time",
+	"character varying":           "String",
+	"text":                        "String",
+	"smallint":                    "Int",
+	"integer":                     "Int",
+	"bigint":                      "Int",
+	"smallserial":                 "Int",
+	"serial":                      "Int",
+	"bigserial":                   "Int",
+	"decimal":                     "Float",
+	"numeric":                     "Float",
+	"real":                        "Float",
+	"double precision":            "Float",
+	"money":                       "Float",
+	"boolean":                     "Boolean",
+}
+
 const (
 	KIND_SCALAR      = "SCALAR"
 	KIND_OBJECT      = "OBJECT"
@@ -77,57 +95,52 @@ var stdTypes = []__Type{
 		Kind:        TK_ENUM,
 		Name:        "Recursion",
 		Description: "Recursion relation types",
-		EnumValues: func(args isDeprecatedArgs) []__Field {
-			return []__Field{
-				{
-					Name:        "children",
-					Description: "Children of parent row",
-				}, {
-					Name:        "parents",
-					Description: "Parents of current row",
-				},
-			}
+		EnumValues: []__Field{
+			{
+				Name:        "children",
+				Description: "Children of parent row",
+			}, {
+				Name:        "parents",
+				Description: "Parents of current row",
+			},
 		},
 	}, {
 		Kind:        TK_ENUM,
 		Name:        "Direction",
 		Description: "Result ordering types",
-		EnumValues: func(args isDeprecatedArgs) []__Field {
-			return []__Field{
-				{
-					Name:        "asc",
-					Description: "Ascending order",
-				}, {
-					Name:        "desc",
-					Description: "Descending order",
-				}, {
-					Name:        "asc_nulls_first",
-					Description: "Ascending nulls first order",
-				}, {
-					Name:        "desc_nulls_first",
-					Description: "Descending nulls first order",
-				}, {
-					Name:        "asc_nulls_last",
-					Description: "Ascending nulls last order",
-				}, {
-					Name:        "desc_nulls_last",
-					Description: "Descending nulls last order",
-				},
-			}
+		EnumValues: []__Field{
+			{
+				Name:        "asc",
+				Description: "Ascending order",
+			}, {
+				Name:        "desc",
+				Description: "Descending order",
+			}, {
+				Name:        "asc_nulls_first",
+				Description: "Ascending nulls first order",
+			}, {
+				Name:        "desc_nulls_first",
+				Description: "Descending nulls first order",
+			}, {
+				Name:        "asc_nulls_last",
+				Description: "Ascending nulls last order",
+			}, {
+				Name:        "desc_nulls_last",
+				Description: "Descending nulls last order",
+			},
 		},
 	},
 }
 
-var expAll = []__Type{
+var expAll = []__Field{
 	{
-		Kind:        TK_INPUT_OBJECT,
 		Name:        "isNull",
-		OfType:      &__Type{Kind: TK_SCALAR, Name: "Boolean"},
+		Type:        &__Type{Kind: TK_SCALAR, Name: "Boolean"},
 		Description: "Is value null (true) or not null (false)",
 	},
 }
 
-var expScalar = []__Type{
+var expScalar = []__Field{
 	{Name: "equals", Description: "Equals value"},
 	{Name: "notEquals", Description: "Does not equal value"},
 	{Name: "greaterThan", Description: "Is greater than value"},
@@ -146,12 +159,12 @@ var expScalar = []__Type{
 	{Name: "notIRegex", Description: "Value not matching (case-insensitive) regex pattern"},
 }
 
-var expList = []__Type{
+var expList = []__Field{
 	{Name: "in", Description: "Is in list of values"},
 	{Name: "notIn", Description: "Is not in list of values"},
 }
 
-var expJSON = []__Type{
+var expJSON = []__Field{
 	{Name: "hasKey", Description: "JSON value contains this key"},
 	{Name: "hasKeyAny", Description: "JSON value contains any of these keys"},
 	{Name: "hasKeyAll", Description: "JSON value contains all of these keys"},

@@ -11,12 +11,14 @@ import (
 
 type __Schema struct {
 	Types            []__Type      `json:"types,omitempty"`
+	Directives       []__Directive `json:"directives,omitempty"`
 	Description      string        `json:"description,omitempty"`
 	QueryType        __Type        `json:"queryType,omitempty"`
 	MutationType     *__Type       `json:"mutationType,omitempty"`
 	SubscriptionType *__Type       `json:"subscriptionType,omitempty"`
-	Directives       []__Directive `json:"directives,omitempty"`
 
+	conf       Config
+	info       *DBInfo
 	types      map[string]bool
 	directives map[string]bool
 }
@@ -26,50 +28,38 @@ type __Type struct {
 	Name        string     `json:"name,omitempty"`
 	Description string     `json:"description,omitempty"`
 	// must be non-null for OBJECT and INTERFACE, otherwise null.
-	Fields func(isDeprecatedArgs) []__Field `json:"-"`
+	Fields []__Field `json:"fields,omitempty"`
 	// must be non-null for OBJECT and INTERFACE, otherwise null.
 	Interfaces []__Type `json:"interfaces,omitempty"`
 	// must be non-null for INTERFACE and UNION, otherwise null.
 	PossibleTypes []__Type `json:"possibleTypes,omitempty"`
 	// must be non-null for ENUM, otherwise null.
-	EnumValues func(isDeprecatedArgs) []__Field `json:"-"`
+	EnumValues []__Field `json:"enumValues,omitempty"`
 	// must be non-null for INPUT_OBJECT, otherwise null.
 	//InputFields func(isDeprecatedArgs) []__Field `json:"-"`
-	InputFields []__Field `json:"fields,omitempty"`
+	InputFields []__Field `json:"inputFields,omitempty"`
 	// must be non-null for NON_NULL and LIST, otherwise null.
 	OfType *__Type `json:"ofType,omitempty"`
 	// may be non-null for custom SCALAR, otherwise null.
 	SpecifiedByURL string `json:"specifiedByUrl,omitempty"`
-
-	//JSONFields      []__Field `json:"fields,omitempty"`
-	JSONEnumValues  []__Field `json:"enumValues,omitempty"`
-	JSONInputFields []__Field `json:"inputFields,omitempty"`
 }
 
 type __Field struct {
-	Name              string                           `json:"name,omitempty"`
-	Description       string                           `json:"description,omitempty"`
-	Args              func(isDeprecatedArgs) []__Field `json:"-"`
-	Type              __Type                           `json:"type,omitempty"`
-	IsDeprecated      bool                             `json:"isDeprecated,omitempty"`
-	DeprecationReason string                           `json:"deprecationReason,omitempty"`
-	DefaultValue      string                           `json:"defaultValue,omitempty"`
-
-	JSONArgs []__Field `json:"args,omitempty"`
+	Name              string    `json:"name,omitempty"`
+	Description       string    `json:"description,omitempty"`
+	Args              []__Field `json:"args,omitempty"`
+	Type              *__Type   `json:"type,omitempty"`
+	IsDeprecated      bool      `json:"isDeprecated,omitempty"`
+	DeprecationReason string    `json:"deprecationReason,omitempty"`
+	DefaultValue      string    `json:"defaultValue,omitempty"`
 }
 
 type __Directive struct {
-	Name         string                           `json:"name,omitempty"`
-	Description  string                           `json:"description,omitempty"`
-	Locations    []__DirectiveLocation            `json:"locations,omitempty"`
-	Args         func(isDeprecatedArgs) []__Field `json:"-"`
-	IsRepeatable bool                             `json:"isRepeatable,omitempty"`
-
-	JSONArgs []__Field `json:"args,omitempty"`
-}
-
-type isDeprecatedArgs struct {
-	IncludeDeprecated bool
+	Name         string                `json:"name,omitempty"`
+	Description  string                `json:"description,omitempty"`
+	Locations    []__DirectiveLocation `json:"locations,omitempty"`
+	Args         []__Field             `json:"args,omitempty"`
+	IsRepeatable bool                  `json:"isRepeatable,omitempty"`
 }
 
 type __TypeKind string
@@ -116,7 +106,7 @@ func (my *__Schema) addType(t __Type) {
 	my.Types = append(my.Types, t)
 }
 
-func (my *__Schema) addExpression(exps []__Type, name string, sub __Type) {
+func (my *__Schema) addExpression(exps []__Field, name string, sub __Type) {
 	name = name + SUFFIX_EXP
 	if _, ok := my.types[name]; ok {
 		return
@@ -129,11 +119,10 @@ func (my *__Schema) addExpression(exps []__Type, name string, sub __Type) {
 	}
 
 	for _, ex := range exps {
-		t.InputFields = append(t.InputFields, __Field{
-			Name:        ex.Name,
-			Description: ex.Description,
-			Type:        sub,
-		})
+		if ex.Type == nil {
+			ex.Type = &sub
+		}
+		t.InputFields = append(t.InputFields, ex)
 	}
 	my.addType(t)
 }
@@ -151,22 +140,22 @@ func Introspection() (res json.RawMessage, err error) {
 
 	// Expression types
 	v := append(expAll, expScalar...)
-	schema.addExpression(v, "ID", __Type{Name: "ID"})
-	schema.addExpression(v, "Int", __Type{Name: "Int"})
-	schema.addExpression(v, "Float", __Type{Name: "Float"})
-	schema.addExpression(v, "String", __Type{Name: "String"})
-	schema.addExpression(v, "Boolean", __Type{Name: "Boolean"})
+	schema.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
+	schema.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
+	schema.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
+	schema.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
+	schema.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
 
 	// ListExpression Types
 	v = append(expAll, expList...)
-	schema.addExpression(v, "IntList", __Type{Name: "Int"})
-	schema.addExpression(v, "FloatList", __Type{Name: "Float"})
-	schema.addExpression(v, "StringList", __Type{Name: "String"})
-	schema.addExpression(v, "BooleanList", __Type{Name: "Boolean"})
+	schema.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
+	schema.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
+	schema.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
+	schema.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
 
 	// JsonExpression types
 	v = append(expAll, expJSON...)
-	schema.addExpression(v, "JSON", __Type{Name: "String"})
+	schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
 
 	return json.Marshal(schema)
 }
