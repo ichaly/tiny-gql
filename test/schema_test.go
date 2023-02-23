@@ -3,7 +3,10 @@ package test
 import (
 	"database/sql"
 	"fmt"
+	"github.com/go-chi/chi/v5"
 	"github.com/ichaly/tiny-go/core"
+	"net/http"
+	"os"
 	"path/filepath"
 	"testing"
 )
@@ -35,5 +38,20 @@ func TestNewSchema(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	println(string(in))
+
+	r := chi.NewRouter()
+	//r.Post("/graphql", func(w http.ResponseWriter, r *http.Request) {
+	//	_, _ = w.Write(in)
+	//})
+	r.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write(in)
+	})
+	r.HandleFunc("/intro", func(w http.ResponseWriter, r *http.Request) {
+		file, err := os.ReadFile("./intro.json")
+		if err != nil {
+			return
+		}
+		_, _ = w.Write(file)
+	})
+	_ = http.ListenAndServe(":3000", r)
 }

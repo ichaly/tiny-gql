@@ -31,6 +31,10 @@ func (my mapDirective) MarshalJSON() ([]byte, error) {
 	return json.Marshal(list)
 }
 
+type __Root struct {
+	Schema __Schema `json:"__schema,omitempty"`
+}
+
 type __Schema struct {
 	Types            mapType      `json:"types,omitempty"`
 	Directives       mapDirective `json:"directives,omitempty"`
@@ -400,13 +404,6 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	v = append(expAll, expJSON...)
 	schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
 
-	schema.addTablesEnumType()
-
-	for _, t := range schema.info.Tables {
-		if err = schema.addTable(t, ""); err != nil {
-			return
-		}
-	}
-
-	return json.Marshal(schema)
+	root := map[string]interface{}{"data": __Root{Schema: schema}}
+	return json.Marshal(root)
 }

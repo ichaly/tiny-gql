@@ -1,0 +1,5800 @@
+{
+  "data": {
+    "__schema": {
+      "types": [
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "JSONExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "hasKey",
+              "description": "JSON value contains this key",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "hasKeyAny",
+              "description": "JSON value contains any of these keys",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "hasKeyAll",
+              "description": "JSON value contains all of these keys",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "contains",
+              "description": "JSON value matches any of they key/value pairs",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "containedIn",
+              "description": "JSON value contains all of they key/value pairs",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "usersColumnsEnum",
+          "description": "Table columns for 'users'",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "reset_password_token",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "remember_created_at",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "category_counts",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "full_name",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "avatar",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "encrypted_password",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "phone",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reset_password_sent_at",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersvar_sampArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersstddevArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersavgArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersOrderByInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "reset_password_token",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "remember_created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "category_counts",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "full_name",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "avatar",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "encrypted_password",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "phone",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "reset_password_sent_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "OrderDirection",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "usersByID",
+          "description": "",
+          "fields": [
+            {
+              "name": "reset_password_token",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "remember_created_at",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "category_counts",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "JSON",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "full_name",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "avatar",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "encrypted_password",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "phone",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reset_password_sent_at",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "upper",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersupperArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "sum",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "userssumArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "max",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersmaxArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev_pop",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersstddev_popArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev_samp",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersstddev_sampArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "var_samp",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersvar_sampArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "length",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "userslengthArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "count",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "userscountArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "avg",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersavgArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "min",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersminArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersstddevArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "var_pop",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersvar_popArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "lower",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "userslowerArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [
+            {
+              "name": "id",
+              "description": "",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "limit",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "offset",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "distinctOn",
+              "description": "",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "first",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "last",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "after",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Cursor",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "before",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Cursor",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "orderBy",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersOrderByInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "where",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersWhereInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Subscription",
+          "description": "",
+          "fields": [
+            {
+              "name": "users",
+              "description": "",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "distinctOn",
+                  "description": "",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "after",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "orderBy",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersOrderByInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "users",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "usersByID",
+              "description": "",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "distinctOn",
+                  "description": "",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "after",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "orderBy",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersOrderByInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "usersByID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersstddev_sampArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersmaxArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "userslowerArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "users",
+          "description": "",
+          "fields": [
+            {
+              "name": "reset_password_token",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "remember_created_at",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "category_counts",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "JSON",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "full_name",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "avatar",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "encrypted_password",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "updated_at",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "phone",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "reset_password_sent_at",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "created_at",
+              "description": "",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "upper",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersupperArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "sum",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "userssumArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "max",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersmaxArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev_pop",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersstddev_popArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev_samp",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersstddev_sampArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "var_samp",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersvar_sampArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "length",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "userslengthArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "count",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "userscountArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "avg",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersavgArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "min",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersminArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "stddev",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersstddevArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "var_pop",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersvar_popArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "lower",
+              "description": "",
+              "args": [
+                {
+                  "name": "args",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "userslowerArgsInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "includeIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "skipIf",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": [
+            {
+              "name": "id",
+              "description": "",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "limit",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "offset",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "distinctOn",
+              "description": "",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "first",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "last",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "after",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Cursor",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "before",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "Cursor",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "orderBy",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersOrderByInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "where",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersWhereInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "IntExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "equals",
+              "description": "Equals value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEquals",
+              "description": "Does not equal value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThan",
+              "description": "Is greater than value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserThan",
+              "description": "Is lesser than value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterOrEquals",
+              "description": "Is greater than or equals value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserOrEquals",
+              "description": "Is lesser than or equals value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "like",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notLike",
+              "description": "Value not matching pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iLike",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notILike",
+              "description": "Value not matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "similar",
+              "description": "Value matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must match entire value.",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notSimilar",
+              "description": "Value not matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must not match entire value.",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "regex",
+              "description": "Value matches regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notRegex",
+              "description": "Value not matching regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iRegex",
+              "description": "Value matches (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIRegex",
+              "description": "Value not matching (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "IntListExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "in",
+              "description": "Is in list of values",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIn",
+              "description": "Is not in list of values",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "BooleanListExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "in",
+              "description": "Is in list of values",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIn",
+              "description": "Is not in list of values",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersstddev_popArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersupperArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersminArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersWhereInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "and",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersWhereInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "or",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersWhereInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "not",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersWhereInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "reset_password_token",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "remember_created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "category_counts",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "JSONExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "full_name",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "avatar",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "encrypted_password",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "IDExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "phone",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "reset_password_sent_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "StringExpression",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Cursor",
+          "description": "A cursor is an encoded string use for pagination",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "BooleanExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "equals",
+              "description": "Equals value",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEquals",
+              "description": "Does not equal value",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThan",
+              "description": "Is greater than value",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserThan",
+              "description": "Is lesser than value",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterOrEquals",
+              "description": "Is greater than or equals value",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserOrEquals",
+              "description": "Is lesser than or equals value",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "like",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notLike",
+              "description": "Value not matching pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iLike",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notILike",
+              "description": "Value not matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "similar",
+              "description": "Value matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must match entire value.",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notSimilar",
+              "description": "Value not matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must not match entire value.",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "regex",
+              "description": "Value matches regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notRegex",
+              "description": "Value not matching regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iRegex",
+              "description": "Value matches (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIRegex",
+              "description": "Value not matching (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "insertusersInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "reset_password_token",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "remember_created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "category_counts",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "JSON",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "full_name",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "avatar",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "encrypted_password",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "phone",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "reset_password_sent_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "updateusersInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "reset_password_token",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "remember_created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "category_counts",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "JSON",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "full_name",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "avatar",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "encrypted_password",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "phone",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "reset_password_sent_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "connect",
+              "description": "Connect to rows in table 'users' that match the expression",
+              "type": {
+                "kind": "",
+                "name": "usersWhereInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "disconnect",
+              "description": "Disconnect from rows in table 'users' that match the expression",
+              "type": {
+                "kind": "",
+                "name": "usersWhereInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "where",
+              "description": "Update rows in table 'users' that match the expression",
+              "type": {
+                "kind": "",
+                "name": "usersWhereInput",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Mutation",
+          "description": "",
+          "fields": [
+            {
+              "name": "users",
+              "description": "",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "distinctOn",
+                  "description": "",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "after",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "orderBy",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersOrderByInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "upsert",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "upsertusersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "insert",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "insertusersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "update",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "updateusersInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "delete",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "users",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "StringExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "equals",
+              "description": "Equals value",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEquals",
+              "description": "Does not equal value",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThan",
+              "description": "Is greater than value",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserThan",
+              "description": "Is lesser than value",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterOrEquals",
+              "description": "Is greater than or equals value",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserOrEquals",
+              "description": "Is lesser than or equals value",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "like",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notLike",
+              "description": "Value not matching pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iLike",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notILike",
+              "description": "Value not matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "similar",
+              "description": "Value matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must match entire value.",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notSimilar",
+              "description": "Value not matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must not match entire value.",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "regex",
+              "description": "Value matches regex pattern",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notRegex",
+              "description": "Value not matching regex pattern",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iRegex",
+              "description": "Value matches (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIRegex",
+              "description": "Value not matching (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "FloatExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "equals",
+              "description": "Equals value",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEquals",
+              "description": "Does not equal value",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThan",
+              "description": "Is greater than value",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserThan",
+              "description": "Is lesser than value",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterOrEquals",
+              "description": "Is greater than or equals value",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserOrEquals",
+              "description": "Is lesser than or equals value",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "like",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notLike",
+              "description": "Value not matching pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iLike",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notILike",
+              "description": "Value not matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "similar",
+              "description": "Value matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must match entire value.",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notSimilar",
+              "description": "Value not matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must not match entire value.",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "regex",
+              "description": "Value matches regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notRegex",
+              "description": "Value not matching regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iRegex",
+              "description": "Value matches (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIRegex",
+              "description": "Value not matching (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "StringListExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "in",
+              "description": "Is in list of values",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIn",
+              "description": "Is not in list of values",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "rolesEnum",
+          "description": "All available roles",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "user",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "anon",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "userslengthArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersvar_popArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "userscountArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Boolean",
+          "description": "The `Boolean` scalar type represents `true` or `false`",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Int",
+          "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent\nvalues between -(2^31) and 2^31 - 1.\n",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "String",
+          "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences.\nThe String type is most often used by GraphQL to represent free-form human-readable text.\n",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "FindSearchInput",
+          "description": "",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "children",
+              "description": "Children of parent row",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "parents",
+              "description": "Parents of current row",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "OrderDirection",
+          "description": "Result ordering types",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "asc",
+              "description": "Ascending order",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "desc",
+              "description": "Descending order",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "asc_nulls_first",
+              "description": "Ascending nulls first order",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "desc_nulls_first",
+              "description": "Descending nulls first order",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "asc_nulls_last",
+              "description": "Ascending nulls last order",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "desc_nulls_last",
+              "description": "Descending nulls last order",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "IDExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "equals",
+              "description": "Equals value",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEquals",
+              "description": "Does not equal value",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThan",
+              "description": "Is greater than value",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserThan",
+              "description": "Is lesser than value",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterOrEquals",
+              "description": "Is greater than or equals value",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lesserOrEquals",
+              "description": "Is lesser than or equals value",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "like",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notLike",
+              "description": "Value not matching pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iLike",
+              "description": "Value matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notILike",
+              "description": "Value not matching (case-insensitive) pattern where '%' represents zero or more characters and '_' represents a single character. Eg. '_r%' finds values not having 'r' in second position",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "similar",
+              "description": "Value matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must match entire value.",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notSimilar",
+              "description": "Value not matching regex pattern. Similar to the 'like' operator but with support for regex. Pattern must not match entire value.",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "regex",
+              "description": "Value matches regex pattern",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notRegex",
+              "description": "Value not matching regex pattern",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "iRegex",
+              "description": "Value matches (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIRegex",
+              "description": "Value not matching (case-insensitive) regex pattern",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "tablesEnum",
+          "description": "All available tables",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "users",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "validateFormatEnum",
+          "description": "Various formats supported by @validate",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "alphaNumeric",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "numeric",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "number",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "alpha",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "alphaUnicode",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "alphaUnicodeNumeric",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "uuid3",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "uuid4",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "uuid5",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ulid",
+              "description": "",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Float",
+          "description": "The `Float` scalar type represents signed double-precision fractional values as specified by\n[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point).",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "JSON",
+          "description": "The `JSON` scalar type represents json data",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "ID",
+          "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache.\nThe ID type appears in a JSON response as a String; however, it is not intended to be human-readable.\nWhen expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted\nas an ID.\n",
+          "fields": null,
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "FloatListExpression",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "in",
+              "description": "Is in list of values",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notIn",
+              "description": "Is not in list of values",
+              "type": {
+                "kind": "",
+                "name": "Float",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "Query",
+          "description": "",
+          "fields": [
+            {
+              "name": "users",
+              "description": "",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "distinctOn",
+                  "description": "",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "after",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "orderBy",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersOrderByInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "users",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "usersByID",
+              "description": "",
+              "args": [
+                {
+                  "name": "id",
+                  "description": "",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "limit",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "offset",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "distinctOn",
+                  "description": "",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "first",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "last",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Int",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "after",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "before",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "Cursor",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "orderBy",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersOrderByInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "where",
+                  "description": "",
+                  "type": {
+                    "kind": "",
+                    "name": "usersWhereInput",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "",
+                "name": "usersByID",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null,
+          "interfaces": [],
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "userssumArgsInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "_0",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "usersColumnsEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "upsertusersInput",
+          "description": "",
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "reset_password_token",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "remember_created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "category_counts",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "JSON",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "full_name",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "avatar",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "email",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "encrypted_password",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "updated_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "id",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "phone",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "reset_password_sent_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "created_at",
+              "description": "",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "enumValues": null,
+          "interfaces": null,
+          "possibleTypes": null
+        }
+      ],
+      "queryType": {
+        "name": "Query"
+      },
+      "mutationType": {
+        "name": "Mutation"
+      },
+      "subscriptionType": {
+        "name": "Subscription"
+      },
+      "directives": [
+        {
+          "name": "cacheControl",
+          "description": "Set the cache-control header to be passed back with the query result",
+          "locations": [
+            "QUERY",
+            "MUTATION",
+            "SUBSCRIPTION"
+          ],
+          "args": [
+            {
+              "name": "maxAge",
+              "description": "The maximum amount of time (in seconds) a resource is considered fresh",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "scope",
+              "description": "Set to 'public' when any cache can store the data and 'private' when only the browser cache should",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "isRepeatable": false
+        },
+        {
+          "name": "skip",
+          "description": "Skip field if defined condition is met",
+          "locations": [
+            "FIELD"
+          ],
+          "args": [
+            {
+              "name": "ifRole",
+              "description": "If current role matches",
+              "type": {
+                "kind": "",
+                "name": "rolesEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ifVar",
+              "description": "If a variable is true",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "isRepeatable": false
+        },
+        {
+          "name": "include",
+          "description": "Include field if defined condition is met",
+          "locations": [
+            "FIELD"
+          ],
+          "args": [
+            {
+              "name": "ifRole",
+              "description": "If current role matches",
+              "type": {
+                "kind": "",
+                "name": "rolesEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "ifVar",
+              "description": "If a variable is true",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "isRepeatable": false
+        },
+        {
+          "name": "add",
+          "description": "Add field if defined condition is met, Similar to 'include' except field is removed when condition is not met",
+          "locations": [
+            "FIELD"
+          ],
+          "args": [
+            {
+              "name": "ifRole",
+              "description": "If current role matches",
+              "type": {
+                "kind": "",
+                "name": "rolesEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "isRepeatable": false
+        },
+        {
+          "name": "remove",
+          "description": "Include field if defined condition is met. Unlike 'skip' field is remove not set to null",
+          "locations": [
+            "FIELD"
+          ],
+          "args": [
+            {
+              "name": "ifRole",
+              "description": "If current role matches",
+              "type": {
+                "kind": "",
+                "name": "rolesEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "isRepeatable": false
+        },
+        {
+          "name": "schema",
+          "description": "Specify database schema to use (Postgres specific)",
+          "locations": [
+            "FIELD"
+          ],
+          "args": [
+            {
+              "name": "name",
+              "description": "Name of schema",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "isRepeatable": false
+        },
+        {
+          "name": "notRelated",
+          "description": "Treat this selector as if it were a top-level selector with no relation to its parent",
+          "locations": [
+            "FIELD"
+          ],
+          "args": [],
+          "isRepeatable": false
+        },
+        {
+          "name": "through",
+          "description": "use the specified table as a join-table to connect this field and it's parent",
+          "locations": [
+            "FIELD"
+          ],
+          "args": [
+            {
+              "name": "table",
+              "description": "Table name",
+              "type": {
+                "kind": "",
+                "name": "tablesEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "isRepeatable": false
+        },
+        {
+          "name": "validate",
+          "description": "Add a validation for input variables",
+          "locations": [
+            "QUERY",
+            "MUTATION",
+            "SUBSCRIPTION"
+          ],
+          "args": [
+            {
+              "name": "variable",
+              "description": "Variable to add the validation on",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEqualsField",
+              "description": "Variable does not equal the value of another variable",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThanOrEqualsField",
+              "description": "Variable is greater than or equals the value of another variable",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "requiredWith",
+              "description": "Variable is required if one of a list of other variables exist",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "requiredWithAll",
+              "description": "Variable is required if all of a list of other variables exist",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "max",
+              "description": "Maximum value a variable can be",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "min",
+              "description": "Minimum value a variable can be",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThanOrEquals",
+              "description": "Variable is greater than or equal to a value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lessThanField",
+              "description": "Variable is less than the value of another variable",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "format",
+              "description": "Value must be of a format, eg: email, uuid",
+              "type": {
+                "kind": "",
+                "name": "validateFormatEnum",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "equals",
+              "description": "Variable equals a value",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "notEquals",
+              "description": "Variable does not equal a value",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lessThan",
+              "description": "Variable is less than a value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "requiredWithoutAll",
+              "description": "Variable is required if none of a list of other variables exist",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThanField",
+              "description": "Variable is greater than the value of another variable",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lessThanOrEqualsField",
+              "description": "Variable is less than or equals the value of another variable",
+              "type": {
+                "kind": "",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "required",
+              "description": "Variable is required",
+              "type": {
+                "kind": "",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "requiredWithout",
+              "description": "Variable is required if one of a list of other variables does not exist",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "oneOf",
+              "description": "Variable equals one of the following values",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "greaterThan",
+              "description": "Variable is greater than a value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "lessThanOrEquals",
+              "description": "Variable is less than or equal to a value",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "equalsField",
+              "description": "Variable equals the value of another variable",
+              "type": {
+                "kind": "",
+                "name": "Int",
+                "ofType": null
+              },
+              "defaultValue": null
+            }
+          ],
+          "isRepeatable": true
+        }
+      ]
+    }
+  }
+}
