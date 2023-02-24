@@ -4,7 +4,25 @@
       "types": [
         {
           "kind": "INPUT_OBJECT",
-          "name": "IntExpression",
+          "name": "upsertusersInput",
+          "inputFields": [
+            {
+              "name": "id",
+              "type": {
+                "name": "ID"
+              }
+            },
+            {
+              "name": "full_name",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "IDExpression",
           "inputFields": [
             {
               "name": "isNull",
@@ -18,7 +36,188 @@
         },
         {
           "kind": "INPUT_OBJECT",
+          "name": "StringExpression",
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "name": "Boolean"
+              }
+            }
+          ],
+          "interfaces": []
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "IntListExpression",
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "name": "Boolean"
+              }
+            }
+          ],
+          "interfaces": []
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "usersWhereInput",
+          "inputFields": [
+            {
+              "name": "id",
+              "type": {
+                "name": "IDExpression"
+              }
+            },
+            {
+              "name": "full_name",
+              "type": {
+                "name": "StringExpression"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "SCALAR",
+          "name": "Boolean",
+          "description": "The `Boolean` scalar type represents `true` or `false`"
+        },
+        {
+          "kind": "INPUT_OBJECT",
           "name": "StringListExpression",
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "name": "Boolean"
+              }
+            }
+          ],
+          "interfaces": []
+        },
+        {
+          "kind": "OBJECT",
+          "name": "users",
+          "fields": [
+            {
+              "name": "id",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "type": {
+                    "name": "usersWhereInput"
+                  }
+                },
+                {
+                  "name": "skipIf",
+                  "type": {
+                    "name": "usersWhereInput"
+                  }
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID"
+                }
+              },
+              "isDeprecated": false
+            },
+            {
+              "name": "full_name",
+              "args": [
+                {
+                  "name": "includeIf",
+                  "type": {
+                    "name": "usersWhereInput"
+                  }
+                },
+                {
+                  "name": "skipIf",
+                  "type": {
+                    "name": "usersWhereInput"
+                  }
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String"
+                }
+              },
+              "isDeprecated": false
+            }
+          ],
+          "inputFields": [
+            {
+              "name": "where",
+              "type": {
+                "name": "usersWhereInput"
+              }
+            }
+          ],
+          "interfaces": []
+        },
+        {
+          "kind": "ENUM",
+          "name": "OrderDirection",
+          "description": "Result ordering types",
+          "enumValues": [
+            {
+              "name": "asc",
+              "description": "Ascending order",
+              "isDeprecated": false
+            },
+            {
+              "name": "desc",
+              "description": "Descending order",
+              "isDeprecated": false
+            },
+            {
+              "name": "asc_nulls_first",
+              "description": "Ascending nulls first order",
+              "isDeprecated": false
+            },
+            {
+              "name": "desc_nulls_first",
+              "description": "Descending nulls first order",
+              "isDeprecated": false
+            },
+            {
+              "name": "asc_nulls_last",
+              "description": "Ascending nulls last order",
+              "isDeprecated": false
+            },
+            {
+              "name": "desc_nulls_last",
+              "description": "Descending nulls last order",
+              "isDeprecated": false
+            }
+          ]
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "BooleanExpression",
+          "inputFields": [
+            {
+              "name": "isNull",
+              "description": "Is value null (true) or not null (false)",
+              "type": {
+                "name": "Boolean"
+              }
+            }
+          ],
+          "interfaces": []
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "FloatExpression",
           "inputFields": [
             {
               "name": "isNull",
@@ -45,181 +244,31 @@
           "interfaces": []
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "usersOrderByInput",
-          "inputFields": [
-            {
-              "name": "reset_password_sent_at",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "created_at",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "avatar",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "email",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "reset_password_token",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "category_counts",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "updated_at",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "id",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "phone",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "encrypted_password",
-              "type": {
-                "name": "OrderDirection"
-              }
-            },
-            {
-              "name": "remember_created_at",
-              "type": {
-                "name": "OrderDirection"
-              }
-            }
-          ]
+          "kind": "SCALAR",
+          "name": "Int",
+          "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent\nvalues between -(2^31) and 2^31 - 1.\n"
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "updateusersInput",
-          "inputFields": [
+          "kind": "OBJECT",
+          "name": "Query",
+          "fields": [
             {
-              "name": "reset_password_sent_at",
+              "name": "users",
+              "args": [
+                {
+                  "name": "where",
+                  "type": {
+                    "name": "usersWhereInput"
+                  }
+                }
+              ],
               "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "created_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "avatar",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "email",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "reset_password_token",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "category_counts",
-              "type": {
-                "name": "JSON"
-              }
-            },
-            {
-              "name": "updated_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "id",
-              "type": {
-                "name": "ID"
-              }
-            },
-            {
-              "name": "phone",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "encrypted_password",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "remember_created_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "connect",
-              "description": "Connect to rows in table 'users' that match the expression",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            },
-            {
-              "name": "disconnect",
-              "description": "Disconnect from rows in table 'users' that match the expression",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            },
-            {
-              "name": "where",
-              "description": "Update rows in table 'users' that match the expression",
-              "type": {
-                "name": "usersWhereInput"
-              }
+                "name": "users"
+              },
+              "isDeprecated": false
             }
-          ]
+          ],
+          "interfaces": []
         },
         {
           "kind": "OBJECT",
@@ -228,63 +277,6 @@
             {
               "name": "users",
               "args": [
-                {
-                  "name": "id",
-                  "type": {
-                    "name": "ID"
-                  }
-                },
-                {
-                  "name": "limit",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "offset",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "distinctOn",
-                  "type": {
-                    "kind": "LIST",
-                    "ofType": {
-                      "name": "String"
-                    }
-                  }
-                },
-                {
-                  "name": "first",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "last",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "after",
-                  "type": {
-                    "name": "Cursor"
-                  }
-                },
-                {
-                  "name": "before",
-                  "type": {
-                    "name": "Cursor"
-                  }
-                },
-                {
-                  "name": "orderBy",
-                  "type": {
-                    "name": "usersOrderByInput"
-                  }
-                },
                 {
                   "name": "where",
                   "type": {
@@ -342,599 +334,12 @@
         },
         {
           "kind": "SCALAR",
-          "name": "ID",
-          "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache.\nThe ID type appears in a JSON response as a String; however, it is not intended to be human-readable.\nWhen expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted\nas an ID.\n"
+          "name": "JSON",
+          "description": "The `JSON` scalar type represents json data"
         },
         {
           "kind": "INPUT_OBJECT",
-          "name": "IDExpression",
-          "inputFields": [
-            {
-              "name": "isNull",
-              "description": "Is value null (true) or not null (false)",
-              "type": {
-                "name": "Boolean"
-              }
-            }
-          ],
-          "interfaces": []
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "BooleanListExpression",
-          "inputFields": [
-            {
-              "name": "isNull",
-              "description": "Is value null (true) or not null (false)",
-              "type": {
-                "name": "Boolean"
-              }
-            }
-          ],
-          "interfaces": []
-        },
-        {
-          "kind": "SCALAR",
-          "name": "Int",
-          "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent\nvalues between -(2^31) and 2^31 - 1.\n"
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "StringExpression",
-          "inputFields": [
-            {
-              "name": "isNull",
-              "description": "Is value null (true) or not null (false)",
-              "type": {
-                "name": "Boolean"
-              }
-            }
-          ],
-          "interfaces": []
-        },
-        {
-          "kind": "ENUM",
-          "name": "usersColumnsEnum",
-          "description": "Table columns for 'users'",
-          "enumValues": [
-            {
-              "name": "reset_password_sent_at",
-              "isDeprecated": false
-            },
-            {
-              "name": "created_at",
-              "isDeprecated": false
-            },
-            {
-              "name": "full_name",
-              "isDeprecated": false
-            },
-            {
-              "name": "avatar",
-              "isDeprecated": false
-            },
-            {
-              "name": "email",
-              "isDeprecated": false
-            },
-            {
-              "name": "reset_password_token",
-              "isDeprecated": false
-            },
-            {
-              "name": "category_counts",
-              "isDeprecated": false
-            },
-            {
-              "name": "updated_at",
-              "isDeprecated": false
-            },
-            {
-              "name": "id",
-              "isDeprecated": false
-            },
-            {
-              "name": "phone",
-              "isDeprecated": false
-            },
-            {
-              "name": "encrypted_password",
-              "isDeprecated": false
-            },
-            {
-              "name": "remember_created_at",
-              "isDeprecated": false
-            }
-          ]
-        },
-        {
-          "kind": "ENUM",
-          "name": "tablesEnum",
-          "description": "All available tables",
-          "enumValues": [
-            {
-              "name": "users",
-              "isDeprecated": false
-            }
-          ]
-        },
-        {
-          "kind": "OBJECT",
-          "name": "users",
-          "fields": [
-            {
-              "name": "reset_password_sent_at",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String"
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "created_at",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String"
-                }
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "full_name",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String"
-                }
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "avatar",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String"
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "email",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String"
-                }
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "reset_password_token",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String"
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "category_counts",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "JSON"
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "updated_at",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String"
-                }
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "id",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID"
-                }
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "phone",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String"
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "encrypted_password",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String"
-                }
-              },
-              "isDeprecated": false
-            },
-            {
-              "name": "remember_created_at",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "SCALAR",
-                "name": "String"
-              },
-              "isDeprecated": false
-            }
-          ],
-          "inputFields": [
-            {
-              "name": "id",
-              "type": {
-                "name": "ID"
-              }
-            },
-            {
-              "name": "limit",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "offset",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "distinctOn",
-              "type": {
-                "kind": "LIST",
-                "ofType": {
-                  "name": "String"
-                }
-              }
-            },
-            {
-              "name": "first",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "last",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "after",
-              "type": {
-                "name": "Cursor"
-              }
-            },
-            {
-              "name": "before",
-              "type": {
-                "name": "Cursor"
-              }
-            },
-            {
-              "name": "orderBy",
-              "type": {
-                "name": "usersOrderByInput"
-              }
-            },
-            {
-              "name": "where",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            }
-          ],
-          "interfaces": []
-        },
-        {
-          "kind": "SCALAR",
-          "name": "String",
-          "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences.\nThe String type is most often used by GraphQL to represent free-form human-readable text.\n"
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "FloatExpression",
-          "inputFields": [
-            {
-              "name": "isNull",
-              "description": "Is value null (true) or not null (false)",
-              "type": {
-                "name": "Boolean"
-              }
-            }
-          ],
-          "interfaces": []
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "usersWhereInput",
-          "inputFields": [
-            {
-              "name": "and",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            },
-            {
-              "name": "or",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            },
-            {
-              "name": "not",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            },
-            {
-              "name": "reset_password_sent_at",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "created_at",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "avatar",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "email",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "reset_password_token",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "category_counts",
-              "type": {
-                "name": "JSONExpression"
-              }
-            },
-            {
-              "name": "updated_at",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "id",
-              "type": {
-                "name": "IDExpression"
-              }
-            },
-            {
-              "name": "phone",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "encrypted_password",
-              "type": {
-                "name": "StringExpression"
-              }
-            },
-            {
-              "name": "remember_created_at",
-              "type": {
-                "name": "StringExpression"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "SCALAR",
-          "name": "Cursor",
-          "description": "A cursor is an encoded string use for pagination"
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "IntListExpression",
+          "name": "IntExpression",
           "inputFields": [
             {
               "name": "isNull",
@@ -961,165 +366,14 @@
           "interfaces": []
         },
         {
-          "kind": "INPUT_OBJECT",
-          "name": "upsertusersInput",
-          "inputFields": [
-            {
-              "name": "reset_password_sent_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "created_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "avatar",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "email",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "reset_password_token",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "category_counts",
-              "type": {
-                "name": "JSON"
-              }
-            },
-            {
-              "name": "updated_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "id",
-              "type": {
-                "name": "ID"
-              }
-            },
-            {
-              "name": "phone",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "encrypted_password",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "remember_created_at",
-              "type": {
-                "name": "String"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "insertusersInput",
-          "inputFields": [
-            {
-              "name": "reset_password_sent_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "created_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "avatar",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "email",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "reset_password_token",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "category_counts",
-              "type": {
-                "name": "JSON"
-              }
-            },
-            {
-              "name": "updated_at",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "id",
-              "type": {
-                "name": "ID"
-              }
-            },
-            {
-              "name": "phone",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "encrypted_password",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "remember_created_at",
-              "type": {
-                "name": "String"
-              }
-            }
-          ]
+          "kind": "SCALAR",
+          "name": "Cursor",
+          "description": "A cursor is an encoded string use for pagination"
         },
         {
           "kind": "SCALAR",
-          "name": "Float",
-          "description": "The `Float` scalar type represents signed double-precision fractional values as specified by\n[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point)."
+          "name": "String",
+          "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences.\nThe String type is most often used by GraphQL to represent free-form human-readable text.\n"
         },
         {
           "kind": "OBJECT",
@@ -1128,63 +382,6 @@
             {
               "name": "users",
               "args": [
-                {
-                  "name": "id",
-                  "type": {
-                    "name": "ID"
-                  }
-                },
-                {
-                  "name": "limit",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "offset",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "distinctOn",
-                  "type": {
-                    "kind": "LIST",
-                    "ofType": {
-                      "name": "String"
-                    }
-                  }
-                },
-                {
-                  "name": "first",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "last",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "after",
-                  "type": {
-                    "name": "Cursor"
-                  }
-                },
-                {
-                  "name": "before",
-                  "type": {
-                    "name": "Cursor"
-                  }
-                },
-                {
-                  "name": "orderBy",
-                  "type": {
-                    "name": "usersOrderByInput"
-                  }
-                },
                 {
                   "name": "where",
                   "type": {
@@ -1201,45 +398,8 @@
           "interfaces": []
         },
         {
-          "kind": "ENUM",
-          "name": "OrderDirection",
-          "description": "Result ordering types",
-          "enumValues": [
-            {
-              "name": "asc",
-              "description": "Ascending order",
-              "isDeprecated": false
-            },
-            {
-              "name": "desc",
-              "description": "Descending order",
-              "isDeprecated": false
-            },
-            {
-              "name": "asc_nulls_first",
-              "description": "Ascending nulls first order",
-              "isDeprecated": false
-            },
-            {
-              "name": "desc_nulls_first",
-              "description": "Descending nulls first order",
-              "isDeprecated": false
-            },
-            {
-              "name": "asc_nulls_last",
-              "description": "Ascending nulls last order",
-              "isDeprecated": false
-            },
-            {
-              "name": "desc_nulls_last",
-              "description": "Descending nulls last order",
-              "isDeprecated": false
-            }
-          ]
-        },
-        {
           "kind": "INPUT_OBJECT",
-          "name": "BooleanExpression",
+          "name": "BooleanListExpression",
           "inputFields": [
             {
               "name": "isNull",
@@ -1252,144 +412,86 @@
           "interfaces": []
         },
         {
-          "kind": "ENUM",
-          "name": "validateFormatEnum",
-          "description": "Various formats supported by @validate",
-          "enumValues": [
+          "kind": "INPUT_OBJECT",
+          "name": "updateusersInput",
+          "inputFields": [
             {
-              "name": "alpha",
-              "isDeprecated": false
+              "name": "id",
+              "type": {
+                "name": "ID"
+              }
             },
             {
-              "name": "alphaNumeric",
-              "isDeprecated": false
+              "name": "full_name",
+              "type": {
+                "name": "String"
+              }
             },
             {
-              "name": "alphaUnicode",
-              "isDeprecated": false
+              "name": "connect",
+              "description": "Connect to rows in table 'users' that match the expression",
+              "type": {
+                "name": "usersWhereInput"
+              }
             },
             {
-              "name": "alphaUnicodeNumeric",
-              "isDeprecated": false
+              "name": "disconnect",
+              "description": "Disconnect from rows in table 'users' that match the expression",
+              "type": {
+                "name": "usersWhereInput"
+              }
             },
             {
-              "name": "numeric",
-              "isDeprecated": false
-            },
-            {
-              "name": "number",
-              "isDeprecated": false
-            },
-            {
-              "name": "email",
-              "isDeprecated": false
-            },
-            {
-              "name": "uuid4",
-              "isDeprecated": false
-            },
-            {
-              "name": "uuid5",
-              "isDeprecated": false
-            },
-            {
-              "name": "uuid3",
-              "isDeprecated": false
-            },
-            {
-              "name": "ulid",
-              "isDeprecated": false
+              "name": "where",
+              "description": "Update rows in table 'users' that match the expression",
+              "type": {
+                "name": "usersWhereInput"
+              }
             }
           ]
         },
         {
           "kind": "SCALAR",
-          "name": "Boolean",
-          "description": "The `Boolean` scalar type represents `true` or `false`"
+          "name": "Float",
+          "description": "The `Float` scalar type represents signed double-precision fractional values as specified by\n[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point)."
         },
         {
           "kind": "SCALAR",
-          "name": "JSON",
-          "description": "The `JSON` scalar type represents json data"
+          "name": "ID",
+          "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache.\nThe ID type appears in a JSON response as a String; however, it is not intended to be human-readable.\nWhen expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted\nas an ID.\n"
         },
         {
-          "kind": "OBJECT",
-          "name": "Query",
-          "fields": [
+          "kind": "ENUM",
+          "name": "usersColumnsEnum",
+          "description": "Table columns for 'users'",
+          "enumValues": [
             {
-              "name": "users",
-              "args": [
-                {
-                  "name": "id",
-                  "type": {
-                    "name": "ID"
-                  }
-                },
-                {
-                  "name": "limit",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "offset",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "distinctOn",
-                  "type": {
-                    "kind": "LIST",
-                    "ofType": {
-                      "name": "String"
-                    }
-                  }
-                },
-                {
-                  "name": "first",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "last",
-                  "type": {
-                    "name": "Int"
-                  }
-                },
-                {
-                  "name": "after",
-                  "type": {
-                    "name": "Cursor"
-                  }
-                },
-                {
-                  "name": "before",
-                  "type": {
-                    "name": "Cursor"
-                  }
-                },
-                {
-                  "name": "orderBy",
-                  "type": {
-                    "name": "usersOrderByInput"
-                  }
-                },
-                {
-                  "name": "where",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "name": "users"
-              },
+              "name": "id",
+              "isDeprecated": false
+            },
+            {
+              "name": "full_name",
               "isDeprecated": false
             }
-          ],
-          "interfaces": []
+          ]
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "insertusersInput",
+          "inputFields": [
+            {
+              "name": "id",
+              "type": {
+                "name": "ID"
+              }
+            },
+            {
+              "name": "full_name",
+              "type": {
+                "name": "String"
+              }
+            }
+          ]
         }
       ],
       "queryType": {
@@ -1400,193 +502,7 @@
       },
       "subscriptionType": {
         "name": "Subscription"
-      },
-      "directives": [
-        {
-          "name": "validate",
-          "description": "Add a validation for input variables",
-          "locations": [
-            "QUERY",
-            "MUTATION",
-            "SUBSCRIPTION"
-          ],
-          "args": [
-            {
-              "name": "variable",
-              "description": "Variable to add the validation on",
-              "type": {
-                "kind": "NON_NULL",
-                "ofType": {
-                  "name": "String"
-                }
-              }
-            },
-            {
-              "name": "requiredWithAll",
-              "description": "Variable is required if all of a list of other variables exist",
-              "type": {
-                "kind": "LIST",
-                "ofType": {
-                  "name": "String"
-                }
-              }
-            },
-            {
-              "name": "requiredWithout",
-              "description": "Variable is required if one of a list of other variables does not exist",
-              "type": {
-                "kind": "LIST",
-                "ofType": {
-                  "name": "String"
-                }
-              }
-            },
-            {
-              "name": "lessThan",
-              "description": "Variable is less than a value",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "greaterThanField",
-              "description": "Variable is greater than the value of another variable",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "required",
-              "description": "Variable is required",
-              "type": {
-                "name": "Boolean"
-              }
-            },
-            {
-              "name": "min",
-              "description": "Minimum value a variable can be",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "notEquals",
-              "description": "Variable does not equal a value",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "greaterThanOrEquals",
-              "description": "Variable is greater than or equal to a value",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "notEqualsField",
-              "description": "Variable does not equal the value of another variable",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "lessThanField",
-              "description": "Variable is less than the value of another variable",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "requiredWith",
-              "description": "Variable is required if one of a list of other variables exist",
-              "type": {
-                "kind": "LIST",
-                "ofType": {
-                  "name": "String"
-                }
-              }
-            },
-            {
-              "name": "oneOf",
-              "description": "Variable equals one of the following values",
-              "type": {
-                "kind": "LIST",
-                "ofType": {
-                  "name": "String"
-                }
-              }
-            },
-            {
-              "name": "equalsField",
-              "description": "Variable equals the value of another variable",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "greaterThanOrEqualsField",
-              "description": "Variable is greater than or equals the value of another variable",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "format",
-              "description": "Value must be of a format, eg: email, uuid",
-              "type": {
-                "name": "validateFormatEnum"
-              }
-            },
-            {
-              "name": "requiredWithoutAll",
-              "description": "Variable is required if none of a list of other variables exist",
-              "type": {
-                "kind": "LIST",
-                "ofType": {
-                  "name": "String"
-                }
-              }
-            },
-            {
-              "name": "max",
-              "description": "Maximum value a variable can be",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "equals",
-              "description": "Variable equals a value",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "greaterThan",
-              "description": "Variable is greater than a value",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "lessThanOrEquals",
-              "description": "Variable is less than or equal to a value",
-              "type": {
-                "name": "Int"
-              }
-            },
-            {
-              "name": "lessThanOrEqualsField",
-              "description": "Variable is less than or equals the value of another variable",
-              "type": {
-                "name": "String"
-              }
-            }
-          ],
-          "isRepeatable": true
-        }
-      ]
+      }
     }
   }
 }
