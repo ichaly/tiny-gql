@@ -3,70 +3,6 @@
     "__schema": {
       "types": [
         {
-          "kind": "INPUT_OBJECT",
-          "name": "upsertusersInput",
-          "inputFields": [
-            {
-              "name": "id",
-              "type": {
-                "name": "ID"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "String"
-              }
-            }
-          ]
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "IDExpression",
-          "inputFields": [
-            {
-              "name": "isNull",
-              "description": "Is value null (true) or not null (false)",
-              "type": {
-                "name": "Boolean"
-              }
-            }
-          ],
-          "interfaces": []
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "StringExpression",
-          "inputFields": [
-            {
-              "name": "isNull",
-              "description": "Is value null (true) or not null (false)",
-              "type": {
-                "name": "Boolean"
-              }
-            }
-          ],
-          "interfaces": []
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "usersWhereInput",
-          "inputFields": [
-            {
-              "name": "id",
-              "type": {
-                "name": "IDExpression"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "StringExpression"
-              }
-            }
-          ]
-        },
-        {
           "kind": "SCALAR",
           "name": "Boolean",
           "description": "The `Boolean` scalar type represents `true` or `false`"
@@ -78,18 +14,6 @@
             {
               "name": "id",
               "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
               ],
               "type": {
                 "kind": "NON_NULL",
@@ -99,79 +23,10 @@
                 }
               },
               "isDeprecated": false
-            },
-            {
-              "name": "full_name",
-              "args": [
-                {
-                  "name": "includeIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                },
-                {
-                  "name": "skipIf",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String"
-                }
-              },
-              "isDeprecated": false
             }
           ],
-          "inputFields": [
-            {
-              "name": "where",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            }
-          ],
+          "inputFields": [],
           "interfaces": []
-        },
-        {
-          "kind": "ENUM",
-          "name": "OrderDirection",
-          "description": "Result ordering types",
-          "enumValues": [
-            {
-              "name": "asc",
-              "description": "Ascending order",
-              "isDeprecated": false
-            },
-            {
-              "name": "desc",
-              "description": "Descending order",
-              "isDeprecated": false
-            },
-            {
-              "name": "asc_nulls_first",
-              "description": "Ascending nulls first order",
-              "isDeprecated": false
-            },
-            {
-              "name": "desc_nulls_first",
-              "description": "Descending nulls first order",
-              "isDeprecated": false
-            },
-            {
-              "name": "asc_nulls_last",
-              "description": "Ascending nulls last order",
-              "isDeprecated": false
-            },
-            {
-              "name": "desc_nulls_last",
-              "description": "Descending nulls last order",
-              "isDeprecated": false
-            }
-          ]
         },
         {
           "kind": "SCALAR",
@@ -185,12 +40,6 @@
             {
               "name": "users",
               "args": [
-                {
-                  "name": "where",
-                  "type": {
-                    "name": "usersWhereInput"
-                  }
-                }
               ],
               "type": {
                 "name": "users"
@@ -202,66 +51,8 @@
         },
         {
           "kind": "SCALAR",
-          "name": "Cursor",
-          "description": "A cursor is an encoded string use for pagination"
-        },
-        {
-          "kind": "SCALAR",
           "name": "String",
           "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences.\nThe String type is most often used by GraphQL to represent free-form human-readable text.\n"
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "BooleanListExpression",
-          "inputFields": [
-            {
-              "name": "isNull",
-              "description": "Is value null (true) or not null (false)",
-              "type": {
-                "name": "Boolean"
-              }
-            }
-          ],
-          "interfaces": []
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "updateusersInput",
-          "inputFields": [
-            {
-              "name": "id",
-              "type": {
-                "name": "ID"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "String"
-              }
-            },
-            {
-              "name": "connect",
-              "description": "Connect to rows in table 'users' that match the expression",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            },
-            {
-              "name": "disconnect",
-              "description": "Disconnect from rows in table 'users' that match the expression",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            },
-            {
-              "name": "where",
-              "description": "Update rows in table 'users' that match the expression",
-              "type": {
-                "name": "usersWhereInput"
-              }
-            }
-          ]
         },
         {
           "kind": "SCALAR",
@@ -272,39 +63,6 @@
           "kind": "SCALAR",
           "name": "ID",
           "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache.\nThe ID type appears in a JSON response as a String; however, it is not intended to be human-readable.\nWhen expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted\nas an ID.\n"
-        },
-        {
-          "kind": "ENUM",
-          "name": "usersColumnsEnum",
-          "description": "Table columns for 'users'",
-          "enumValues": [
-            {
-              "name": "id",
-              "isDeprecated": false
-            },
-            {
-              "name": "full_name",
-              "isDeprecated": false
-            }
-          ]
-        },
-        {
-          "kind": "INPUT_OBJECT",
-          "name": "insertusersInput",
-          "inputFields": [
-            {
-              "name": "id",
-              "type": {
-                "name": "ID"
-              }
-            },
-            {
-              "name": "full_name",
-              "type": {
-                "name": "String"
-              }
-            }
-          ]
         }
       ],
       "queryType": {
