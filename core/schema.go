@@ -33,16 +33,16 @@ func (my mapDirective) MarshalJSON() ([]byte, error) {
 }
 
 type __Root struct {
-	Schema __Schema `json:"__schema,omitempty"`
+	Schema __Schema `json:"__schema"`
 }
 
 type __Schema struct {
-	Types            mapType      `json:"types,omitempty"`
-	Directives       mapDirective `json:"directives,omitempty"`
+	Types            mapType      `json:"types"`
+	Directives       mapDirective `json:"directives"`
 	Description      string       `json:"description,omitempty"`
-	QueryType        __Type       `json:"queryType,omitempty"`
-	MutationType     *__Type      `json:"mutationType,omitempty"`
-	SubscriptionType *__Type      `json:"subscriptionType,omitempty"`
+	QueryType        __Type       `json:"queryType"`
+	MutationType     *__Type      `json:"mutationType"`
+	SubscriptionType *__Type      `json:"subscriptionType"`
 
 	conf *Config
 	info *DBInfo
@@ -53,38 +53,52 @@ type __Type struct {
 	Name        string     `json:"name,omitempty"`
 	Description string     `json:"description,omitempty"`
 	// must be non-null for OBJECT and INTERFACE, otherwise null.
-	Fields []__Field `json:"fields,omitempty"`
+	Fields []__Field `json:"fields"`
 	// must be non-null for OBJECT and INTERFACE, otherwise null.
-	Interfaces []__Type `json:"interfaces,omitempty"`
+	Interfaces []__Type `json:"interfaces"`
 	// must be non-null for INTERFACE and UNION, otherwise null.
-	PossibleTypes []__Type `json:"possibleTypes,omitempty"`
+	PossibleTypes []__Type `json:"possibleTypes"`
 	// must be non-null for ENUM, otherwise null.
-	EnumValues []__Field `json:"enumValues,omitempty"`
+	EnumValues []__EnumValue `json:"enumValues"`
 	// must be non-null for INPUT_OBJECT, otherwise null.
-	//InputFields func(isDeprecatedArgs) []__Field `json:"-"`
-	InputFields []__Field `json:"inputFields,omitempty"`
+	InputFields []__InputValue `json:"inputFields"`
 	// must be non-null for NON_NULL and LIST, otherwise null.
-	OfType *__Type `json:"ofType,omitempty"`
+	OfType *__Type `json:"ofType"`
 	// may be non-null for custom SCALAR, otherwise null.
 	SpecifiedByURL string `json:"specifiedByUrl,omitempty"`
 }
 
 type __Field struct {
-	Name              string    `json:"name,omitempty"`
-	Description       string    `json:"description,omitempty"`
-	Args              []__Field `json:"args,omitempty"`
-	Type              *__Type   `json:"type,omitempty"`
-	IsDeprecated      bool      `json:"isDeprecated,omitempty"`
-	DeprecationReason string    `json:"deprecationReason,omitempty"`
-	DefaultValue      string    `json:"defaultValue,omitempty"`
+	Name              string         `json:"name,omitempty"`
+	Description       string         `json:"description,omitempty"`
+	Args              []__InputValue `json:"args"`
+	Type              *__Type        `json:"type"`
+	IsDeprecated      bool           `json:"isDeprecated"`
+	DeprecationReason string         `json:"deprecationReason,omitempty"`
+}
+
+type __InputValue struct {
+	Name              string  `json:"name,omitempty"`
+	Description       string  `json:"description,omitempty"`
+	Type              *__Type `json:"type"`
+	IsDeprecated      bool    `json:"isDeprecated"`
+	DeprecationReason string  `json:"deprecationReason,omitempty"`
+	DefaultValue      string  `json:"defaultValue,omitempty"`
+}
+
+type __EnumValue struct {
+	Name              string `json:"name,omitempty"`
+	Description       string `json:"description,omitempty"`
+	IsDeprecated      bool   `json:"isDeprecated"`
+	DeprecationReason string `json:"deprecationReason,omitempty"`
 }
 
 type __Directive struct {
 	Name         string                `json:"name,omitempty"`
 	Description  string                `json:"description,omitempty"`
-	Locations    []__DirectiveLocation `json:"locations,omitempty"`
-	Args         []__Field             `json:"args,omitempty"`
-	IsRepeatable bool                  `json:"isRepeatable,omitempty"`
+	Locations    []__DirectiveLocation `json:"locations"`
+	Args         []__Field             `json:"args"`
+	IsRepeatable bool                  `json:"isRepeatable"`
 }
 
 type __TypeKind string
@@ -136,11 +150,11 @@ func (my *__Schema) addType(t __Type) {
 	my.Types[t.Name] = t
 }
 
-func (my *__Schema) addExpression(exps []__Field, name string, sub __Type) {
+func (my *__Schema) addExpression(exps []__InputValue, name string, sub __Type) {
 	t := __Type{
 		Kind:        TK_INPUT_OBJECT,
 		Name:        name + SUFFIX_EXP,
-		InputFields: []__Field{},
+		InputFields: []__InputValue{},
 	}
 
 	for _, ex := range exps {
@@ -163,7 +177,7 @@ func (my *__Schema) addTablesEnumType() {
 		if t.Blocked {
 			continue
 		}
-		f := __Field{Name: my.getName(t.Name)}
+		f := __EnumValue{Name: my.getName(t.Name)}
 		if t.Comment != nil {
 			f.Description = *t.Comment
 		}
@@ -184,7 +198,7 @@ func (my *__Schema) addColumnsEnumType(t *DBTable) (err error) {
 		if c.Blocked {
 			continue
 		}
-		f := __Field{Name: my.getName(c.Name)}
+		f := __EnumValue{Name: my.getName(c.Name)}
 		if t.Comment != nil {
 			f.Description = *c.Comment
 		}
@@ -192,17 +206,6 @@ func (my *__Schema) addColumnsEnumType(t *DBTable) (err error) {
 	}
 	my.addType(ft)
 	return
-}
-
-func (my *__Schema) addTypeTo(op string, ft __Type) {
-	qt := my.Types[op]
-	qt.Fields = append(qt.Fields, __Field{
-		Name:        ft.Name,
-		Description: ft.Description,
-		Args:        ft.InputFields,
-		Type:        &__Type{Name: ft.Name},
-	})
-	my.Types[op] = qt
 }
 
 func getTypeFromColumn(col DBColumn) (gqlType string) {
@@ -215,7 +218,7 @@ func getTypeFromColumn(col DBColumn) (gqlType string) {
 }
 
 func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
-	f.Args = []__Field{}
+	f.Args = []__InputValue{}
 	f.Name = my.getName(c.Name)
 	t := __Type{Name: "String"}
 
@@ -238,16 +241,27 @@ func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
 
 	f.Type = &t
 
-	f.Args = append(f.Args, __Field{
+	f.Args = append(f.Args, __InputValue{
 		Name: "includeIf",
 		Type: &__Type{Name: c.Table + SUFFIX_WHERE},
 	})
 
-	f.Args = append(f.Args, __Field{
+	f.Args = append(f.Args, __InputValue{
 		Name: "skipIf",
 		Type: &__Type{Name: c.Table + SUFFIX_WHERE},
 	})
 	return
+}
+
+func (my *__Schema) addTypeTo(op string, ft __Type) {
+	qt := my.Types[op]
+	qt.Fields = append(qt.Fields, __Field{
+		Name:        ft.Name,
+		Description: ft.Description,
+		Args:        ft.InputFields,
+		Type:        &__Type{Name: ft.Name},
+	})
+	my.Types[op] = qt
 }
 
 func (my *__Schema) addTable(t *DBTable, alias string) (err error) {
@@ -260,21 +274,14 @@ func (my *__Schema) addTable(t *DBTable, alias string) (err error) {
 		return
 	}
 	my.addTypeTo("Query", tq)
-	my.addTypeTo("Subscription", tq)
-
-	// add table type to mutation
-	//var tm __Type
-	//if tm, err = my.addInputType(t, tq); err != nil {
-	//	return
-	//}
-	//my.addTypeTo("Mutation", tm)
 	return
 }
 
 func (my *__Schema) addTableType(t *DBTable, alias string, depth int) (ft __Type, err error) {
 	ft = __Type{
 		Kind:        TK_OBJECT,
-		InputFields: []__Field{},
+		InputFields: []__InputValue{},
+		Interfaces:  []__Type{},
 	}
 
 	name := t.Name
@@ -287,9 +294,6 @@ func (my *__Schema) addTableType(t *DBTable, alias string, depth int) (ft __Type
 		ft.Description = *t.Comment
 	}
 
-	var hasSearch bool
-	var hasRecursive bool
-
 	if err = my.addColumnsEnumType(t); err != nil {
 		return
 	}
@@ -299,10 +303,10 @@ func (my *__Schema) addTableType(t *DBTable, alias string, depth int) (ft __Type
 			continue
 		}
 		if c.FullText {
-			hasSearch = true
+			//hasSearch = true
 		}
 		if c.FKRecursive {
-			hasRecursive = true
+			//hasRecursive = true
 		}
 		var f __Field
 		f, err = my.getColumnField(c)
@@ -312,62 +316,7 @@ func (my *__Schema) addTableType(t *DBTable, alias string, depth int) (ft __Type
 		ft.Fields = append(ft.Fields, f)
 	}
 
-	//for _, fn := range my.schema.GetFunctions() {
-	//	f1 := my.getFunctionField(t, fn)
-	//	ft.Fields = append(ft.Fields, f1)
-	//}
-
-	//relNodes1, err := my.schema.GetFirstDegree(t)
-	//if err != nil {
-	//	return
-	//}
-	//
-	//relNodes2, err := my.schema.GetSecondDegree(t)
-	//if err != nil {
-	//	return
-	//}
-	//
-	//for _, relNode := range append(relNodes1, relNodes2...) {
-	//	var f fieldObj
-	//	var skip bool
-	//	f, skip, err = my.getTableField(relNode)
-	//	if err != nil {
-	//		return
-	//	}
-	//	if !skip {
-	//		ft.Fields = append(ft.Fields, f)
-	//	}
-	//}
-
-	ft.InputFields = append(ft.InputFields, __Field{Name: "id", Type: &__Type{Name: "ID"}})
-	ft.InputFields = append(ft.InputFields, __Field{Name: "limit", Type: &__Type{Name: "Int"}})
-	ft.InputFields = append(ft.InputFields, __Field{Name: "offset", Type: &__Type{Name: "Int"}})
-	ft.InputFields = append(ft.InputFields, __Field{Name: "distinctOn", Type: &__Type{Kind: TK_LIST, OfType: &__Type{Name: "String"}}})
-	ft.InputFields = append(ft.InputFields, __Field{Name: "first", Type: &__Type{Name: "Int"}})
-	ft.InputFields = append(ft.InputFields, __Field{Name: "last", Type: &__Type{Name: "Int"}})
-	ft.InputFields = append(ft.InputFields, __Field{Name: "after", Type: &__Type{Name: "Cursor"}})
-	ft.InputFields = append(ft.InputFields, __Field{Name: "before", Type: &__Type{Name: "Cursor"}})
-
-	//my.addOrderByType(t, &ft)
-	//my.addWhereType(t, &ft)
-	//my.addTableArgsType(t, &ft)
-
-	if hasSearch {
-		ft.InputFields = append(ft.InputFields, __Field{Name: "search", Type: &__Type{Name: "String"}})
-	}
-
-	if depth > 1 {
-		return
-	}
-	if depth > 0 {
-		ft.InputFields = append(ft.InputFields, __Field{Name: "find", Type: &__Type{Name: "Recursion"}})
-	}
-
 	my.addType(ft)
-
-	if hasRecursive {
-		_, err = my.addTableType(t, name+"Recursive", depth+1)
-	}
 	return
 }
 

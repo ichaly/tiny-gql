@@ -116,7 +116,7 @@ var stdTypes = []__Type{
 		Kind:        TK_ENUM,
 		Name:        "Recursion",
 		Description: "Recursion relation types",
-		EnumValues: []__Field{
+		EnumValues: []__EnumValue{
 			{
 				Name:        "children",
 				Description: "Children of parent row",
@@ -129,7 +129,7 @@ var stdTypes = []__Type{
 		Kind:        TK_ENUM,
 		Name:        "Direction",
 		Description: "Result ordering types",
-		EnumValues: []__Field{
+		EnumValues: []__EnumValue{
 			{
 				Name:        "asc",
 				Description: "Ascending order",
@@ -153,7 +153,7 @@ var stdTypes = []__Type{
 	},
 }
 
-var expAll = []__Field{
+var expAll = []__InputValue{
 	{
 		Name:        "isNull",
 		Type:        &__Type{Kind: TK_SCALAR, Name: "Boolean"},
@@ -161,7 +161,7 @@ var expAll = []__Field{
 	},
 }
 
-var expScalar = []__Field{
+var expScalar = []__InputValue{
 	{Name: "equals", Description: "Equals value"},
 	{Name: "notEquals", Description: "Does not equal value"},
 	{Name: "greaterThan", Description: "Is greater than value"},
@@ -180,12 +180,12 @@ var expScalar = []__Field{
 	{Name: "notIRegex", Description: "Value not matching (case-insensitive) regex pattern"},
 }
 
-var expList = []__Field{
+var expList = []__InputValue{
 	{Name: "in", Description: "Is in list of values"},
 	{Name: "notIn", Description: "Is not in list of values"},
 }
 
-var expJSON = []__Field{
+var expJSON = []__InputValue{
 	{Name: "hasKey", Description: "JSON value contains this key"},
 	{Name: "hasKeyAny", Description: "JSON value contains any of these keys"},
 	{Name: "hasKeyAll", Description: "JSON value contains all of these keys"},

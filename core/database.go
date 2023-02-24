@@ -144,7 +144,6 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 				Comment:  c.Description,
 				Columns:  make(map[string]DBColumn),
 				FullText: make(map[string]DBColumn),
-				//Type         string
 			}
 			if isBlock(c.Table, blockList) {
 				t.Blocked = true
@@ -156,9 +155,8 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 		}
 		if c.PrimaryKey {
 			t.PrimaryCol = c
-		} else {
-			t.Columns[ck] = c
 		}
+		t.Columns[ck] = c
 	}
 	return di, nil
 }
