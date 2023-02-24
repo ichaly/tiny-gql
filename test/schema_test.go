@@ -20,6 +20,7 @@ func init() {
 		panic(err)
 	}
 }
+
 func TestNewSchema(t *testing.T) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -30,17 +31,16 @@ func TestNewSchema(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-
+	info, err := core.GetDBInfo(db, dialect, conf.Blocklist)
+	if err != nil {
+		panic(err)
+	}
+	in, err := core.NewSchema(conf, info)
+	if err != nil {
+		panic(err)
+	}
 	r := chi.NewRouter()
 	r.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
-		info, err := core.GetDBInfo(db, dialect, conf.Blocklist)
-		if err != nil {
-			panic(err)
-		}
-		in, err := core.NewSchema(conf, info)
-		if err != nil {
-			panic(err)
-		}
 		_, _ = w.Write(in)
 	})
 	r.HandleFunc("/intro", func(w http.ResponseWriter, r *http.Request) {

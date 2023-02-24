@@ -41,8 +41,8 @@ type __Schema struct {
 	Directives       mapDirective `json:"directives"`
 	Description      string       `json:"description,omitempty"`
 	QueryType        __Type       `json:"queryType"`
-	MutationType     *__Type      `json:"mutationType"`
-	SubscriptionType *__Type      `json:"subscriptionType"`
+	MutationType     *__Type      `json:"mutationType,omitempty"`
+	SubscriptionType *__Type      `json:"subscriptionType,omitempty"`
 
 	conf *Config
 	info *DBInfo
@@ -97,7 +97,7 @@ type __Directive struct {
 	Name         string                `json:"name,omitempty"`
 	Description  string                `json:"description,omitempty"`
 	Locations    []__DirectiveLocation `json:"locations"`
-	Args         []__Field             `json:"args"`
+	Args         []__InputValue        `json:"args"`
 	IsRepeatable bool                  `json:"isRepeatable"`
 }
 
@@ -166,7 +166,7 @@ func (my *__Schema) addExpression(exps []__InputValue, name string, sub __Type) 
 	my.addType(t)
 }
 
-func (my *__Schema) addTablesEnumType() {
+func (my *__Schema) addTablesEnum() {
 	te := __Type{
 		Kind:        TK_ENUM,
 		Name:        "Tables" + SUFFIX_ENUM,
@@ -208,6 +208,34 @@ func (my *__Schema) addColumnsEnumType(t *DBTable) (err error) {
 	return
 }
 
+func (my *__Schema) addTypeTo(op string, ft __Type) {
+	qt := my.Types[op]
+	qt.Fields = append(qt.Fields, __Field{
+		Name:        ft.Name,
+		Description: ft.Description,
+		Args:        []__InputValue{},
+		Type:        &__Type{Name: ft.Name},
+	})
+	my.Types[op] = qt
+}
+
+func (my *__Schema) addTable(t *DBTable, alias string) (err error) {
+	if t.Blocked || len(t.Columns) == 0 {
+		return
+	}
+
+	// add table type to query and subscription
+	tt, err := my.getTableType(t, alias, 0)
+	if err != nil {
+		return
+	}
+	my.addType(tt)
+	my.addTypeTo("Query", tt)
+	my.addTypeTo("Subscription", tt)
+
+	return
+}
+
 func getTypeFromColumn(col DBColumn) (gqlType string) {
 	if col.PrimaryKey {
 		gqlType = "ID"
@@ -218,8 +246,6 @@ func getTypeFromColumn(col DBColumn) (gqlType string) {
 }
 
 func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
-	f.Args = []__InputValue{}
-	f.Name = my.getName(c.Name)
 	t := __Type{Name: "String"}
 
 	if v, ok := my.Types[getTypeFromColumn(c)]; ok {
@@ -239,64 +265,41 @@ func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
 		}}
 	}
 
+	f.Args = []__InputValue{}
+	f.Name = my.getName(c.Name)
 	f.Type = &t
 
-	f.Args = append(f.Args, __InputValue{
-		Name: "includeIf",
-		Type: &__Type{Name: c.Table + SUFFIX_WHERE},
-	})
-
-	f.Args = append(f.Args, __InputValue{
-		Name: "skipIf",
-		Type: &__Type{Name: c.Table + SUFFIX_WHERE},
-	})
+	//f.Args = append(f.Args, __InputValue{
+	//	Name: "includeIf",
+	//	Type: &__Type{Name: c.Table + SUFFIX_WHERE},
+	//})
+	//
+	//f.Args = append(f.Args, __InputValue{
+	//	Name: "skipIf",
+	//	Type: &__Type{Name: c.Table + SUFFIX_WHERE},
+	//})
 	return
 }
 
-func (my *__Schema) addTypeTo(op string, ft __Type) {
-	qt := my.Types[op]
-	qt.Fields = append(qt.Fields, __Field{
-		Name:        ft.Name,
-		Description: ft.Description,
-		Args:        ft.InputFields,
-		Type:        &__Type{Name: ft.Name},
-	})
-	my.Types[op] = qt
-}
-
-func (my *__Schema) addTable(t *DBTable, alias string) (err error) {
-	if t.Blocked || len(t.Columns) == 0 {
-		return
-	}
-	// add table type to query and subscription
-	var tq __Type
-	if tq, err = my.addTableType(t, alias, 0); err != nil {
-		return
-	}
-	my.addTypeTo("Query", tq)
-	return
-}
-
-func (my *__Schema) addTableType(t *DBTable, alias string, depth int) (ft __Type, err error) {
+func (my *__Schema) getTableType(t *DBTable, alias string, depth int) (ft __Type, err error) {
 	ft = __Type{
-		Kind:        TK_OBJECT,
-		InputFields: []__InputValue{},
-		Interfaces:  []__Type{},
+		Kind:       TK_OBJECT,
+		Interfaces: []__Type{},
 	}
 
 	name := t.Name
 	if alias != "" {
 		name = alias
 	}
-	ft.Name = name
+	ft.Name = my.getName(name)
 
 	if t.Comment != nil {
 		ft.Description = *t.Comment
 	}
 
-	if err = my.addColumnsEnumType(t); err != nil {
-		return
-	}
+	//if err = my.addColumnsEnumType(t); err != nil {
+	//	return
+	//}
 
 	for _, c := range t.Columns {
 		if c.Blocked {
@@ -315,19 +318,17 @@ func (my *__Schema) addTableType(t *DBTable, alias string, depth int) (ft __Type
 		}
 		ft.Fields = append(ft.Fields, f)
 	}
-
-	my.addType(ft)
 	return
 }
 
 func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	schema := __Schema{
-		conf:             conf,
-		info:             info,
-		Types:            map[string]__Type{},
-		Directives:       map[string]__Directive{},
-		QueryType:        __Type{Name: "Query"},
-		MutationType:     &__Type{Name: "Mutation"},
+		conf:       conf,
+		info:       info,
+		Types:      map[string]__Type{},
+		Directives: map[string]__Directive{},
+		QueryType:  __Type{Name: "Query"},
+		//MutationType: &__Type{Name: "Mutation"},
 		SubscriptionType: &__Type{Name: "Subscription"},
 	}
 
@@ -335,26 +336,27 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 		schema.addType(v)
 	}
 
-	// Expression types
-	v := append(expAll, expScalar...)
-	schema.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
-	schema.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
-	schema.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
-	schema.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
-	schema.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+	//// Expression types
+	//v := append(expAll, expScalar...)
+	//schema.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
+	//schema.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
+	//schema.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
+	//schema.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
+	//schema.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+	//
+	//// ListExpression Types
+	//v = append(expAll, expList...)
+	//schema.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
+	//schema.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
+	//schema.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
+	//schema.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+	//
+	//// JsonExpression types
+	//v = append(expAll, expJSON...)
+	//schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
+	//
+	//schema.addTablesEnum()
 
-	// ListExpression Types
-	v = append(expAll, expList...)
-	schema.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
-	schema.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
-	schema.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
-	schema.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
-
-	// JsonExpression types
-	v = append(expAll, expJSON...)
-	schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
-
-	schema.addTablesEnumType()
 	for _, t := range schema.info.Tables {
 		if err = schema.addTable(t, ""); err != nil {
 			return

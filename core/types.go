@@ -20,24 +20,6 @@ var dbTypes = map[string]string{
 	"boolean":                     "Boolean",
 }
 
-func getType(t string) (gqlType string, list bool) {
-	if i := strings.IndexRune(t, '('); i != -1 {
-		t = t[:i]
-	}
-	if i := strings.IndexRune(t, '['); i != -1 {
-		list = true
-		t = t[:i]
-	}
-	if v, ok := dbTypes[t]; ok {
-		gqlType = v
-	} else if t == "json" || t == "jsonb" {
-		gqlType = "JSON"
-	} else {
-		gqlType = "String"
-	}
-	return
-}
-
 const (
 	//KIND_SCALAR      = "SCALAR"
 	//KIND_OBJECT      = "OBJECT"
@@ -108,10 +90,10 @@ var stdTypes = []__Type{
 		Kind:       TK_OBJECT,
 		Name:       "Subscription",
 		Interfaces: []__Type{},
-	}, {
-		Kind:       TK_OBJECT,
-		Name:       "Mutation",
-		Interfaces: []__Type{},
+		//}, {
+		//	Kind:       TK_OBJECT,
+		//	Name:       "Mutation",
+		//	Interfaces: []__Type{},
 	}, {
 		Kind:        TK_ENUM,
 		Name:        "Recursion",
@@ -191,4 +173,22 @@ var expJSON = []__InputValue{
 	{Name: "hasKeyAll", Description: "JSON value contains all of these keys"},
 	{Name: "contains", Description: "JSON value matches any of they key/value pairs"},
 	{Name: "containedIn", Description: "JSON value contains all of they key/value pairs"},
+}
+
+func getType(t string) (gqlType string, list bool) {
+	if i := strings.IndexRune(t, '('); i != -1 {
+		t = t[:i]
+	}
+	if i := strings.IndexRune(t, '['); i != -1 {
+		list = true
+		t = t[:i]
+	}
+	if v, ok := dbTypes[t]; ok {
+		gqlType = v
+	} else if t == "json" || t == "jsonb" {
+		gqlType = "JSON"
+	} else {
+		gqlType = "String"
+	}
+	return
 }
