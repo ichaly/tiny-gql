@@ -40,9 +40,6 @@ func TestNewSchema(t *testing.T) {
 	}
 
 	r := chi.NewRouter()
-	//r.Post("/graphql", func(w http.ResponseWriter, r *http.Request) {
-	//	_, _ = w.Write(in)
-	//})
 	r.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write(in)
 	})

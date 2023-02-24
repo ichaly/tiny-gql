@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/bytedance/sonic"
 	"github.com/iancoleman/strcase"
 )
 
@@ -404,6 +405,13 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	v = append(expAll, expJSON...)
 	schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
 
+	schema.addTablesEnumType()
+	for _, t := range schema.info.Tables {
+		if err = schema.addTable(t, ""); err != nil {
+			return
+		}
+	}
+
 	root := map[string]interface{}{"data": __Root{Schema: schema}}
-	return json.Marshal(root)
+	return sonic.Marshal(root)
 }
