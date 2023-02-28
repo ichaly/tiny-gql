@@ -1,6 +1,7 @@
 package test
 
 import (
+	"github.com/bytedance/sonic"
 	"github.com/ichaly/tiny-go/core"
 	"path/filepath"
 	"testing"
@@ -11,7 +12,7 @@ func TestReadInConfig(t *testing.T) {
 	if err != nil {
 		return
 	}
-	str, err := json.MarshalToString(cfg)
+	str, err := sonic.MarshalString(cfg)
 	if err != nil {
 		return
 	}
