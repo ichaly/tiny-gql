@@ -63,7 +63,7 @@ type __Type struct {
 	// must be non-null for INPUT_OBJECT, otherwise null.
 	InputFields []__InputValue `json:"inputFields"`
 	// must be non-null for NON_NULL and LIST, otherwise null.
-	OfType *__Type `json:"ofType"`
+	OfType *__Type `json:"ofType,omitempty"`
 	// may be non-null for custom SCALAR, otherwise null.
 	SpecifiedByURL string `json:"specifiedByUrl,omitempty"`
 }
@@ -72,7 +72,7 @@ type __Field struct {
 	Name              string         `json:"name,omitempty"`
 	Description       string         `json:"description,omitempty"`
 	Args              []__InputValue `json:"args"`
-	Type              *__Type        `json:"type"`
+	Type              *__Type        `json:"type,omitempty"`
 	IsDeprecated      bool           `json:"isDeprecated"`
 	DeprecationReason string         `json:"deprecationReason,omitempty"`
 }
@@ -80,7 +80,7 @@ type __Field struct {
 type __InputValue struct {
 	Name              string  `json:"name,omitempty"`
 	Description       string  `json:"description,omitempty"`
-	Type              *__Type `json:"type"`
+	Type              *__Type `json:"type,omitempty"`
 	IsDeprecated      bool    `json:"isDeprecated"`
 	DeprecationReason string  `json:"deprecationReason,omitempty"`
 	DefaultValue      string  `json:"defaultValue,omitempty"`
@@ -297,9 +297,9 @@ func (my *__Schema) getTableType(t *DBTable, alias string, depth int) (ft __Type
 		ft.Description = *t.Comment
 	}
 
-	//if err = my.addColumnsEnumType(t); err != nil {
-	//	return
-	//}
+	if err = my.addColumnsEnumType(t); err != nil {
+		return
+	}
 
 	for _, c := range t.Columns {
 		if c.Blocked {
@@ -328,7 +328,7 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 		Types:      map[string]__Type{},
 		Directives: map[string]__Directive{},
 		QueryType:  __Type{Name: "Query"},
-		//MutationType: &__Type{Name: "Mutation"},
+		//MutationType:     &__Type{Name: "Mutation"},
 		SubscriptionType: &__Type{Name: "Subscription"},
 	}
 
@@ -336,26 +336,26 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 		schema.addType(v)
 	}
 
-	//// Expression types
-	//v := append(expAll, expScalar...)
-	//schema.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
-	//schema.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
-	//schema.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
-	//schema.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
-	//schema.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
-	//
-	//// ListExpression Types
-	//v = append(expAll, expList...)
-	//schema.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
-	//schema.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
-	//schema.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
-	//schema.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
-	//
-	//// JsonExpression types
-	//v = append(expAll, expJSON...)
-	//schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
-	//
-	//schema.addTablesEnum()
+	// Expression types
+	v := append(expAll, expScalar...)
+	schema.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
+	schema.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
+	schema.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
+	schema.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
+	schema.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+
+	// ListExpression Types
+	v = append(expAll, expList...)
+	schema.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
+	schema.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
+	schema.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
+	schema.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+
+	// JsonExpression types
+	v = append(expAll, expJSON...)
+	schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
+
+	schema.addTablesEnum()
 
 	for _, t := range schema.info.Tables {
 		if err = schema.addTable(t, ""); err != nil {
