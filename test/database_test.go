@@ -2,17 +2,14 @@ package test
 
 import (
 	"database/sql"
+	"github.com/bytedance/sonic"
 	"github.com/ichaly/tiny-go/core"
-	"github.com/json-iterator/go"
-	"testing"
-
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 var (
 	dialect string
 	db      *sql.DB
-	json    = jsoniter.ConfigCompatibleWithStandardLibrary
 )
 
 func init() {
@@ -25,12 +22,12 @@ func init() {
 	}
 }
 
-func TestGetDBInfo(t *testing.T) {
+func main() {
 	info, err := core.GetDBInfo(db, dialect, nil)
 	if err != nil {
 		panic(err)
 	}
-	str, err := json.MarshalToString(info)
+	str, err := sonic.MarshalString(info)
 	if err != nil {
 		panic(err)
 	}

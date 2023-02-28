@@ -4,7 +4,6 @@ go 1.20
 
 require (
 	github.com/jackc/pgx/v5 v5.3.0
-	github.com/json-iterator/go v1.1.12
 )
 
 require (
