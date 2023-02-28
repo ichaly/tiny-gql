@@ -63,7 +63,7 @@ type __Type struct {
 	// must be non-null for INPUT_OBJECT, otherwise null.
 	InputFields []__InputValue `json:"inputFields"`
 	// must be non-null for NON_NULL and LIST, otherwise null.
-	OfType *__Type `json:"ofType"`
+	OfType *__Type `json:"ofType,omitempty"`
 	// may be non-null for custom SCALAR, otherwise null.
 	SpecifiedByURL string `json:"specifiedByUrl,omitempty"`
 }
@@ -72,7 +72,7 @@ type __Field struct {
 	Name              string         `json:"name,omitempty"`
 	Description       string         `json:"description,omitempty"`
 	Args              []__InputValue `json:"args"`
-	Type              *__Type        `json:"type"`
+	Type              *__Type        `json:"type,omitempty"`
 	IsDeprecated      bool           `json:"isDeprecated"`
 	DeprecationReason string         `json:"deprecationReason,omitempty"`
 }
@@ -80,7 +80,7 @@ type __Field struct {
 type __InputValue struct {
 	Name              string  `json:"name,omitempty"`
 	Description       string  `json:"description,omitempty"`
-	Type              *__Type `json:"type"`
+	Type              *__Type `json:"type,omitempty"`
 	IsDeprecated      bool    `json:"isDeprecated"`
 	DeprecationReason string  `json:"deprecationReason,omitempty"`
 	DefaultValue      string  `json:"defaultValue,omitempty"`
@@ -297,9 +297,9 @@ func (my *__Schema) getTableType(t *DBTable, alias string, depth int) (ft __Type
 		ft.Description = *t.Comment
 	}
 
-	//if err = my.addColumnsEnumType(t); err != nil {
-	//	return
-	//}
+	if err = my.addColumnsEnumType(t); err != nil {
+		return
+	}
 
 	for _, c := range t.Columns {
 		if c.Blocked {
