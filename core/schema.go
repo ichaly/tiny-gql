@@ -328,7 +328,7 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 		Types:      map[string]__Type{},
 		Directives: map[string]__Directive{},
 		QueryType:  __Type{Name: "Query"},
-		//MutationType: &__Type{Name: "Mutation"},
+		//MutationType:     &__Type{Name: "Mutation"},
 		SubscriptionType: &__Type{Name: "Subscription"},
 	}
 
@@ -336,26 +336,26 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 		schema.addType(v)
 	}
 
-	//// Expression types
-	//v := append(expAll, expScalar...)
-	//schema.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
-	//schema.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
-	//schema.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
-	//schema.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
-	//schema.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
-	//
-	//// ListExpression Types
-	//v = append(expAll, expList...)
-	//schema.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
-	//schema.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
-	//schema.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
-	//schema.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
-	//
-	//// JsonExpression types
-	//v = append(expAll, expJSON...)
-	//schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
-	//
-	//schema.addTablesEnum()
+	// Expression types
+	v := append(expAll, expScalar...)
+	schema.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
+	schema.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
+	schema.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
+	schema.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
+	schema.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+
+	// ListExpression Types
+	v = append(expAll, expList...)
+	schema.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
+	schema.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
+	schema.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
+	schema.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+
+	// JsonExpression types
+	v = append(expAll, expJSON...)
+	schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
+
+	schema.addTablesEnum()
 
 	for _, t := range schema.info.Tables {
 		if err = schema.addTable(t, ""); err != nil {
