@@ -358,7 +358,7 @@ func (my *__Schema) getTableType(t *DBTable, alias string, depth int) (ft __Type
 }
 
 func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
-	schema := __Schema{
+	s := __Schema{
 		conf:       conf,
 		info:       info,
 		Types:      map[string]__Type{},
@@ -369,36 +369,36 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	}
 
 	for _, v := range stdTypes {
-		schema.addType(v)
+		s.addType(v)
 	}
 
 	// Expression types
 	v := append(expAll, expScalar...)
-	schema.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
-	schema.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
-	schema.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
-	schema.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
-	schema.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+	s.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
+	s.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
+	s.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
+	s.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
+	s.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
 
 	// ListExpression Types
 	v = append(expAll, expList...)
-	schema.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
-	schema.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
-	schema.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
-	schema.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+	s.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
+	s.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
+	s.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
+	s.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
 
 	// JsonExpression types
 	v = append(expAll, expJSON...)
-	schema.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
+	s.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
 
-	schema.addTablesEnum()
+	s.addTablesEnum()
 
-	for _, t := range schema.info.Tables {
-		if err = schema.addTable(t, ""); err != nil {
+	for _, t := range s.info.Tables {
+		if err = s.addTable(t, ""); err != nil {
 			return
 		}
 	}
 
-	root := map[string]interface{}{"data": map[string]interface{}{"__schema": schema}}
+	root := map[string]interface{}{"data": map[string]interface{}{"__schema": s}}
 	return sonic.Marshal(root)
 }
