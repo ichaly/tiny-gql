@@ -1,11 +1,19 @@
-package test
+package main
 
 import (
 	"database/sql"
 	"fmt"
+	"github.com/go-chi/chi/v5"
 	"github.com/ichaly/tiny-go/core"
+	_ "github.com/jackc/pgx/v5/stdlib"
+	"net/http"
+	"os"
 	"path/filepath"
-	"testing"
+)
+
+var (
+	dialect string
+	db      *sql.DB
 )
 
 func init() {
@@ -18,7 +26,7 @@ func init() {
 	}
 }
 
-func TestNewSchema(t *testing.T) {
+func main() {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println(err)
@@ -36,5 +44,19 @@ func TestNewSchema(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	println(string(in))
+	r := chi.NewRouter()
+	r.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write(in)
+	})
+	r.HandleFunc("/intro", func(w http.ResponseWriter, r *http.Request) {
+		file, err := os.ReadFile("../conf/intro.json")
+		if err != nil {
+			return
+		}
+		_, _ = w.Write(file)
+	})
+	err = http.ListenAndServe(":3000", r)
+	if err != nil {
+		panic(err)
+	}
 }
