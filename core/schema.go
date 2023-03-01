@@ -2,7 +2,6 @@ package core
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/iancoleman/strcase"
 )
@@ -188,6 +187,16 @@ func (my *__Schema) addType(t __Type) {
 	my.Types[t.Name] = t
 }
 
+func (my *__Schema) addTypeTo(op string, ft __Type) {
+	qt := my.Types[op]
+	qt.Fields = append(qt.Fields, __Field{
+		Name:        strcase.ToLowerCamel(ft.Name),
+		Description: ft.Description,
+		Type:        &__Type{Name: ft.Name},
+	})
+	my.Types[op] = qt
+}
+
 func (my *__Schema) addExpression(exps []__InputValue, name string, sub __Type) {
 	t := __Type{
 		Kind:        TK_INPUT_OBJECT,
@@ -225,146 +234,13 @@ func (my *__Schema) addTablesEnum() {
 	my.addType(te)
 }
 
-func (my *__Schema) addColumnsEnumType(t *DBTable) (err error) {
-	tableName := my.getName(t.Name)
-	ft := __Type{
-		Kind:        TK_ENUM,
-		Name:        tableName + "Columns" + SUFFIX_ENUM,
-		Description: fmt.Sprintf("Table columns for '%s'", tableName),
-	}
-	for _, c := range t.Columns {
-		if c.Blocked {
-			continue
-		}
-		f := __EnumValue{Name: my.getName(c.Name)}
-		if t.Comment != nil {
-			f.Description = *c.Comment
-		}
-		ft.EnumValues = append(ft.EnumValues, f)
-	}
-	my.addType(ft)
-	return
-}
-
-func (my *__Schema) addTypeTo(op string, ft __Type) {
-	qt := my.Types[op]
-	qt.Fields = append(qt.Fields, __Field{
-		Name:        ft.Name,
-		Description: ft.Description,
-		Type:        &__Type{Name: ft.Name},
-	})
-	my.Types[op] = qt
-}
-
-func (my *__Schema) addTable(t *DBTable, alias string) (err error) {
-	if t.Blocked || len(t.Columns) == 0 {
-		return
-	}
-
-	// add table type to query and subscription
-	tt, err := my.getTableType(t, alias, 0)
-	if err != nil {
-		return
-	}
-	my.addType(tt)
-	my.addTypeTo("Query", tt)
-	my.addTypeTo("Subscription", tt)
-
-	return
-}
-
-func getTypeFromColumn(col DBColumn) (gqlType string) {
-	if col.PrimaryKey {
-		gqlType = "ID"
-		return
-	}
-	gqlType, _ = getType(col.Type)
-	return
-}
-
-func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
-	t := __Type{Name: "String"}
-
-	if v, ok := my.Types[getTypeFromColumn(c)]; ok {
-		t.Name = v.Name
-		t.Kind = v.Kind
-	}
-
-	if c.Array {
-		t = __Type{Kind: TK_LIST, OfType: &__Type{
-			Name: t.Name, Kind: t.Kind,
-		}}
-	}
-
-	if c.NotNull {
-		t = __Type{Kind: TK_NON_NULL, OfType: &__Type{
-			Name: t.Name, Kind: t.Kind,
-		}}
-	}
-
-	f.Name = my.getName(c.Name)
-	f.Type = &t
-
-	//f.Args = append(f.Args, __InputValue{
-	//	Name: "includeIf",
-	//	Type: &__Type{Name: c.Table + SUFFIX_WHERE},
-	//})
-	//
-	//f.Args = append(f.Args, __InputValue{
-	//	Name: "skipIf",
-	//	Type: &__Type{Name: c.Table + SUFFIX_WHERE},
-	//})
-	return
-}
-
-func (my *__Schema) getTableType(t *DBTable, alias string, depth int) (ft __Type, err error) {
-	ft = __Type{
-		Kind: TK_OBJECT,
-		//Interfaces: []__Type{},
-	}
-
-	name := t.Name
-	if alias != "" {
-		name = alias
-	}
-	ft.Name = my.getName(name)
-
-	if t.Comment != nil {
-		ft.Description = *t.Comment
-	}
-
-	if err = my.addColumnsEnumType(t); err != nil {
-		return
-	}
-
-	for _, c := range t.Columns {
-		if c.Blocked {
-			continue
-		}
-		if c.FullText {
-			//hasSearch = true
-		}
-		if c.FKRecursive {
-			//hasRecursive = true
-		}
-		var f __Field
-		f, err = my.getColumnField(c)
-		if err != nil {
-			return
-		}
-		ft.Fields = append(ft.Fields, f)
-	}
-	return
-}
-
 func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	s := __Schema{
-		conf:       conf,
-		info:       info,
-		Types:      map[string]__Type{},
-		Directives: map[string]__Directive{},
-		QueryType:  __Type{Name: "Query"},
-		//MutationType:     &__Type{Name: "Mutation"},
+		conf:             conf,
+		info:             info,
+		Types:            map[string]__Type{},
+		Directives:       map[string]__Directive{},
+		QueryType:        __Type{Name: "Query"},
 		SubscriptionType: &__Type{Name: "Subscription"},
 	}
 
@@ -391,14 +267,66 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	v = append(expAll, expJSON...)
 	s.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
 
-	s.addTablesEnum()
-
 	for _, t := range s.info.Tables {
-		if err = s.addTable(t, ""); err != nil {
-			return
+		if t.Blocked || len(t.Columns) == 0 {
+			continue
 		}
+		s.addTableType(t)
 	}
 
 	root := map[string]interface{}{"data": map[string]interface{}{"__schema": s}}
 	return sonic.Marshal(root)
+}
+
+func (my *__Schema) getColumnField(c DBColumn) (f __Field) {
+	t := __Type{Kind: TK_SCALAR, Name: "String"}
+
+	if c.PrimaryKey {
+		t.Name = "ID"
+	} else {
+		name, isList := getType(c.Type)
+		if isList {
+			c.Array = true
+		}
+		if v, ok := my.Types[name]; ok {
+			t.Name = v.Name
+			t.Kind = v.Kind
+		}
+	}
+
+	if c.Array {
+		t = __Type{Kind: TK_LIST, OfType: &__Type{
+			Name: t.Name, Kind: t.Kind,
+		}}
+	}
+
+	if c.NotNull {
+		t = __Type{Kind: TK_NON_NULL, OfType: &__Type{
+			Name: t.Name, Kind: t.Kind,
+		}}
+	}
+
+	f.Name = strcase.ToLowerCamel(c.Name)
+	f.Type = &t
+	return
+}
+
+func (my *__Schema) addTableType(t *DBTable) {
+	ot := __Type{
+		Kind: TK_OBJECT,
+		Name: my.getName(t.Name),
+	}
+	if t.Comment != nil {
+		ot.Description = *t.Comment
+	}
+	for _, c := range t.Columns {
+		if c.Blocked {
+			continue
+		}
+		ot.Fields = append(ot.Fields, my.getColumnField(c))
+	}
+	my.addType(ot)
+
+	my.addTypeTo("Query", ot)
+	my.addTypeTo("Subscription", ot)
 }

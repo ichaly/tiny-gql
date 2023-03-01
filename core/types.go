@@ -41,6 +41,10 @@ const (
 	SUFFIX_ARGS     = "ArgsInput"
 	SUFFIX_WHERE    = "WhereInput"
 	SUFFIX_ORDER_BY = "OrderByInput"
+
+	SUFFIX_UPSERT = "UpsertInput"
+	SUFFIX_INSERT = "InsertInput"
+	SUFFIX_UPDATE = "UpdateInput"
 )
 
 var stdTypes = []__Type{
