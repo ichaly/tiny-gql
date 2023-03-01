@@ -88,12 +88,31 @@ func (my __Type) MarshalJSON() ([]byte, error) {
 }
 
 type __Field struct {
-	Name              string         `json:"name,omitempty"`
-	Description       string         `json:"description,omitempty"`
+	Name              string         `json:"name"`
+	Description       string         `json:"description"`
 	Args              []__InputValue `json:"args"`
-	Type              *__Type        `json:"type,omitempty"`
+	Type              *__Type        `json:"type"`
 	IsDeprecated      bool           `json:"isDeprecated"`
-	DeprecationReason string         `json:"deprecationReason,omitempty"`
+	DeprecationReason string         `json:"deprecationReason"`
+}
+
+func (my __Field) MarshalJSON() ([]byte, error) {
+	obj := make(map[string]interface{})
+	if my.Name != "" {
+		obj["name"] = my.Name
+	}
+	if my.Description != "" {
+		obj["description"] = my.Description
+	}
+	obj["args"] = append([]__InputValue{}, my.Args...)
+	if my.Type != nil {
+		obj["type"] = my.Type
+	}
+	obj["isDeprecated"] = my.IsDeprecated
+	if my.DeprecationReason != "" {
+		obj["deprecationReason"] = my.DeprecationReason
+	}
+	return sonic.Marshal(obj)
 }
 
 type __InputValue struct {
@@ -232,7 +251,6 @@ func (my *__Schema) addTypeTo(op string, ft __Type) {
 	qt.Fields = append(qt.Fields, __Field{
 		Name:        ft.Name,
 		Description: ft.Description,
-		Args:        []__InputValue{},
 		Type:        &__Type{Name: ft.Name},
 	})
 	my.Types[op] = qt
@@ -284,7 +302,6 @@ func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
 		}}
 	}
 
-	f.Args = []__InputValue{}
 	f.Name = my.getName(c.Name)
 	f.Type = &t
 
