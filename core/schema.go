@@ -35,9 +35,9 @@ type __Schema struct {
 }
 
 type __Type struct {
-	Kind        __TypeKind `json:"kind,omitempty"`
-	Name        string     `json:"name,omitempty"`
-	Description string     `json:"description,omitempty"`
+	Kind        __TypeKind `json:"kind"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
 	// must be non-null for OBJECT and INTERFACE, otherwise null.
 	Fields []__Field `json:"fields"`
 	// must be non-null for OBJECT and INTERFACE, otherwise null.
@@ -49,9 +49,9 @@ type __Type struct {
 	// must be non-null for INPUT_OBJECT, otherwise null.
 	InputFields []__InputValue `json:"inputFields"`
 	// must be non-null for NON_NULL and LIST, otherwise null.
-	OfType *__Type `json:"ofType,omitempty"`
+	OfType *__Type `json:"ofType"`
 	// may be non-null for custom SCALAR, otherwise null.
-	SpecifiedByURL string `json:"specifiedByUrl,omitempty"`
+	SpecifiedByURL string `json:"specifiedByUrl"`
 }
 
 func (my __Type) MarshalJSON() ([]byte, error) {
@@ -66,32 +66,17 @@ func (my __Type) MarshalJSON() ([]byte, error) {
 		obj["description"] = my.Description
 	}
 	if my.Kind == TK_OBJECT || my.Kind == TK_INTERFACE {
-		if my.Fields == nil {
-			my.Fields = []__Field{}
-		}
-		obj["fields"] = my.Fields
-		if my.Interfaces == nil {
-			my.Interfaces = []__Type{}
-		}
-		obj["interfaces"] = my.Interfaces
+		obj["fields"] = append([]__Field{}, my.Fields...)
+		obj["interfaces"] = append([]__Type{}, my.Interfaces...)
 	}
 	if my.Kind == TK_INTERFACE || my.Kind == TK_UNION {
-		if my.PossibleTypes == nil {
-			my.PossibleTypes = []__Type{}
-		}
-		obj["possibleTypes"] = my.PossibleTypes
+		obj["possibleTypes"] = append([]__Type{}, my.PossibleTypes...)
 	}
 	if my.Kind == TK_ENUM {
-		if my.EnumValues == nil {
-			my.EnumValues = []__EnumValue{}
-		}
-		obj["enumValues"] = my.EnumValues
+		obj["enumValues"] = append([]__EnumValue{}, my.EnumValues...)
 	}
 	if my.Kind == TK_INPUT_OBJECT {
-		if my.InputFields == nil {
-			my.InputFields = []__InputValue{}
-		}
-		obj["inputFields"] = my.InputFields
+		obj["inputFields"] = append([]__InputValue{}, my.InputFields...)
 	}
 	if my.OfType != nil {
 		obj["ofType"] = my.OfType
@@ -317,8 +302,8 @@ func (my *__Schema) getColumnField(c DBColumn) (f __Field, err error) {
 
 func (my *__Schema) getTableType(t *DBTable, alias string, depth int) (ft __Type, err error) {
 	ft = __Type{
-		Kind:       TK_OBJECT,
-		Interfaces: []__Type{},
+		Kind: TK_OBJECT,
+		//Interfaces: []__Type{},
 	}
 
 	name := t.Name
