@@ -193,6 +193,7 @@ func (my *__Schema) addTypeTo(op string, ft __Type) {
 		Name:        strcase.ToLowerCamel(ft.Name),
 		Description: ft.Description,
 		Type:        &__Type{Name: ft.Name},
+		Args:        ft.InputFields,
 	})
 	my.Types[op] = qt
 }
@@ -306,8 +307,11 @@ func (my *__Schema) getColumnField(c DBColumn) (f __Field) {
 		}}
 	}
 
-	f.Name = strcase.ToLowerCamel(c.Name)
 	f.Type = &t
+	f.Name = strcase.ToLowerCamel(c.Name)
+	if c.Comment != nil {
+		f.Description = *c.Comment
+	}
 	return
 }
 
@@ -325,8 +329,11 @@ func (my *__Schema) addTableType(t *DBTable) {
 		}
 		ot.Fields = append(ot.Fields, my.getColumnField(c))
 	}
-	my.addType(ot)
 
+	ot.InputFields = append(ot.InputFields, argsList...)
+
+	my.addType(ot)
 	my.addTypeTo("Query", ot)
+	my.addTypeTo("Mutation", ot)
 	my.addTypeTo("Subscription", ot)
 }

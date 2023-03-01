@@ -87,17 +87,14 @@ var stdTypes = []__Type{
 		Description:    "The `Time` scalar type references to a ISO 8601 date+time, often used to insert and/or view dates. Expects a string with the ISO 8601 format",
 		SpecifiedByURL: "https://en.wikipedia.org/wiki/ISO_8601",
 	}, {
-		Kind:       TK_OBJECT,
-		Name:       "Query",
-		Interfaces: []__Type{},
+		Kind: TK_OBJECT,
+		Name: "Query",
 	}, {
-		Kind:       TK_OBJECT,
-		Name:       "Subscription",
-		Interfaces: []__Type{},
-		//}, {
-		//	Kind:       TK_OBJECT,
-		//	Name:       "Mutation",
-		//	Interfaces: []__Type{},
+		Kind: TK_OBJECT,
+		Name: "Mutation",
+	}, {
+		Kind: TK_OBJECT,
+		Name: "Subscription",
 	}, {
 		Kind:        TK_ENUM,
 		Name:        "Recursion",
@@ -177,6 +174,17 @@ var expJSON = []__InputValue{
 	{Name: "hasKeyAll", Description: "JSON value contains all of these keys"},
 	{Name: "contains", Description: "JSON value matches any of they key/value pairs"},
 	{Name: "containedIn", Description: "JSON value contains all of they key/value pairs"},
+}
+
+var argsList = []__InputValue{
+	{Name: "id", Type: &__Type{Name: "ID"}},
+	{Name: "limit", Type: &__Type{Name: "Int"}},
+	{Name: "offset", Type: &__Type{Name: "Int"}},
+	{Name: "first", Type: &__Type{Name: "Int"}},
+	{Name: "last", Type: &__Type{Name: "Int"}},
+	{Name: "before", Type: &__Type{Name: "Cursor"}},
+	{Name: "after", Type: &__Type{Name: "Cursor"}},
+	{Name: "distinctOn", Type: &__Type{Kind: TK_LIST, OfType: &__Type{Name: "String"}}},
 }
 
 func getType(t string) (gqlType string, list bool) {
