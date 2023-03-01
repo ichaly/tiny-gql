@@ -12,37 +12,23 @@ import (
 // https://spec.graphql.org/draft/#sec-Schema-Introspection
 //
 
-type mapType map[string]__Type
+type mapArray[V any] map[string]V
 
-func (my mapType) MarshalJSON() ([]byte, error) {
-	var list []__Type
+func (my mapArray[V]) MarshalJSON() ([]byte, error) {
+	var list []V
 	for _, t := range my {
 		list = append(list, t)
 	}
-	return json.Marshal(list)
-}
-
-type mapDirective map[string]__Directive
-
-func (my mapDirective) MarshalJSON() ([]byte, error) {
-	var list []__Directive
-	for _, t := range my {
-		list = append(list, t)
-	}
-	return json.Marshal(list)
-}
-
-type __Root struct {
-	Schema __Schema `json:"__schema"`
+	return sonic.Marshal(list)
 }
 
 type __Schema struct {
-	Types            mapType      `json:"types"`
-	Directives       mapDirective `json:"directives"`
-	Description      string       `json:"description,omitempty"`
-	QueryType        __Type       `json:"queryType"`
-	MutationType     *__Type      `json:"mutationType,omitempty"`
-	SubscriptionType *__Type      `json:"subscriptionType,omitempty"`
+	Types            mapArray[__Type]      `json:"types"`
+	QueryType        __Type                `json:"queryType"`
+	Directives       mapArray[__Directive] `json:"directives,omitempty"`
+	Description      string                `json:"description,omitempty"`
+	MutationType     *__Type               `json:"mutationType,omitempty"`
+	SubscriptionType *__Type               `json:"subscriptionType,omitempty"`
 
 	conf *Config
 	info *DBInfo
@@ -66,6 +52,54 @@ type __Type struct {
 	OfType *__Type `json:"ofType,omitempty"`
 	// may be non-null for custom SCALAR, otherwise null.
 	SpecifiedByURL string `json:"specifiedByUrl,omitempty"`
+}
+
+func (my __Type) MarshalJSON() ([]byte, error) {
+	obj := make(map[string]interface{})
+	if my.Kind != "" {
+		obj["kind"] = my.Kind
+	}
+	if my.Name != "" {
+		obj["name"] = my.Name
+	}
+	if my.Description != "" {
+		obj["description"] = my.Description
+	}
+	if my.Kind == TK_OBJECT || my.Kind == TK_INTERFACE {
+		if my.Fields == nil {
+			my.Fields = []__Field{}
+		}
+		obj["fields"] = my.Fields
+		if my.Interfaces == nil {
+			my.Interfaces = []__Type{}
+		}
+		obj["interfaces"] = my.Interfaces
+	}
+	if my.Kind == TK_INTERFACE || my.Kind == TK_UNION {
+		if my.PossibleTypes == nil {
+			my.PossibleTypes = []__Type{}
+		}
+		obj["possibleTypes"] = my.PossibleTypes
+	}
+	if my.Kind == TK_ENUM {
+		if my.EnumValues == nil {
+			my.EnumValues = []__EnumValue{}
+		}
+		obj["enumValues"] = my.EnumValues
+	}
+	if my.Kind == TK_INPUT_OBJECT {
+		if my.InputFields == nil {
+			my.InputFields = []__InputValue{}
+		}
+		obj["inputFields"] = my.InputFields
+	}
+	if my.OfType != nil {
+		obj["ofType"] = my.OfType
+	}
+	if my.SpecifiedByURL != "" {
+		obj["specifiedByUrl"] = my.SpecifiedByURL
+	}
+	return sonic.Marshal(obj)
 }
 
 type __Field struct {
@@ -363,6 +397,6 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 		}
 	}
 
-	root := map[string]interface{}{"data": __Root{Schema: schema}}
+	root := map[string]interface{}{"data": map[string]interface{}{"__schema": schema}}
 	return sonic.Marshal(root)
 }
