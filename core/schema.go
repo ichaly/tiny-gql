@@ -214,27 +214,6 @@ func (my *__Schema) addExpression(exps []__InputValue, name string, sub __Type) 
 	my.addType(t)
 }
 
-func (my *__Schema) addTablesEnum() {
-	te := __Type{
-		Kind:        TK_ENUM,
-		Name:        "Tables" + SUFFIX_ENUM,
-		Description: "All available tables",
-	}
-
-	for _, t := range my.info.Tables {
-		if t.Blocked {
-			continue
-		}
-		f := __EnumValue{Name: my.getName(t.Name)}
-		if t.Comment != nil {
-			f.Description = *t.Comment
-		}
-		te.EnumValues = append(te.EnumValues, f)
-	}
-
-	my.addType(te)
-}
-
 func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	s := __Schema{
 		conf:             conf,
@@ -242,6 +221,7 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 		Types:            map[string]__Type{},
 		Directives:       map[string]__Directive{},
 		QueryType:        __Type{Name: "Query"},
+		MutationType:     &__Type{Name: "Mutation"},
 		SubscriptionType: &__Type{Name: "Subscription"},
 	}
 
@@ -268,15 +248,93 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	v = append(expAll, expJSON...)
 	s.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
 
-	for _, t := range s.info.Tables {
-		if t.Blocked || len(t.Columns) == 0 {
-			continue
-		}
-		s.addTableType(t)
-	}
+	s.addTablesType()
 
 	root := map[string]interface{}{"data": map[string]interface{}{"__schema": s}}
 	return sonic.Marshal(root)
+}
+
+func (my *__Schema) addTablesType() {
+	var enumValues []__EnumValue
+
+	for _, t := range my.info.Tables {
+		if t.Blocked {
+			continue
+		}
+		// append tables enum value to type
+		enumValues = append(enumValues, __EnumValue{Name: my.getName(t.Name), Description: t.Comment})
+
+		// where input type
+		wn := strcase.ToCamel(t.Name) + SUFFIX_WHERE
+		wi := __Type{
+			Kind: TK_INPUT_OBJECT,
+			Name: wn,
+			InputFields: []__InputValue{
+				{Name: "not", Type: &__Type{Name: wn}},
+				{Name: "and", Type: &__Type{Name: wn}},
+				{Name: "or", Type: &__Type{Name: wn}},
+			},
+		}
+
+		// order by input type
+		oi := __Type{
+			Kind: TK_INPUT_OBJECT,
+			Name: strcase.ToCamel(t.Name) + SUFFIX_ORDER_BY,
+		}
+
+		// table object type
+		to := __Type{
+			Kind:        TK_OBJECT,
+			Name:        my.getName(t.Name),
+			Description: t.Comment,
+		}
+
+		for _, c := range t.Columns {
+			if c.Blocked {
+				continue
+			}
+
+			// append order by input fields
+			oi.InputFields = append(oi.InputFields, __InputValue{
+				Name:        strcase.ToCamel(c.Name),
+				Description: c.Comment,
+				Type:        &__Type{Name: "Direction"},
+			})
+
+			// append where input fields
+			wi.InputFields = append(wi.InputFields, __InputValue{
+				Name:        strcase.ToLowerCamel(c.Name),
+				Description: c.Comment,
+				Type:        &__Type{Name: wn},
+			})
+
+			// append table object field
+			to.Fields = append(to.Fields, my.getColumnField(c))
+		}
+
+		// add order by input to types
+		my.addType(oi)
+
+		// add where input to types
+		my.addType(wi)
+
+		// add table object to types
+		my.addType(to)
+		to.InputFields = append(to.InputFields, argsList...)
+		my.addTypeTo("Query", to)
+		my.addTypeTo("Subscription", to)
+
+		to.InputFields = append(to.InputFields, __InputValue{Name: "delete", Type: &__Type{Name: "Boolean"}})
+		my.addTypeTo("Mutation", to)
+	}
+
+	// add tables enum to types
+	my.addType(__Type{
+		Kind:        TK_ENUM,
+		Name:        "Tables" + SUFFIX_ENUM,
+		Description: "All available tables",
+		EnumValues:  enumValues,
+	})
 }
 
 func (my *__Schema) getColumnField(c DBColumn) (f __Field) {
@@ -307,33 +365,14 @@ func (my *__Schema) getColumnField(c DBColumn) (f __Field) {
 		}}
 	}
 
-	f.Type = &t
 	f.Name = strcase.ToLowerCamel(c.Name)
-	if c.Comment != nil {
-		f.Description = *c.Comment
+	f.Description = c.Comment
+	f.Type = &t
+
+	name := strcase.ToCamel(c.Table) + SUFFIX_WHERE
+	f.Args = []__InputValue{
+		{Name: "includeIf", Type: &__Type{Name: name}},
+		{Name: "skipIf", Type: &__Type{Name: name}},
 	}
 	return
-}
-
-func (my *__Schema) addTableType(t *DBTable) {
-	ot := __Type{
-		Kind: TK_OBJECT,
-		Name: my.getName(t.Name),
-	}
-	if t.Comment != nil {
-		ot.Description = *t.Comment
-	}
-	for _, c := range t.Columns {
-		if c.Blocked {
-			continue
-		}
-		ot.Fields = append(ot.Fields, my.getColumnField(c))
-	}
-
-	ot.InputFields = append(ot.InputFields, argsList...)
-
-	my.addType(ot)
-	my.addTypeTo("Query", ot)
-	my.addTypeTo("Mutation", ot)
-	my.addTypeTo("Subscription", ot)
 }

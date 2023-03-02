@@ -62,7 +62,7 @@ type DBColumn struct {
 
 	Schema      string
 	Table       string
-	Description string
+	Description string // table comment
 }
 
 func (my DBColumn) String() string {

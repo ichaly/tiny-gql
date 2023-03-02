@@ -21,18 +21,6 @@ var dbTypes = map[string]string{
 }
 
 const (
-	//KIND_SCALAR      = "SCALAR"
-	//KIND_OBJECT      = "OBJECT"
-	//KIND_NONNULL     = "NON_NULL"
-	//KIND_LIST        = "LIST"
-	//KIND_UNION       = "UNION"
-	//KIND_ENUM        = "ENUM"
-	//KIND_INPUT_OBJ   = "INPUT_OBJECT"
-	//LOC_QUERY        = "QUERY"
-	//LOC_MUTATION     = "MUTATION"
-	//LOC_SUBSCRIPTION = "SUBSCRIPTION"
-	//LOC_FIELD        = "FIELD"
-
 	SUFFIX_EXP     = "Expression"
 	SUFFIX_LISTEXP = "ListExpression"
 
