@@ -24,12 +24,10 @@ const (
 	SUFFIX_EXP     = "Expression"
 	SUFFIX_LISTEXP = "ListExpression"
 
-	SUFFIX_ENUM     = "Enum"
-	SUFFIX_INPUT    = "Input"
-	SUFFIX_ARGS     = "ArgsInput"
-	SUFFIX_WHERE    = "WhereInput"
-	SUFFIX_ORDER_BY = "OrderByInput"
-
+	SUFFIX_ENUM   = "Enum"
+	SUFFIX_ARGS   = "ArgsInput"
+	SUFFIX_WHERE  = "WhereInput"
+	SUFFIX_ORDER  = "OrderInput"
 	SUFFIX_UPSERT = "UpsertInput"
 	SUFFIX_INSERT = "InsertInput"
 	SUFFIX_UPDATE = "UpdateInput"

@@ -187,15 +187,15 @@ func (my *__Schema) addType(t __Type) {
 	my.Types[t.Name] = t
 }
 
-func (my *__Schema) addTypeTo(op string, ft __Type) {
-	qt := my.Types[op]
-	qt.Fields = append(qt.Fields, __Field{
-		Name:        strcase.ToLowerCamel(ft.Name),
-		Description: ft.Description,
-		Type:        &__Type{Name: ft.Name},
-		Args:        ft.InputFields,
+func (my *__Schema) addTypeTo(op string, ot __Type, args []__InputValue) {
+	t := my.Types[op]
+	t.Fields = append(t.Fields, __Field{
+		Name:        strcase.ToLowerCamel(ot.Name),
+		Description: ot.Description,
+		Type:        &__Type{Name: ot.Name},
+		Args:        args,
 	})
-	my.Types[op] = qt
+	my.Types[op] = t
 }
 
 func (my *__Schema) addExpression(exps []__InputValue, name string, sub __Type) {
@@ -261,12 +261,13 @@ func (my *__Schema) addTablesType() {
 		if t.Blocked {
 			continue
 		}
-		// append tables enum value to type
-		enumValues = append(enumValues, __EnumValue{Name: my.getName(t.Name), Description: t.Comment})
+		tableName := strcase.ToCamel(t.Name)
+		// append tables enum value object type
+		enumValues = append(enumValues, __EnumValue{Name: tableName, Description: t.Comment})
 
 		// where input type
-		wn := strcase.ToCamel(t.Name) + SUFFIX_WHERE
-		wi := __Type{
+		wn := tableName + SUFFIX_WHERE
+		where := __Type{
 			Kind: TK_INPUT_OBJECT,
 			Name: wn,
 			InputFields: []__InputValue{
@@ -276,32 +277,31 @@ func (my *__Schema) addTablesType() {
 			},
 		}
 
-		// order by input type
-		oi := __Type{
+		// order input type
+		order := __Type{
 			Kind: TK_INPUT_OBJECT,
-			Name: strcase.ToCamel(t.Name) + SUFFIX_ORDER_BY,
+			Name: tableName + SUFFIX_ORDER,
 		}
 
 		// upsert input type
-		us := __Type{
+		upsert := __Type{
 			Kind: TK_INPUT_OBJECT,
-			Name: strcase.ToCamel(t.Name) + SUFFIX_UPSERT,
+			Name: tableName + SUFFIX_UPSERT,
 		}
-		ii := __Type{
+		insert := __Type{
 			Kind: TK_INPUT_OBJECT,
-			Name: strcase.ToCamel(t.Name) + SUFFIX_INSERT,
+			Name: tableName + SUFFIX_INSERT,
 		}
-		up := __Type{
+		update := __Type{
 			Kind: TK_INPUT_OBJECT,
-			Name: strcase.ToCamel(t.Name) + SUFFIX_UPDATE,
+			Name: tableName + SUFFIX_UPDATE,
 		}
 
 		// table object type
-		to := __Type{
+		object := __Type{
 			Kind:        TK_OBJECT,
-			Name:        my.getName(t.Name),
+			Name:        tableName,
 			Description: t.Comment,
-			InputFields: argsList,
 		}
 
 		for _, c := range t.Columns {
@@ -311,17 +311,18 @@ func (my *__Schema) addTablesType() {
 
 			//get column scalar type
 			cn, isList := my.getColumnType(c)
+			columnName := strcase.ToLowerCamel(c.Name)
 
 			// append order by input fields
-			oi.InputFields = append(oi.InputFields, __InputValue{
-				Name:        strcase.ToCamel(c.Name),
+			order.InputFields = append(order.InputFields, __InputValue{
+				Name:        columnName,
 				Description: c.Comment,
 				Type:        &__Type{Name: "Direction"},
 			})
 
 			// append where input fields
 			iv := __InputValue{
-				Name:        strcase.ToLowerCamel(c.Name),
+				Name:        columnName,
 				Description: c.Comment,
 			}
 			if c.Array || isList {
@@ -329,7 +330,7 @@ func (my *__Schema) addTablesType() {
 			} else {
 				iv.Type = &__Type{Name: cn + SUFFIX_EXP}
 			}
-			wi.InputFields = append(wi.InputFields, iv)
+			where.InputFields = append(where.InputFields, iv)
 
 			// append table object field
 			ct := __Type{Name: cn}
@@ -344,55 +345,64 @@ func (my *__Schema) addTablesType() {
 				}}
 			}
 
-			us.InputFields = append(us.InputFields, __InputValue{
-				Name: strcase.ToLowerCamel(c.Name), Type: &ct,
+			upsert.InputFields = append(upsert.InputFields, __InputValue{
+				Name: columnName, Type: &ct,
 			})
-			ii.InputFields = append(us.InputFields, __InputValue{
-				Name: strcase.ToLowerCamel(c.Name), Type: &ct,
+			insert.InputFields = append(upsert.InputFields, __InputValue{
+				Name: columnName, Type: &ct,
 			})
-			up.InputFields = append(us.InputFields, __InputValue{
-				Name: strcase.ToLowerCamel(c.Name), Type: &ct,
+			update.InputFields = append(upsert.InputFields, __InputValue{
+				Name: columnName, Type: &ct,
 			})
 
-			to.Fields = append(to.Fields, __Field{
-				Name:        strcase.ToLowerCamel(c.Name),
+			object.Fields = append(object.Fields, __Field{
+				Name:        columnName,
 				Description: c.Comment,
 				Type:        &ct,
 				Args: []__InputValue{
-					{Name: "includeIf", Type: &__Type{Name: wi.Name}},
-					{Name: "skipIf", Type: &__Type{Name: wi.Name}},
+					{Name: "includeIf", Type: &__Type{Name: where.Name}},
+					{Name: "skipIf", Type: &__Type{Name: where.Name}},
 				},
 			})
 		}
 
-		// add order by input to types
-		my.addType(oi)
+		// add order by input object types
+		my.addType(order)
 
-		// add where input to types
-		my.addType(wi)
-		my.addType(us)
-		my.addType(ii)
-		my.addType(up)
+		// add where input object types
+		my.addType(where)
 
-		// add table object to types
-		my.addType(to)
+		my.addType(upsert)
+		my.addType(insert)
+		my.addType(update)
 
-		// add to Query and Subscription
-		to.InputFields = append(to.InputFields, __InputValue{
-			Name: "orderBy", Type: &__Type{Name: oi.Name},
+		// add table object types
+		my.addType(object)
+
+		// add object Query and Subscription
+		args := append(argsList, __InputValue{
+			Name: "orderBy", Type: &__Type{Name: order.Name},
 		})
-		to.InputFields = append(to.InputFields, __InputValue{
-			Name: "where", Type: &__Type{Name: wi.Name},
+		args = append(args, __InputValue{
+			Name: "where", Type: &__Type{Name: where.Name},
 		})
-		my.addTypeTo("Query", to)
-		my.addTypeTo("Subscription", to)
+		my.addTypeTo("Query", object, args)
+		my.addTypeTo("Subscription", object, args)
 
-		// add to Mutation
-		to.InputFields = append(to.InputFields, __InputValue{Name: "delete", Type: &__Type{Name: "Boolean"}})
-		to.InputFields = append(to.InputFields, __InputValue{Name: "upsert", Type: &__Type{Name: us.Name}})
-		to.InputFields = append(to.InputFields, __InputValue{Name: "insert", Type: &__Type{Name: ii.Name}})
-		to.InputFields = append(to.InputFields, __InputValue{Name: "update", Type: &__Type{Name: up.Name}})
-		my.addTypeTo("Mutation", to)
+		// add object Mutation
+		args = append(args, __InputValue{
+			Name: "delete", Type: &__Type{Name: "Boolean"},
+		})
+		args = append(args, __InputValue{
+			Name: "upsert", Type: &__Type{Name: upsert.Name},
+		})
+		args = append(args, __InputValue{
+			Name: "insert", Type: &__Type{Name: insert.Name},
+		})
+		args = append(args, __InputValue{
+			Name: "update", Type: &__Type{Name: update.Name},
+		})
+		my.addTypeTo("Mutation", object, args)
 	}
 
 	// add tables enum to types
