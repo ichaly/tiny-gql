@@ -294,6 +294,24 @@ func (my *__Schema) addTablesType() {
 				continue
 			}
 
+			tn, isList := my.getColumnType(c)
+			var wt __Type
+			ct := __Type{Name: tn}
+			if c.Array || isList {
+				wt = __Type{Name: tn + SUFFIX_LISTEXP}
+
+				ct = __Type{Kind: TK_LIST, OfType: &__Type{
+					Name: tn,
+				}}
+			} else {
+				wt = __Type{Name: tn + SUFFIX_EXP}
+			}
+			if c.NotNull {
+				ct = __Type{Kind: TK_NON_NULL, OfType: &__Type{
+					Name: tn,
+				}}
+			}
+
 			// append order by input fields
 			oi.InputFields = append(oi.InputFields, __InputValue{
 				Name:        strcase.ToCamel(c.Name),
@@ -305,11 +323,19 @@ func (my *__Schema) addTablesType() {
 			wi.InputFields = append(wi.InputFields, __InputValue{
 				Name:        strcase.ToLowerCamel(c.Name),
 				Description: c.Comment,
-				Type:        &__Type{Name: wn},
+				Type:        &wt,
 			})
 
 			// append table object field
-			to.Fields = append(to.Fields, my.getColumnField(c))
+			to.Fields = append(to.Fields, __Field{
+				Name:        strcase.ToLowerCamel(c.Name),
+				Description: c.Comment,
+				Type:        &ct,
+				Args: []__InputValue{
+					{Name: "includeIf", Type: &__Type{Name: wi.Name}},
+					{Name: "skipIf", Type: &__Type{Name: wi.Name}},
+				},
+			})
 		}
 
 		// add order by input to types
@@ -320,10 +346,13 @@ func (my *__Schema) addTablesType() {
 
 		// add table object to types
 		my.addType(to)
+
+		// add to Query and Subscription
 		to.InputFields = append(to.InputFields, argsList...)
 		my.addTypeTo("Query", to)
 		my.addTypeTo("Subscription", to)
 
+		// add to Mutation
 		to.InputFields = append(to.InputFields, __InputValue{Name: "delete", Type: &__Type{Name: "Boolean"}})
 		my.addTypeTo("Mutation", to)
 	}
@@ -337,42 +366,11 @@ func (my *__Schema) addTablesType() {
 	})
 }
 
-func (my *__Schema) getColumnField(c DBColumn) (f __Field) {
-	t := __Type{Kind: TK_SCALAR, Name: "String"}
-
+func (my *__Schema) getColumnType(c DBColumn) (name string, isList bool) {
 	if c.PrimaryKey {
-		t.Name = "ID"
-	} else {
-		name, isList := getType(c.Type)
-		if isList {
-			c.Array = true
-		}
-		if v, ok := my.Types[name]; ok {
-			t.Name = v.Name
-			t.Kind = v.Kind
-		}
+		name = "ID"
+		return
 	}
-
-	if c.Array {
-		t = __Type{Kind: TK_LIST, OfType: &__Type{
-			Name: t.Name, Kind: t.Kind,
-		}}
-	}
-
-	if c.NotNull {
-		t = __Type{Kind: TK_NON_NULL, OfType: &__Type{
-			Name: t.Name, Kind: t.Kind,
-		}}
-	}
-
-	f.Name = strcase.ToLowerCamel(c.Name)
-	f.Description = c.Comment
-	f.Type = &t
-
-	name := strcase.ToCamel(c.Table) + SUFFIX_WHERE
-	f.Args = []__InputValue{
-		{Name: "includeIf", Type: &__Type{Name: name}},
-		{Name: "skipIf", Type: &__Type{Name: name}},
-	}
+	name, isList = getType(c.Type)
 	return
 }
