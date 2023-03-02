@@ -287,6 +287,7 @@ func (my *__Schema) addTablesType() {
 			Kind:        TK_OBJECT,
 			Name:        my.getName(t.Name),
 			Description: t.Comment,
+			InputFields: argsList,
 		}
 
 		for _, c := range t.Columns {
@@ -349,7 +350,12 @@ func (my *__Schema) addTablesType() {
 		my.addType(to)
 
 		// add to Query and Subscription
-		to.InputFields = append(to.InputFields, argsList...)
+		to.InputFields = append(to.InputFields, __InputValue{
+			Name: "orderBy", Type: &__Type{Name: oi.Name},
+		})
+		to.InputFields = append(to.InputFields, __InputValue{
+			Name: "where", Type: &__Type{Name: wi.Name},
+		})
 		my.addTypeTo("Query", to)
 		my.addTypeTo("Subscription", to)
 
