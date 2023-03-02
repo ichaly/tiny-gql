@@ -2,6 +2,7 @@ package core
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/iancoleman/strcase"
 )
@@ -374,6 +375,21 @@ func (my *__Schema) addTablesType() {
 
 		my.addType(upsert)
 		my.addType(insert)
+		update.InputFields = append(update.InputFields, __InputValue{
+			Name:        "connect",
+			Type:        &__Type{Name: where.Name},
+			Description: fmt.Sprintf("Connect to rows in table '%s' that match the expression", tableName),
+		})
+		update.InputFields = append(update.InputFields, __InputValue{
+			Name:        "disconnect",
+			Type:        &__Type{Name: where.Name},
+			Description: fmt.Sprintf("Disconnect from rows in table '%s' that match the expression", tableName),
+		})
+		update.InputFields = append(update.InputFields, __InputValue{
+			Name:        "where",
+			Type:        &__Type{Name: where.Name},
+			Description: fmt.Sprintf("Update rows in table '%s' that match the expression", tableName),
+		})
 		my.addType(update)
 
 		// add table object types
