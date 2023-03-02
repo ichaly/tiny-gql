@@ -282,6 +282,20 @@ func (my *__Schema) addTablesType() {
 			Name: strcase.ToCamel(t.Name) + SUFFIX_ORDER_BY,
 		}
 
+		// upsert input type
+		us := __Type{
+			Kind: TK_INPUT_OBJECT,
+			Name: strcase.ToCamel(t.Name) + SUFFIX_UPSERT,
+		}
+		ii := __Type{
+			Kind: TK_INPUT_OBJECT,
+			Name: strcase.ToCamel(t.Name) + SUFFIX_INSERT,
+		}
+		up := __Type{
+			Kind: TK_INPUT_OBJECT,
+			Name: strcase.ToCamel(t.Name) + SUFFIX_UPDATE,
+		}
+
 		// table object type
 		to := __Type{
 			Kind:        TK_OBJECT,
@@ -329,6 +343,17 @@ func (my *__Schema) addTablesType() {
 					Name: cn,
 				}}
 			}
+
+			us.InputFields = append(us.InputFields, __InputValue{
+				Name: strcase.ToLowerCamel(c.Name), Type: &ct,
+			})
+			ii.InputFields = append(us.InputFields, __InputValue{
+				Name: strcase.ToLowerCamel(c.Name), Type: &ct,
+			})
+			up.InputFields = append(us.InputFields, __InputValue{
+				Name: strcase.ToLowerCamel(c.Name), Type: &ct,
+			})
+
 			to.Fields = append(to.Fields, __Field{
 				Name:        strcase.ToLowerCamel(c.Name),
 				Description: c.Comment,
@@ -345,6 +370,9 @@ func (my *__Schema) addTablesType() {
 
 		// add where input to types
 		my.addType(wi)
+		my.addType(us)
+		my.addType(ii)
+		my.addType(up)
 
 		// add table object to types
 		my.addType(to)
@@ -361,6 +389,9 @@ func (my *__Schema) addTablesType() {
 
 		// add to Mutation
 		to.InputFields = append(to.InputFields, __InputValue{Name: "delete", Type: &__Type{Name: "Boolean"}})
+		to.InputFields = append(to.InputFields, __InputValue{Name: "upsert", Type: &__Type{Name: us.Name}})
+		to.InputFields = append(to.InputFields, __InputValue{Name: "insert", Type: &__Type{Name: ii.Name}})
+		to.InputFields = append(to.InputFields, __InputValue{Name: "update", Type: &__Type{Name: up.Name}})
 		my.addTypeTo("Mutation", to)
 	}
 
