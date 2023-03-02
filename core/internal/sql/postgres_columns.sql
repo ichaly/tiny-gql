@@ -1,8 +1,8 @@
 SELECT n.nspname as "schema",
 	c.relname as "table",
-    obj_description(c.relfilenode,'pg_class') AS table_comment,
+    COALESCE(obj_description(c.relfilenode,'pg_class'), '') AS table_comment,
 	f.attname AS "column",
-    col_description(c.oid,f.attnum) AS column_comment,
+    COALESCE(col_description(c.oid, f.attnum), '') AS column_comment,
 	pg_catalog.format_type(f.atttypid, f.atttypmod) AS "type",
 	f.attnotnull AS not_null,
 	(

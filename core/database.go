@@ -33,7 +33,7 @@ type VirtualTable struct {
 type DBTable struct {
 	Name       string
 	Schema     string
-	Comment    *string
+	Comment    string
 	Type       string // json,jsonb,polymorphic,virtual
 	PrimaryCol DBColumn
 	Columns    map[string]DBColumn
@@ -46,7 +46,7 @@ func (my *DBTable) String() string {
 }
 
 type DBColumn struct {
-	Comment     *string
+	Comment     string
 	Name        string
 	Type        string
 	Array       bool
@@ -62,7 +62,7 @@ type DBColumn struct {
 
 	Schema      string
 	Table       string
-	Description *string
+	Description string
 }
 
 func (my DBColumn) String() string {
