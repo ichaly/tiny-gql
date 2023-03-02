@@ -294,23 +294,8 @@ func (my *__Schema) addTablesType() {
 				continue
 			}
 
-			tn, isList := my.getColumnType(c)
-			var wt __Type
-			ct := __Type{Name: tn}
-			if c.Array || isList {
-				wt = __Type{Name: tn + SUFFIX_LISTEXP}
-
-				ct = __Type{Kind: TK_LIST, OfType: &__Type{
-					Name: tn,
-				}}
-			} else {
-				wt = __Type{Name: tn + SUFFIX_EXP}
-			}
-			if c.NotNull {
-				ct = __Type{Kind: TK_NON_NULL, OfType: &__Type{
-					Name: tn,
-				}}
-			}
+			//get column scalar type
+			cn, isList := my.getColumnType(c)
 
 			// append order by input fields
 			oi.InputFields = append(oi.InputFields, __InputValue{
@@ -320,13 +305,29 @@ func (my *__Schema) addTablesType() {
 			})
 
 			// append where input fields
-			wi.InputFields = append(wi.InputFields, __InputValue{
+			iv := __InputValue{
 				Name:        strcase.ToLowerCamel(c.Name),
 				Description: c.Comment,
-				Type:        &wt,
-			})
+			}
+			if c.Array || isList {
+				iv.Type = &__Type{Name: cn + SUFFIX_LISTEXP}
+			} else {
+				iv.Type = &__Type{Name: cn + SUFFIX_EXP}
+			}
+			wi.InputFields = append(wi.InputFields, iv)
 
 			// append table object field
+			ct := __Type{Name: cn}
+			if c.Array || isList {
+				ct = __Type{Kind: TK_LIST, OfType: &__Type{
+					Name: cn,
+				}}
+			}
+			if c.NotNull {
+				ct = __Type{Kind: TK_NON_NULL, OfType: &__Type{
+					Name: cn,
+				}}
+			}
 			to.Fields = append(to.Fields, __Field{
 				Name:        strcase.ToLowerCamel(c.Name),
 				Description: c.Comment,
