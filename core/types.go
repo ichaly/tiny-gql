@@ -83,8 +83,8 @@ var stdTypes = []__Type{
 		Name: "Subscription",
 	}, {
 		Kind:        TK_ENUM,
-		Name:        "Recursion",
-		Description: "Recursion relation types",
+		Name:        "Recursive",
+		Description: "Recursive relation types",
 		EnumValues: []__EnumValue{
 			{
 				Name:        "children",

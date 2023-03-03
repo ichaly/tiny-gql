@@ -325,9 +325,14 @@ func (my *__Schema) addTablesType() {
 			Description: t.Comment,
 		}
 
+		var hasRecursive bool
+
 		for _, c := range t.Columns {
 			if c.Blocked {
 				continue
+			}
+			if c.FKRecursive {
+				hasRecursive = true
 			}
 
 			//get column scalar type
@@ -383,6 +388,18 @@ func (my *__Schema) addTablesType() {
 				Args: []__InputValue{
 					{Name: "includeIf", Type: &__Type{Name: where.Name}},
 					{Name: "skipIf", Type: &__Type{Name: where.Name}},
+				},
+			})
+		}
+
+		if hasRecursive {
+			object.Fields = append(object.Fields, __Field{
+				Name: t.Name,
+				Type: &__Type{Name: tableName},
+				Args: []__InputValue{
+					{Name: "includeIf", Type: &__Type{Name: where.Name}},
+					{Name: "skipIf", Type: &__Type{Name: where.Name}},
+					{Name: "find", Type: &__Type{Name: "Recursive"}},
 				},
 			})
 		}
