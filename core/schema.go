@@ -237,24 +237,24 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 
 	// Expression types
 	v := append(expAll, expScalar...)
-	s.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
-	s.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
-	s.addExpression(v, "Time", __Type{Kind: TK_SCALAR, Name: "Time"})
-	s.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
-	s.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
-	s.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+	s.addExpression(v, ID, __Type{Name: ID})
+	s.addExpression(v, Int, __Type{Name: Int})
+	s.addExpression(v, Time, __Type{Name: Time})
+	s.addExpression(v, Float, __Type{Name: Float})
+	s.addExpression(v, String, __Type{Name: String})
+	s.addExpression(v, Boolean, __Type{Name: Boolean})
 
 	// ListExpression Types
 	v = append(expAll, expList...)
-	s.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
-	s.addExpression(v, "TimeList", __Type{Kind: TK_SCALAR, Name: "Time"})
-	s.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
-	s.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
-	s.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
+	s.addExpression(v, "IntList", __Type{Name: Int})
+	s.addExpression(v, "TimeList", __Type{Name: Time})
+	s.addExpression(v, "FloatList", __Type{Name: Float})
+	s.addExpression(v, "StringList", __Type{Name: String})
+	s.addExpression(v, "BooleanList", __Type{Name: Boolean})
 
 	// JsonExpression types
 	v = append(expAll, expJSON...)
-	s.addExpression(v, "JSON", __Type{Kind: TK_SCALAR, Name: "String"})
+	s.addExpression(v, JSON, __Type{Name: String})
 
 	s.addTablesType()
 
@@ -346,7 +346,7 @@ func (my *__Schema) addTablesType() {
 			sort.InputFields = append(sort.InputFields, __InputValue{
 				Name:        columnName,
 				Description: c.Comment,
-				Type:        &__Type{Name: "Direction"},
+				Type:        &__Type{Name: Direction},
 			})
 
 			// append where input fields
@@ -402,7 +402,7 @@ func (my *__Schema) addTablesType() {
 				Args: []__InputValue{
 					{Name: "includeIf", Type: &__Type{Name: where.Name}},
 					{Name: "skipIf", Type: &__Type{Name: where.Name}},
-					{Name: "find", Type: &__Type{Name: "Recursive"}},
+					{Name: "find", Type: &__Type{Name: Recursive}},
 				},
 			})
 		}
@@ -420,7 +420,7 @@ func (my *__Schema) addTablesType() {
 
 		// add object Mutation
 		args = append(args,
-			__InputValue{Name: "delete", Type: &__Type{Name: "Boolean"}},
+			__InputValue{Name: "delete", Type: &__Type{Name: Boolean}},
 			__InputValue{Name: "upsert", Type: &__Type{Name: upsert.Name}},
 			__InputValue{Name: "insert", Type: &__Type{Name: insert.Name}},
 			__InputValue{Name: "update", Type: &__Type{Name: update.Name}},
@@ -439,7 +439,7 @@ func (my *__Schema) addTablesType() {
 
 func (my *__Schema) getColumnType(c DBColumn) (name string, isList bool) {
 	if c.PrimaryKey {
-		name = "ID"
+		name = ID
 		return
 	}
 	name, isList = getType(c.Type)
