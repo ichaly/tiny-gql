@@ -184,8 +184,10 @@ func (my *__Schema) getName(name string) string {
 	}
 }
 
-func (my *__Schema) addType(t __Type) {
-	my.Types[t.Name] = t
+func (my *__Schema) addType(types ...__Type) {
+	for _, t := range types {
+		my.Types[t.Name] = t
+	}
 }
 
 func (my *__Schema) addTypeTo(op string, ot __Type, args []__InputValue) {
@@ -234,6 +236,7 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	v := append(expAll, expScalar...)
 	s.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
 	s.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
+	s.addExpression(v, "Time", __Type{Kind: TK_SCALAR, Name: "Time"})
 	s.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
 	s.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
 	s.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
@@ -241,6 +244,7 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	// ListExpression Types
 	v = append(expAll, expList...)
 	s.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
+	s.addExpression(v, "TimeList", __Type{Kind: TK_SCALAR, Name: "Time"})
 	s.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
 	s.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
 	s.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
@@ -266,6 +270,12 @@ func (my *__Schema) addTablesType() {
 		// append tables enum value object type
 		enumValues = append(enumValues, __EnumValue{Name: tableName, Description: t.Comment})
 
+		// sort input type
+		sort := __Type{
+			Kind: TK_INPUT_OBJECT,
+			Name: tableName + SUFFIX_SORT,
+		}
+
 		// where input type
 		wn := tableName + SUFFIX_WHERE
 		where := __Type{
@@ -278,12 +288,6 @@ func (my *__Schema) addTablesType() {
 			},
 		}
 
-		// order input type
-		order := __Type{
-			Kind: TK_INPUT_OBJECT,
-			Name: tableName + SUFFIX_ORDER,
-		}
-
 		// upsert input type
 		upsert := __Type{
 			Kind: TK_INPUT_OBJECT,
@@ -293,9 +297,25 @@ func (my *__Schema) addTablesType() {
 			Kind: TK_INPUT_OBJECT,
 			Name: tableName + SUFFIX_INSERT,
 		}
+		for _, f := range my.info.Relation[t.Name] {
+			name := strcase.ToCamel(f) + SUFFIX_UPDATE
+			insert.InputFields = append(insert.InputFields, __InputValue{
+				Name: f, Type: &__Type{Name: name},
+			})
+		}
 		update := __Type{
 			Kind: TK_INPUT_OBJECT,
 			Name: tableName + SUFFIX_UPDATE,
+			InputFields: []__InputValue{{
+				Name: "where", Type: &__Type{Name: where.Name},
+				Description: fmt.Sprintf("Update rows in table '%s' that match the expression", tableName),
+			}, {
+				Name: "connect", Type: &__Type{Name: where.Name},
+				Description: fmt.Sprintf("Connect to rows in table '%s' that match the expression", tableName),
+			}, {
+				Name: "disconnect", Type: &__Type{Name: where.Name},
+				Description: fmt.Sprintf("Disconnect from rows in table '%s' that match the expression", tableName),
+			}},
 		}
 
 		// table object type
@@ -305,17 +325,22 @@ func (my *__Schema) addTablesType() {
 			Description: t.Comment,
 		}
 
+		var hasRecursive bool
+
 		for _, c := range t.Columns {
 			if c.Blocked {
 				continue
+			}
+			if c.FKRecursive {
+				hasRecursive = true
 			}
 
 			//get column scalar type
 			cn, isList := my.getColumnType(c)
 			columnName := strcase.ToLowerCamel(c.Name)
 
-			// append order by input fields
-			order.InputFields = append(order.InputFields, __InputValue{
+			// append sort by input fields
+			sort.InputFields = append(sort.InputFields, __InputValue{
 				Name:        columnName,
 				Description: c.Comment,
 				Type:        &__Type{Name: "Direction"},
@@ -349,10 +374,10 @@ func (my *__Schema) addTablesType() {
 			upsert.InputFields = append(upsert.InputFields, __InputValue{
 				Name: columnName, Type: &ct,
 			})
-			insert.InputFields = append(upsert.InputFields, __InputValue{
+			insert.InputFields = append(insert.InputFields, __InputValue{
 				Name: columnName, Type: &ct,
 			})
-			update.InputFields = append(upsert.InputFields, __InputValue{
+			update.InputFields = append(update.InputFields, __InputValue{
 				Name: columnName, Type: &ct,
 			})
 
@@ -367,57 +392,36 @@ func (my *__Schema) addTablesType() {
 			})
 		}
 
-		// add order by input object types
-		my.addType(order)
+		if hasRecursive {
+			object.Fields = append(object.Fields, __Field{
+				Name: t.Name,
+				Type: &__Type{Name: tableName},
+				Args: []__InputValue{
+					{Name: "includeIf", Type: &__Type{Name: where.Name}},
+					{Name: "skipIf", Type: &__Type{Name: where.Name}},
+					{Name: "find", Type: &__Type{Name: "Recursive"}},
+				},
+			})
+		}
 
-		// add where input object types
-		my.addType(where)
-
-		my.addType(upsert)
-		my.addType(insert)
-		update.InputFields = append(update.InputFields, __InputValue{
-			Name:        "connect",
-			Type:        &__Type{Name: where.Name},
-			Description: fmt.Sprintf("Connect to rows in table '%s' that match the expression", tableName),
-		})
-		update.InputFields = append(update.InputFields, __InputValue{
-			Name:        "disconnect",
-			Type:        &__Type{Name: where.Name},
-			Description: fmt.Sprintf("Disconnect from rows in table '%s' that match the expression", tableName),
-		})
-		update.InputFields = append(update.InputFields, __InputValue{
-			Name:        "where",
-			Type:        &__Type{Name: where.Name},
-			Description: fmt.Sprintf("Update rows in table '%s' that match the expression", tableName),
-		})
-		my.addType(update)
-
-		// add table object types
-		my.addType(object)
+		// add to types
+		my.addType(sort, where, upsert, insert, update, object)
 
 		// add object Query and Subscription
-		args := append(argsList, __InputValue{
-			Name: "orderBy", Type: &__Type{Name: order.Name},
-		})
-		args = append(args, __InputValue{
-			Name: "where", Type: &__Type{Name: where.Name},
-		})
+		args := append(argsList,
+			__InputValue{Name: "sort", Type: &__Type{Name: sort.Name}},
+			__InputValue{Name: "where", Type: &__Type{Name: where.Name}},
+		)
 		my.addTypeTo("Query", object, args)
 		my.addTypeTo("Subscription", object, args)
 
 		// add object Mutation
-		args = append(args, __InputValue{
-			Name: "delete", Type: &__Type{Name: "Boolean"},
-		})
-		args = append(args, __InputValue{
-			Name: "upsert", Type: &__Type{Name: upsert.Name},
-		})
-		args = append(args, __InputValue{
-			Name: "insert", Type: &__Type{Name: insert.Name},
-		})
-		args = append(args, __InputValue{
-			Name: "update", Type: &__Type{Name: update.Name},
-		})
+		args = append(args,
+			__InputValue{Name: "delete", Type: &__Type{Name: "Boolean"}},
+			__InputValue{Name: "upsert", Type: &__Type{Name: upsert.Name}},
+			__InputValue{Name: "insert", Type: &__Type{Name: insert.Name}},
+			__InputValue{Name: "update", Type: &__Type{Name: update.Name}},
+		)
 		my.addTypeTo("Mutation", object, args)
 	}
 

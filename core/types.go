@@ -26,8 +26,8 @@ const (
 
 	SUFFIX_ENUM   = "Enum"
 	SUFFIX_ARGS   = "ArgsInput"
+	SUFFIX_SORT   = "SortInput"
 	SUFFIX_WHERE  = "WhereInput"
-	SUFFIX_ORDER  = "OrderInput"
 	SUFFIX_UPSERT = "UpsertInput"
 	SUFFIX_INSERT = "InsertInput"
 	SUFFIX_UPDATE = "UpdateInput"
@@ -83,8 +83,8 @@ var stdTypes = []__Type{
 		Name: "Subscription",
 	}, {
 		Kind:        TK_ENUM,
-		Name:        "Recursion",
-		Description: "Recursion relation types",
+		Name:        "Recursive",
+		Description: "Recursive relation types",
 		EnumValues: []__EnumValue{
 			{
 				Name:        "children",

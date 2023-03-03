@@ -40,12 +40,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	in, err := core.NewSchema(conf, info)
-	if err != nil {
-		panic(err)
-	}
 	r := chi.NewRouter()
 	r.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
+		in, err := core.NewSchema(conf, info)
+		if err != nil {
+			panic(err)
+		}
 		_, _ = w.Write(in)
 	})
 	r.HandleFunc("/intro", func(w http.ResponseWriter, r *http.Request) {
