@@ -176,8 +176,11 @@ const (
 	DL_INPUT_FIELD_DEFINITION __DirectiveLocation = "INPUT_FIELD_DEFINITION"
 )
 
-func (my *__Schema) getName(name string) string {
+func (my *__Schema) getName(name string, isField ...bool) string {
 	if my.conf.EnableCamelcase {
+		if len(isField) > 0 && isField[0] {
+			return strcase.ToLowerCamel(name)
+		}
 		return strcase.ToCamel(name)
 	} else {
 		return name
@@ -193,7 +196,7 @@ func (my *__Schema) addType(types ...__Type) {
 func (my *__Schema) addTypeTo(op string, ot __Type, args []__InputValue) {
 	t := my.Types[op]
 	t.Fields = append(t.Fields, __Field{
-		Name:        strcase.ToLowerCamel(ot.Name),
+		Name:        my.getName(ot.Name, true),
 		Description: ot.Description,
 		Type:        &__Type{Name: ot.Name},
 		Args:        args,
@@ -266,7 +269,7 @@ func (my *__Schema) addTablesType() {
 		if t.Blocked {
 			continue
 		}
-		tableName := strcase.ToCamel(t.Name)
+		tableName := my.getName(t.Name)
 		// append tables enum value object type
 		enumValues = append(enumValues, __EnumValue{Name: tableName, Description: t.Comment})
 
@@ -298,7 +301,7 @@ func (my *__Schema) addTablesType() {
 			Name: tableName + SUFFIX_INSERT,
 		}
 		for _, f := range my.info.Relation[t.Name] {
-			name := strcase.ToCamel(f) + SUFFIX_UPDATE
+			name := my.getName(f) + SUFFIX_UPDATE
 			insert.InputFields = append(insert.InputFields, __InputValue{
 				Name: f, Type: &__Type{Name: name},
 			})
@@ -337,7 +340,7 @@ func (my *__Schema) addTablesType() {
 
 			//get column scalar type
 			cn, isList := my.getColumnType(c)
-			columnName := strcase.ToLowerCamel(c.Name)
+			columnName := my.getName(c.Name, true)
 
 			// append sort by input fields
 			sort.InputFields = append(sort.InputFields, __InputValue{
