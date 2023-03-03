@@ -16,7 +16,8 @@ type DBInfo struct {
 	Tables  map[string]*DBTable
 	VTables []VirtualTable `json:"-"` // for polymorphic relationships
 
-	hash int
+	Relation Graph
+	hash     int
 }
 
 func (my *DBInfo) Hash() int {
@@ -99,11 +100,12 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 	defer rows.Close()
 
 	di := &DBInfo{
-		Dialect: dialect,
-		Version: dbVersion,
-		Schema:  dbSchema,
-		Name:    dbName,
-		Tables:  make(map[string]*DBTable),
+		Dialect:  dialect,
+		Version:  dbVersion,
+		Schema:   dbSchema,
+		Name:     dbName,
+		Tables:   make(map[string]*DBTable),
+		Relation: make(map[string][]string),
 	}
 
 	// we have to rescan and update columns to overcome
@@ -155,6 +157,9 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 		}
 		if c.PrimaryKey {
 			t.PrimaryCol = c
+		}
+		if c.FKeyTable != "" {
+			di.Relation.Put(t.Name, c.FKeyTable)
 		}
 		t.Columns[ck] = c
 	}

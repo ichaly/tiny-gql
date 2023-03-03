@@ -26,8 +26,8 @@ const (
 
 	SUFFIX_ENUM   = "Enum"
 	SUFFIX_ARGS   = "ArgsInput"
+	SUFFIX_SORT   = "SortInput"
 	SUFFIX_WHERE  = "WhereInput"
-	SUFFIX_ORDER  = "OrderInput"
 	SUFFIX_UPSERT = "UpsertInput"
 	SUFFIX_INSERT = "InsertInput"
 	SUFFIX_UPDATE = "UpdateInput"

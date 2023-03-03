@@ -2,6 +2,7 @@ package core
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/bytedance/sonic"
 	"github.com/iancoleman/strcase"
 )
@@ -233,6 +234,7 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	v := append(expAll, expScalar...)
 	s.addExpression(v, "ID", __Type{Kind: TK_SCALAR, Name: "ID"})
 	s.addExpression(v, "Int", __Type{Kind: TK_SCALAR, Name: "Int"})
+	s.addExpression(v, "Time", __Type{Kind: TK_SCALAR, Name: "Time"})
 	s.addExpression(v, "Float", __Type{Kind: TK_SCALAR, Name: "Float"})
 	s.addExpression(v, "String", __Type{Kind: TK_SCALAR, Name: "String"})
 	s.addExpression(v, "Boolean", __Type{Kind: TK_SCALAR, Name: "Boolean"})
@@ -240,6 +242,7 @@ func NewSchema(conf *Config, info *DBInfo) (res json.RawMessage, err error) {
 	// ListExpression Types
 	v = append(expAll, expList...)
 	s.addExpression(v, "IntList", __Type{Kind: TK_SCALAR, Name: "Int"})
+	s.addExpression(v, "TimeList", __Type{Kind: TK_SCALAR, Name: "Time"})
 	s.addExpression(v, "FloatList", __Type{Kind: TK_SCALAR, Name: "Float"})
 	s.addExpression(v, "StringList", __Type{Kind: TK_SCALAR, Name: "String"})
 	s.addExpression(v, "BooleanList", __Type{Kind: TK_SCALAR, Name: "Boolean"})
@@ -265,6 +268,12 @@ func (my *__Schema) addTablesType() {
 		// append tables enum value object type
 		enumValues = append(enumValues, __EnumValue{Name: tableName, Description: t.Comment})
 
+		// sort input type
+		sort := __Type{
+			Kind: TK_INPUT_OBJECT,
+			Name: tableName + SUFFIX_SORT,
+		}
+
 		// where input type
 		wn := tableName + SUFFIX_WHERE
 		where := __Type{
@@ -277,12 +286,6 @@ func (my *__Schema) addTablesType() {
 			},
 		}
 
-		// order input type
-		order := __Type{
-			Kind: TK_INPUT_OBJECT,
-			Name: tableName + SUFFIX_ORDER,
-		}
-
 		// upsert input type
 		upsert := __Type{
 			Kind: TK_INPUT_OBJECT,
@@ -292,10 +295,33 @@ func (my *__Schema) addTablesType() {
 			Kind: TK_INPUT_OBJECT,
 			Name: tableName + SUFFIX_INSERT,
 		}
+		for _, f := range my.info.Relation[t.Name] {
+			name := strcase.ToCamel(f) + SUFFIX_UPDATE
+			insert.InputFields = append(insert.InputFields, __InputValue{
+				Name: f, Type: &__Type{Name: name},
+			})
+		}
 		update := __Type{
 			Kind: TK_INPUT_OBJECT,
 			Name: tableName + SUFFIX_UPDATE,
 		}
+		update.InputFields = append(update.InputFields,
+			__InputValue{
+				Name:        "where",
+				Type:        &__Type{Name: where.Name},
+				Description: fmt.Sprintf("Update rows in table '%s' that match the expression", tableName),
+			},
+			__InputValue{
+				Name:        "connect",
+				Type:        &__Type{Name: where.Name},
+				Description: fmt.Sprintf("Connect to rows in table '%s' that match the expression", tableName),
+			},
+			__InputValue{
+				Name:        "disconnect",
+				Type:        &__Type{Name: where.Name},
+				Description: fmt.Sprintf("Disconnect from rows in table '%s' that match the expression", tableName),
+			},
+		)
 
 		// table object type
 		object := __Type{
@@ -313,8 +339,8 @@ func (my *__Schema) addTablesType() {
 			cn, isList := my.getColumnType(c)
 			columnName := strcase.ToLowerCamel(c.Name)
 
-			// append order by input fields
-			order.InputFields = append(order.InputFields, __InputValue{
+			// append sort by input fields
+			sort.InputFields = append(sort.InputFields, __InputValue{
 				Name:        columnName,
 				Description: c.Comment,
 				Type:        &__Type{Name: "Direction"},
@@ -348,10 +374,10 @@ func (my *__Schema) addTablesType() {
 			upsert.InputFields = append(upsert.InputFields, __InputValue{
 				Name: columnName, Type: &ct,
 			})
-			insert.InputFields = append(upsert.InputFields, __InputValue{
+			insert.InputFields = append(insert.InputFields, __InputValue{
 				Name: columnName, Type: &ct,
 			})
-			update.InputFields = append(upsert.InputFields, __InputValue{
+			update.InputFields = append(update.InputFields, __InputValue{
 				Name: columnName, Type: &ct,
 			})
 
@@ -366,8 +392,8 @@ func (my *__Schema) addTablesType() {
 			})
 		}
 
-		// add order by input object types
-		my.addType(order)
+		// add sort by input object types
+		my.addType(sort)
 
 		// add where input object types
 		my.addType(where)
@@ -381,7 +407,7 @@ func (my *__Schema) addTablesType() {
 
 		// add object Query and Subscription
 		args := append(argsList, __InputValue{
-			Name: "orderBy", Type: &__Type{Name: order.Name},
+			Name: "sort", Type: &__Type{Name: sort.Name},
 		})
 		args = append(args, __InputValue{
 			Name: "where", Type: &__Type{Name: where.Name},
