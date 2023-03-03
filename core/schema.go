@@ -184,8 +184,10 @@ func (my *__Schema) getName(name string) string {
 	}
 }
 
-func (my *__Schema) addType(t __Type) {
-	my.Types[t.Name] = t
+func (my *__Schema) addType(types ...__Type) {
+	for _, t := range types {
+		my.Types[t.Name] = t
+	}
 }
 
 func (my *__Schema) addTypeTo(op string, ot __Type, args []__InputValue) {
@@ -304,24 +306,17 @@ func (my *__Schema) addTablesType() {
 		update := __Type{
 			Kind: TK_INPUT_OBJECT,
 			Name: tableName + SUFFIX_UPDATE,
-		}
-		update.InputFields = append(update.InputFields,
-			__InputValue{
-				Name:        "where",
-				Type:        &__Type{Name: where.Name},
+			InputFields: []__InputValue{{
+				Name: "where", Type: &__Type{Name: where.Name},
 				Description: fmt.Sprintf("Update rows in table '%s' that match the expression", tableName),
-			},
-			__InputValue{
-				Name:        "connect",
-				Type:        &__Type{Name: where.Name},
+			}, {
+				Name: "connect", Type: &__Type{Name: where.Name},
 				Description: fmt.Sprintf("Connect to rows in table '%s' that match the expression", tableName),
-			},
-			__InputValue{
-				Name:        "disconnect",
-				Type:        &__Type{Name: where.Name},
+			}, {
+				Name: "disconnect", Type: &__Type{Name: where.Name},
 				Description: fmt.Sprintf("Disconnect from rows in table '%s' that match the expression", tableName),
-			},
-		)
+			}},
+		}
 
 		// table object type
 		object := __Type{
@@ -392,42 +387,24 @@ func (my *__Schema) addTablesType() {
 			})
 		}
 
-		// add sort by input object types
-		my.addType(sort)
-
-		// add where input object types
-		my.addType(where)
-
-		my.addType(upsert)
-		my.addType(insert)
-		my.addType(update)
-
-		// add table object types
-		my.addType(object)
+		// add to types
+		my.addType(sort, where, upsert, insert, update, object)
 
 		// add object Query and Subscription
-		args := append(argsList, __InputValue{
-			Name: "sort", Type: &__Type{Name: sort.Name},
-		})
-		args = append(args, __InputValue{
-			Name: "where", Type: &__Type{Name: where.Name},
-		})
+		args := append(argsList,
+			__InputValue{Name: "sort", Type: &__Type{Name: sort.Name}},
+			__InputValue{Name: "where", Type: &__Type{Name: where.Name}},
+		)
 		my.addTypeTo("Query", object, args)
 		my.addTypeTo("Subscription", object, args)
 
 		// add object Mutation
-		args = append(args, __InputValue{
-			Name: "delete", Type: &__Type{Name: "Boolean"},
-		})
-		args = append(args, __InputValue{
-			Name: "upsert", Type: &__Type{Name: upsert.Name},
-		})
-		args = append(args, __InputValue{
-			Name: "insert", Type: &__Type{Name: insert.Name},
-		})
-		args = append(args, __InputValue{
-			Name: "update", Type: &__Type{Name: update.Name},
-		})
+		args = append(args,
+			__InputValue{Name: "delete", Type: &__Type{Name: "Boolean"}},
+			__InputValue{Name: "upsert", Type: &__Type{Name: upsert.Name}},
+			__InputValue{Name: "insert", Type: &__Type{Name: insert.Name}},
+			__InputValue{Name: "update", Type: &__Type{Name: update.Name}},
+		)
 		my.addTypeTo("Mutation", object, args)
 	}
 
