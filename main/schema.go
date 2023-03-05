@@ -19,7 +19,7 @@ var (
 func init() {
 	var err error
 	dialect = "postgres"
-	url := "postgres://postgres:postgres@localhost:5432/test_development?sslmode=disable"
+	url := "postgres://postgres:postgres@localhost:5432/blog_development?sslmode=disable"
 	db, err = sql.Open("pgx", url)
 	if err != nil {
 		panic(err)

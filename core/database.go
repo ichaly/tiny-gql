@@ -16,7 +16,7 @@ type DBInfo struct {
 	Tables  map[string]*DBTable
 	VTables []VirtualTable `json:"-"` // for polymorphic relationships
 
-	Relation Graph
+	Relation AMap
 	hash     int
 }
 

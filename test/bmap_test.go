@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-var m *core.BiMap[string, int]
+var m *core.BMap[string, int]
 
 func init() {
 	m = core.NewBiMap[string, int]()
