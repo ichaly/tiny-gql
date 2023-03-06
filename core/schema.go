@@ -300,7 +300,7 @@ func (my *__Schema) addTablesType() {
 			Kind: TK_INPUT_OBJECT,
 			Name: tableName + SUFFIX_INSERT,
 		}
-		for _, f := range my.info.Relation[t.Name] {
+		for _, f := range my.info.relation[t.Name] {
 			name := my.getName(f) + SUFFIX_UPDATE
 			insert.InputFields = append(insert.InputFields, __InputValue{
 				Name: f, Type: &__Type{Name: name},

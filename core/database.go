@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/ichaly/tiny-go/core/internal"
+	"github.com/ichaly/tiny-go/core/internal/data"
 	"regexp"
 	"strings"
 )
@@ -16,7 +17,7 @@ type DBInfo struct {
 	Tables  map[string]*DBTable
 	VTables []VirtualTable `json:"-"` // for polymorphic relationships
 
-	Relation AMap
+	relation data.BiDict
 	hash     int
 }
 
@@ -105,7 +106,7 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 		Schema:   dbSchema,
 		Name:     dbName,
 		Tables:   make(map[string]*DBTable),
-		Relation: make(map[string][]string),
+		relation: make(map[string][]string),
 	}
 
 	// we have to rescan and update columns to overcome
@@ -159,7 +160,7 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 			t.PrimaryCol = c
 		}
 		if c.FKeyTable != "" {
-			di.Relation.Put(t.Name, c.FKeyTable)
+			di.relation.Put(t.Name, c.FKeyTable)
 		}
 		t.Columns[ck] = c
 	}

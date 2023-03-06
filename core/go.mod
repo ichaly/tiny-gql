@@ -7,6 +7,7 @@ require (
 	github.com/iancoleman/strcase v0.2.0
 	github.com/spf13/afero v1.9.3
 	github.com/spf13/viper v1.15.0
+	golang.org/x/exp v0.0.0-20230304125523-9ff063c70017
 )
 
 require (

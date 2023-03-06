@@ -1,4 +1,4 @@
-package core
+package data
 
 import (
 	"errors"
@@ -9,20 +9,20 @@ import (
 
 var ErrDuplicationExists = errors.New("duplication key or value exists")
 
-// BMap A threadsafe generic bidirectional map structure written in Go
-type BMap[K, V comparable] struct {
+// BiMap A threadsafe generic bidirectional map structure written in Go
+type BiMap[K, V comparable] struct {
 	lock   sync.RWMutex
 	keys   map[K]V
 	values map[V]K
 }
 
 type option[K, V comparable] interface {
-	apply(*BMap[K, V])
+	apply(*BiMap[K, V])
 }
 
 type initialOption[K, V comparable] map[K]V
 
-func (o initialOption[K, V]) apply(m *BMap[K, V]) {
+func (o initialOption[K, V]) apply(m *BiMap[K, V]) {
 	for k, v := range map[K]V(o) {
 		m.keys[k] = v
 		m.values[v] = k
@@ -34,9 +34,9 @@ func WithInitialMap[K, V comparable](m map[K]V) option[K, V] {
 	return initialOption[K, V](m)
 }
 
-// NewBiMap returns a BMap object
-func NewBiMap[K, V comparable](options ...option[K, V]) *BMap[K, V] {
-	m := &BMap[K, V]{
+// NewBiMap returns a BiMap object
+func NewBiMap[K, V comparable](options ...option[K, V]) *BiMap[K, V] {
+	m := &BiMap[K, V]{
 		keys:   make(map[K]V),
 		values: make(map[V]K),
 	}
@@ -46,7 +46,7 @@ func NewBiMap[K, V comparable](options ...option[K, V]) *BMap[K, V] {
 	return m
 }
 
-func (my *BMap[K, V]) String() string {
+func (my *BiMap[K, V]) String() string {
 	my.lock.RLock()
 	defer my.lock.RUnlock()
 	pairs := make([]string, 0, len(my.keys))
@@ -56,15 +56,15 @@ func (my *BMap[K, V]) String() string {
 	return "map[" + strings.Join(pairs, " ") + "]"
 }
 
-// Size returns size of the BMap.
-func (my *BMap[_, _]) Size() int {
+// Size returns size of the BiMap.
+func (my *BiMap[_, _]) Size() int {
 	my.lock.RLock()
 	defer my.lock.RUnlock()
 	return len(my.keys)
 }
 
-// Keys returns a slice of the keys in the BMap.
-func (my *BMap[K, V]) Keys() []K {
+// Keys returns a slice of the keys in the BiMap.
+func (my *BiMap[K, V]) Keys() []K {
 	my.lock.RLock()
 	defer my.lock.RUnlock()
 	var keys []K
@@ -74,8 +74,8 @@ func (my *BMap[K, V]) Keys() []K {
 	return keys
 }
 
-// Values returns a slice of the values in the BMap.
-func (my *BMap[K, V]) Values() []V {
+// Values returns a slice of the values in the BiMap.
+func (my *BiMap[K, V]) Values() []V {
 	my.lock.RLock()
 	defer my.lock.RUnlock()
 	var values []V
@@ -86,7 +86,7 @@ func (my *BMap[K, V]) Values() []V {
 }
 
 // Each iterate over the map for the given function
-func (my *BMap[K, V]) Each(fn func(k K, v V)) {
+func (my *BiMap[K, V]) Each(fn func(k K, v V)) {
 	my.lock.RLock()
 	defer my.lock.RUnlock()
 	for k, v := range my.keys {
@@ -95,7 +95,7 @@ func (my *BMap[K, V]) Each(fn func(k K, v V)) {
 }
 
 // Put sets the value with corresponding key in the keys map, it will return an error if either key or value exist
-func (my *BMap[K, V]) Put(key K, val V) error {
+func (my *BiMap[K, V]) Put(key K, val V) error {
 	my.lock.Lock()
 	defer my.lock.Unlock()
 	if _, ok := my.keys[key]; ok {
@@ -110,7 +110,7 @@ func (my *BMap[K, V]) Put(key K, val V) error {
 }
 
 // Delete deletes the key-value pair involving the given key.
-func (my *BMap[T, _]) Delete(key T) {
+func (my *BiMap[T, _]) Delete(key T) {
 	my.lock.Lock()
 	defer my.lock.Unlock()
 	v, ok := my.keys[key]
@@ -122,7 +122,7 @@ func (my *BMap[T, _]) Delete(key T) {
 }
 
 // DeleteInverse deletes the key-value pair involving the given value.
-func (my *BMap[_, V]) DeleteInverse(val V) {
+func (my *BiMap[_, V]) DeleteInverse(val V) {
 	my.lock.Lock()
 	defer my.lock.Unlock()
 	k, ok := my.values[val]
@@ -134,7 +134,7 @@ func (my *BMap[_, V]) DeleteInverse(val V) {
 }
 
 // Get returns the value and its existence by the given key in keys map
-func (my *BMap[K, V]) Get(key K) (V, bool) {
+func (my *BiMap[K, V]) Get(key K) (V, bool) {
 	my.lock.RLock()
 	defer my.lock.RUnlock()
 	v, ok := my.keys[key]
@@ -142,7 +142,7 @@ func (my *BMap[K, V]) Get(key K) (V, bool) {
 }
 
 // GetInverse returns the key and its existence by the given value in values map
-func (my *BMap[K, V]) GetInverse(v V) (K, bool) {
+func (my *BiMap[K, V]) GetInverse(v V) (K, bool) {
 	my.lock.RLock()
 	defer my.lock.RUnlock()
 	k, ok := my.values[v]
