@@ -128,7 +128,7 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 		}
 
 		// data perfection
-		c.Blocked = isBlock(c.Name, blockList)
+		c.Blocked = isBlocked(c.Name, blockList)
 		if c.PrimaryKey {
 			c.UniqueKey = true
 		}
@@ -148,7 +148,7 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 				Columns:  make(map[string]DBColumn),
 				FullText: make(map[string]DBColumn),
 			}
-			if isBlock(c.Table, blockList) {
+			if isBlocked(c.Table, blockList) {
 				t.Blocked = true
 			}
 			di.Tables[tk] = t
@@ -167,9 +167,9 @@ func GetDBInfo(db *sql.DB, dialect string, blockList []string) (*DBInfo, error) 
 	return di, nil
 }
 
-func isBlock(val string, list []string) bool {
+func isBlocked(val string, list []string) bool {
 	for _, v := range list {
-		regex := fmt.Sprintf("^%list$", v)
+		regex := fmt.Sprintf("^%s$", v)
 		if matched, _ := regexp.MatchString(regex, val); matched {
 			return true
 		}
