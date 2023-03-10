@@ -136,12 +136,12 @@ func (my *lexer) next() rune {
 // peek returns but does not consume the next rune in the input.
 func (my *lexer) peek() rune {
 	r := my.next()
-	my.backup()
+	my.revert()
 	return r
 }
 
-// backup steps back one rune. Can only be called once per call of next.
-func (my *lexer) backup() {
+// revert steps back one rune. Can only be called once per call of next.
+func (my *lexer) revert() {
 	if my.cursor != 0 {
 		my.cursor -= my.width
 		// Correct newline count.
@@ -195,7 +195,7 @@ func (my *lexer) accept(valid []byte) (rune, bool) {
 	if r != eof && bytes.ContainsRune(valid, r) {
 		return r, true
 	}
-	my.backup()
+	my.revert()
 	return r, false
 }
 
@@ -204,7 +204,7 @@ func (my *lexer) acceptRun(valid []byte) {
 	for bytes.ContainsRune(valid, my.next()) {
 
 	}
-	my.backup()
+	my.revert()
 }
 
 // acceptComment consumes a run of runes while till the end of line
@@ -221,7 +221,7 @@ func (my *lexer) acceptAlphaNum() bool {
 	for r := my.next(); isAlphaNumeric(r); r = my.next() {
 		n++
 	}
-	my.backup()
+	my.revert()
 	return n != 0
 }
 
@@ -257,7 +257,7 @@ func lexRoot(l *lexer) stateFn {
 			l.emit(item)
 		}
 	case r == '"' || r == '\'':
-		l.backup()
+		l.revert()
 		return lexString
 	case r == '.':
 		l.accept(dotToken)
@@ -267,10 +267,10 @@ func lexRoot(l *lexer) stateFn {
 		}
 		//fallthrough // '.' can start a number.
 	case r == '+' || r == '-' || ('0' <= r && r <= '9'):
-		l.backup()
+		l.revert()
 		return lexNumber
 	case isAlphaNumeric(r):
-		l.backup()
+		l.revert()
 		return lexName
 	default:
 		return l.errorf("unrecognized character in action: %#U", r)
@@ -315,7 +315,7 @@ func lexName(l *lexer) stateFn {
 			return nil
 		}
 		if !isAlphaNumeric(r) {
-			l.backup()
+			l.revert()
 			val := l.current()
 			switch {
 			case equals(val, onToken):
@@ -349,7 +349,7 @@ func lexString(l *lexer) stateFn {
 				continue
 			}
 			if !escaped && r == sr {
-				l.backup()
+				l.revert()
 				l.emit(itemString)
 				if _, ok := l.accept(quotesToken); ok {
 					l.ignore()
