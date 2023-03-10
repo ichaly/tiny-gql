@@ -13,7 +13,7 @@ import (
 
 type Config struct {
 	Debug     bool             `jsonschema:"title=Debug,default=false"`
-	Tables    []Table          `jsonschema:"title=Tables"`
+	Tables    []TableConfig    `jsonschema:"title=Tables"`
 	Resolvers []ResolverConfig `jsonschema:"-"`
 	Blocklist []string         `jsonschema:"title=Block List"`
 
@@ -23,7 +23,7 @@ type Config struct {
 	FS              interface{}   `mapstructure:"-" jsonschema:"-" json:"-"`
 }
 
-type Table struct {
+type TableConfig struct {
 	Schema    string
 	Table     string // Inherits Table
 	Name      string
@@ -33,11 +33,11 @@ type Table struct {
 	// Permitted order by options
 	OrderBy map[string][]string `mapstructure:"order_by" json:"order_by" yaml:"order_by" jsonschema:"title=Order By Options,example=created_at desc"`
 
-	Query  *Query
-	Insert *Insert
-	Update *Update
-	Upsert *Upsert
-	Delete *Delete
+	Query  *QueryConfig
+	Insert *InsertConfig
+	Update *UpdateConfig
+	Upsert *UpsertConfig
+	Delete *DeleteConfig
 }
 
 type Column struct {
@@ -48,7 +48,7 @@ type Column struct {
 	ForeignKey string `mapstructure:"related_to" json:"related_to" yaml:"related_to" jsonschema:"title=Related To,example=other_table.id_column,example=users.id"`
 }
 
-type Query struct {
+type QueryConfig struct {
 	Limit int
 	// Use filters to enforce table wide things like { disabled: false } where you never want disabled users to be shown.
 	Filters          []string
@@ -57,28 +57,28 @@ type Query struct {
 	Block            bool
 }
 
-type Insert struct {
+type InsertConfig struct {
 	Filters []string
 	Columns []string
 	Presets map[string]string
 	Block   bool
 }
 
-type Update struct {
+type UpdateConfig struct {
 	Filters []string
 	Columns []string
 	Presets map[string]string
 	Block   bool
 }
 
-type Upsert struct {
+type UpsertConfig struct {
 	Filters []string
 	Columns []string
 	Presets map[string]string
 	Block   bool
 }
 
-type Delete struct {
+type DeleteConfig struct {
 	Filters []string
 	Columns []string
 	Block   bool
