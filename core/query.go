@@ -8,6 +8,11 @@ const (
 	Subscription OperationType = "subscription"
 )
 
+type QueryDocument struct {
+	Operations []*OperationDefinition
+	Fragments  []*FragmentDefinition
+}
+
 type OperationDefinition struct {
 	OperationType       OperationType
 	Name                string
@@ -75,3 +80,14 @@ type InlineFragment struct {
 	Directives    []*Directive
 	SelectionSet  []Selection
 }
+
+type FragmentDefinition struct {
+	Name          string
+	TypeCondition string
+	Directives    []*Directive
+	SelectionSet  []Selection
+}
+
+func (*Field) isSelection()          {}
+func (*FragmentSpread) isSelection() {}
+func (*InlineFragment) isSelection() {}
