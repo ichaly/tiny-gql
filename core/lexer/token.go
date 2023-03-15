@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"github.com/ichaly/tiny-go/core/ast"
 	"strconv"
 )
 
@@ -134,9 +133,9 @@ func (t Type) String() string {
 }
 
 type Token struct {
-	Kind  Type         // The token type.
-	Value string       // The literal value consumed.
-	Pos   ast.Position // The file and line this token was read from
+	Kind  Type     // The token type.
+	Value string   // The literal value consumed.
+	Pos   Position // The file and line this token was read from
 }
 
 func (t Token) String() string {

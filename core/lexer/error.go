@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/ichaly/tiny-go/core/ast"
 	"strconv"
 )
 
@@ -12,7 +11,6 @@ import (
 type Error struct {
 	err        error                  `json:"-"`
 	Message    string                 `json:"message"`
-	Path       ast.Path               `json:"path,omitempty"`
 	Locations  []Location             `json:"locations,omitempty"`
 	Extensions map[string]interface{} `json:"extensions,omitempty"`
 	Rule       string                 `json:"-"`
@@ -53,18 +51,10 @@ func (err *Error) Error() string {
 	}
 
 	res.WriteString(": ")
-	if ps := err.pathString(); ps != "" {
-		res.WriteString(ps)
-		res.WriteByte(' ')
-	}
 
 	res.WriteString(err.Message)
 
 	return res.String()
-}
-
-func (err Error) pathString() string {
-	return err.Path.String()
 }
 
 func (err Error) Unwrap() error {
@@ -98,35 +88,13 @@ func (errs List) As(target interface{}) bool {
 	return false
 }
 
-func WrapPath(path ast.Path, err error) *Error {
-	return &Error{
-		err:     err,
-		Message: err.Error(),
-		Path:    path,
-	}
-}
-
-func Wrap(err error) *Error {
-	return &Error{
-		err:     err,
-		Message: err.Error(),
-	}
-}
-
 func Errorf(message string, args ...interface{}) *Error {
 	return &Error{
 		Message: fmt.Sprintf(message, args...),
 	}
 }
 
-func ErrorPathf(path ast.Path, message string, args ...interface{}) *Error {
-	return &Error{
-		Message: fmt.Sprintf(message, args...),
-		Path:    path,
-	}
-}
-
-func ErrorPosf(pos *ast.Position, message string, args ...interface{}) *Error {
+func ErrorPosf(pos *Position, message string, args ...interface{}) *Error {
 	return ErrorLocf(
 		pos.Src.Name,
 		pos.Line,

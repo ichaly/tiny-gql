@@ -4,7 +4,7 @@ type Input struct {
 	// Name is the filename of the source
 	Name string
 	// Content is the actual contents of the source file
-	Content []byte
+	Content string
 	// BuiltIn indicate whether the source is a part of the specification
 	BuiltIn bool
 }
