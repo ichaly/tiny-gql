@@ -10,16 +10,12 @@ type Lexer struct {
 	*Input
 	// An offset into the string in bytes
 	start int
-	// An offset into the string in runes
-	startRunes int
 	// An offset into the string in bytes
 	end int
-	// An offset into the string in runes
-	endRunes int
 	// the current line number
 	line int
-	// An offset into the string in rune
-	lineStartRunes int
+	// the current column number
+	column int
 }
 
 func New(src *Input) Lexer {
@@ -43,22 +39,22 @@ func (s *Lexer) makeValueToken(kind Type, value string) (Token, error) {
 		Kind:  kind,
 		Value: value,
 		Pos: Position{
-			Start:  s.startRunes,
-			End:    s.endRunes,
+			Start:  s.start,
+			End:    s.end,
 			Line:   s.line,
-			Column: s.startRunes - s.lineStartRunes + 1,
+			Column: s.column + 1,
 			Src:    s.Input,
 		},
 	}, nil
 }
 
 func (s *Lexer) makeError(format string, args ...interface{}) (Token, error) {
-	column := s.endRunes - s.lineStartRunes + 1
+	column := s.column + 1
 	return Token{
 		Kind: Invalid,
 		Pos: Position{
-			Start:  s.startRunes,
-			End:    s.endRunes,
+			Start:  s.start,
+			End:    s.end,
 			Line:   s.line,
 			Column: column,
 			Src:    s.Input,
@@ -75,18 +71,16 @@ func (s *Lexer) ReadToken() (token Token, err error) {
 
 	s.ws()
 	s.start = s.end
-	s.startRunes = s.endRunes
 
 	if s.end >= len(s.Content) {
 		return s.makeToken(EOF)
 	}
 	r := s.Content[s.start]
 	s.end++
-	s.endRunes++
+	s.column++
 	switch r {
 	case '!':
 		return s.makeValueToken(Bang, "")
-
 	case '$':
 		return s.makeValueToken(Dollar, "")
 	case '&':
@@ -98,7 +92,7 @@ func (s *Lexer) ReadToken() (token Token, err error) {
 	case '.':
 		if len(s.Content) > s.start+2 && s.Content[s.start:s.start+3] == "..." {
 			s.end += 2
-			s.endRunes += 2
+			s.column++
 			return s.makeValueToken(Spread, "")
 		}
 	case ':':
@@ -122,24 +116,19 @@ func (s *Lexer) ReadToken() (token Token, err error) {
 			return comment, err
 		}
 		return s.ReadToken()
-
 	case '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z':
 		return s.readName()
-
 	case '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 		return s.readNumber()
-
 	case '"':
 		if len(s.Content) > s.start+2 && s.Content[s.start:s.start+3] == `"""` {
 			return s.readBlockString()
 		}
-
 		return s.readString()
 	}
 
 	s.end--
-	s.endRunes--
-
+	s.column--
 	if r < 0x0020 && r != 0x0009 && r != 0x000a && r != 0x000d {
 		return s.makeError(`Cannot contain the invalid character "\u%04d"`, r)
 	}
@@ -158,27 +147,24 @@ func (s *Lexer) ws() {
 		switch s.Content[s.end] {
 		case '\t', ' ', ',':
 			s.end++
-			s.endRunes++
+			s.column++
 		case '\n':
 			s.end++
-			s.endRunes++
 			s.line++
-			s.lineStartRunes = s.endRunes
+			s.column = 0
 		case '\r':
 			s.end++
-			s.endRunes++
 			s.line++
-			s.lineStartRunes = s.endRunes
+			s.column = 0
 			// skip the following newline if its there
 			if s.end < len(s.Content) && s.Content[s.end] == '\n' {
 				s.end++
-				s.endRunes++
+				s.column++
 			}
 			// byte order mark, given ws is hot path we aren't relying on the unicode package here.
 		case 0xef:
 			if s.end+2 < len(s.Content) && s.Content[s.end+1] == 0xBB && s.Content[s.end+2] == 0xBF {
 				s.end += 3
-				s.endRunes++
 			} else {
 				return
 			}
@@ -198,7 +184,7 @@ func (s *Lexer) readComment() (Token, error) {
 		// SourceCharacter but not LineTerminator
 		if r > 0x001f || r == '\t' {
 			s.end += w
-			s.endRunes++
+			s.column++
 		} else {
 			break
 		}
@@ -217,14 +203,13 @@ func (s *Lexer) readNumber() (Token, error) {
 
 	// backup to the first digit
 	s.end--
-	s.endRunes--
-
+	s.column--
 	s.acceptByte('-')
 
 	if s.acceptByte('0') {
 		if consumed := s.acceptDigits(); consumed != 0 {
 			s.end -= consumed
-			s.endRunes -= consumed
+			s.column -= consumed
 			return s.makeError("Invalid number, unexpected digit after 0: %s.", s.describeNext())
 		}
 	} else {
@@ -267,7 +252,7 @@ func (s *Lexer) acceptByte(bytes ...uint8) bool {
 	for _, accepted := range bytes {
 		if s.Content[s.end] == accepted {
 			s.end++
-			s.endRunes++
+			s.column++
 			return true
 		}
 	}
@@ -279,7 +264,7 @@ func (s *Lexer) acceptDigits() int {
 	consumed := 0
 	for s.end < len(s.Content) && s.Content[s.end] >= '0' && s.Content[s.end] <= '9' {
 		s.end++
-		s.endRunes++
+		s.column++
 		consumed++
 	}
 
@@ -306,7 +291,7 @@ func (s *Lexer) readString() (Token, error) {
 
 	// skip the opening quote
 	s.start++
-	s.startRunes++
+	s.column++
 
 	for s.end < inputLen {
 		r := s.Content[s.end]
@@ -326,7 +311,7 @@ func (s *Lexer) readString() (Token, error) {
 				char, w = utf8.DecodeRuneInString(s.Content[s.end:])
 			}
 			s.end += w
-			s.endRunes++
+			s.column++
 
 			if buf != nil {
 				buf.WriteRune(char)
@@ -344,14 +329,14 @@ func (s *Lexer) readString() (Token, error) {
 
 			// skip the close quote
 			s.end++
-			s.endRunes++
+			s.column++
 
 			return t, err
 
 		case '\\':
 			if s.end+1 >= inputLen {
 				s.end++
-				s.endRunes++
+				s.column++
 				return s.makeError(`Invalid character escape sequence.`)
 			}
 
@@ -364,19 +349,19 @@ func (s *Lexer) readString() (Token, error) {
 			if escape == 'u' {
 				if s.end+6 >= inputLen {
 					s.end++
-					s.endRunes++
+					s.column++
 					return s.makeError("Invalid character escape sequence: \\%s.", s.Content[s.end:])
 				}
 
 				r, ok := unhex(s.Content[s.end+2 : s.end+6])
 				if !ok {
 					s.end++
-					s.endRunes++
+					s.column++
 					return s.makeError("Invalid character escape sequence: \\%s.", s.Content[s.end:s.end+5])
 				}
 				buf.WriteRune(r)
 				s.end += 6
-				s.endRunes += 6
+				s.column++
 			} else {
 				switch escape {
 				case '"', '/', '\\':
@@ -393,11 +378,11 @@ func (s *Lexer) readString() (Token, error) {
 					buf.WriteByte('\t')
 				default:
 					s.end++
-					s.endRunes++
+					s.column++
 					return s.makeError("Invalid character escape sequence: \\%s.", string(escape))
 				}
 				s.end += 2
-				s.endRunes += 2
+				s.column++
 			}
 		}
 	}
@@ -415,9 +400,8 @@ func (s *Lexer) readBlockString() (Token, error) {
 
 	// skip the opening quote
 	s.start += 3
-	s.startRunes += 3
 	s.end += 2
-	s.endRunes += 2
+	s.column += 3
 
 	for s.end < inputLen {
 		r := s.Content[s.end]
@@ -432,7 +416,7 @@ func (s *Lexer) readBlockString() (Token, error) {
 
 			// skip the close quote
 			s.end += 3
-			s.endRunes += 3
+			s.column += 3
 			return t, err
 		}
 
@@ -444,18 +428,15 @@ func (s *Lexer) readBlockString() (Token, error) {
 		if r == '\\' && s.end+4 <= inputLen && s.Content[s.end:s.end+4] == `\"""` {
 			buf.WriteString(`"""`)
 			s.end += 4
-			s.endRunes += 4
 		} else if r == '\r' {
 			if s.end+1 < inputLen && s.Content[s.end+1] == '\n' {
 				s.end++
-				s.endRunes++
 			}
 
 			buf.WriteByte('\n')
 			s.end++
-			s.endRunes++
 			s.line++
-			s.lineStartRunes = s.endRunes
+			s.column = 0
 		} else {
 			var char = rune(r)
 			var w = 1
@@ -465,11 +446,10 @@ func (s *Lexer) readBlockString() (Token, error) {
 				char, w = utf8.DecodeRuneInString(s.Content[s.end:])
 			}
 			s.end += w
-			s.endRunes++
 			buf.WriteRune(char)
 			if r == '\n' {
 				s.line++
-				s.lineStartRunes = s.endRunes
+				s.column = 0
 			}
 		}
 	}
@@ -501,14 +481,12 @@ func unhex(b string) (v rune, ok bool) {
 func (s *Lexer) readName() (Token, error) {
 	for s.end < len(s.Content) {
 		r, w := s.peek()
-
 		if (r >= '0' && r <= '9') || (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z') || r == '_' {
 			s.end += w
-			s.endRunes++
+			s.column++
 		} else {
 			break
 		}
 	}
-
 	return s.makeToken(Name)
 }
