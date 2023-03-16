@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"bytes"
+	"strconv"
 	"unicode/utf8"
 )
 
@@ -34,7 +35,12 @@ func (s *Lexer) makeToken(kind Type) (Token, error) {
 	return s.makeValueToken(kind, s.Content[s.start:s.end])
 }
 
-func (s *Lexer) makeValueToken(kind Type, value string) (Token, error) {
+func (s *Lexer) makeValueToken(kind Type, values ...string) (Token, error) {
+	var value string
+	for _, v := range values {
+		value = v
+		break
+	}
 	return Token{
 		Kind:  kind,
 		Value: value,
@@ -68,8 +74,7 @@ func (s *Lexer) makeError(format string, args ...interface{}) (Token, error) {
 // token, then lexes punctuators immediately or calls the appropriate helper
 // function for more complicated tokens.
 func (s *Lexer) ReadToken() (token Token, err error) {
-
-	s.ws()
+	s.trim()
 	s.start = s.end
 
 	if s.end >= len(s.Content) {
@@ -78,49 +83,46 @@ func (s *Lexer) ReadToken() (token Token, err error) {
 	r := s.Content[s.start]
 	s.end++
 	s.column++
-	switch r {
-	case '!':
-		return s.makeValueToken(Bang, "")
-	case '$':
-		return s.makeValueToken(Dollar, "")
-	case '&':
-		return s.makeValueToken(Amp, "")
-	case '(':
-		return s.makeValueToken(ParenL, "")
-	case ')':
-		return s.makeValueToken(ParenR, "")
-	case '.':
+	switch {
+	case r == '!':
+		return s.makeValueToken(Bang)
+	case r == '$':
+		return s.makeValueToken(Dollar)
+	case r == '&':
+		return s.makeValueToken(Amp)
+	case r == '(':
+		return s.makeValueToken(ParenL)
+	case r == ')':
+		return s.makeValueToken(ParenR)
+	case r == '.':
 		if len(s.Content) > s.start+2 && s.Content[s.start:s.start+3] == "..." {
 			s.end += 2
 			s.column++
-			return s.makeValueToken(Spread, "")
+			return s.makeValueToken(Spread)
 		}
-	case ':':
-		return s.makeValueToken(Colon, "")
-	case '=':
-		return s.makeValueToken(Equals, "")
-	case '@':
-		return s.makeValueToken(At, "")
-	case '[':
-		return s.makeValueToken(BracketL, "")
-	case ']':
-		return s.makeValueToken(BracketR, "")
-	case '{':
-		return s.makeValueToken(BraceL, "")
-	case '}':
-		return s.makeValueToken(BraceR, "")
-	case '|':
-		return s.makeValueToken(Pipe, "")
-	case '#':
-		if comment, err := s.readComment(); err != nil {
-			return comment, err
-		}
-		return s.ReadToken()
-	case '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z':
+	case r == ':':
+		return s.makeValueToken(Colon)
+	case r == '=':
+		return s.makeValueToken(Equals)
+	case r == '@':
+		return s.makeValueToken(At)
+	case r == '[':
+		return s.makeValueToken(BracketL)
+	case r == ']':
+		return s.makeValueToken(BracketR)
+	case r == '{':
+		return s.makeValueToken(BraceL)
+	case r == '}':
+		return s.makeValueToken(BraceR)
+	case r == '|':
+		return s.makeValueToken(Pipe)
+	case r == '#':
+		return s.readComment()
+	case r == '_' || (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z'):
 		return s.readName()
-	case '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
+	case r == '-' || ('0' <= r && r <= '9'):
 		return s.readNumber()
-	case '"':
+	case r == '"':
 		if len(s.Content) > s.start+2 && s.Content[s.start:s.start+3] == `"""` {
 			return s.readBlockString()
 		}
@@ -140,9 +142,9 @@ func (s *Lexer) ReadToken() (token Token, err error) {
 	return s.makeError(`Cannot parse the unexpected character "%s".`, string(r))
 }
 
-// ws reads from body starting at startPosition until it finds a non-whitespace
+// trim reads from body starting at startPosition until it finds a non-whitespace
 // or commented character, and updates the token end to include all whitespace
-func (s *Lexer) ws() {
+func (s *Lexer) trim() {
 	for s.end < len(s.Content) {
 		switch s.Content[s.end] {
 		case '\t', ' ', ',':
@@ -155,16 +157,17 @@ func (s *Lexer) ws() {
 		case '\r':
 			s.end++
 			s.line++
-			s.column = 0
+			s.column++
 			// skip the following newline if its there
 			if s.end < len(s.Content) && s.Content[s.end] == '\n' {
 				s.end++
-				s.column++
+				s.column = 0
 			}
-			// byte order mark, given ws is hot path we aren't relying on the unicode package here.
+			// byte order mark, given trim is hot path we aren't relying on the unicode package here.
 		case 0xef:
 			if s.end+2 < len(s.Content) && s.Content[s.end+1] == 0xBB && s.Content[s.end+2] == 0xBF {
 				s.end += 3
+				s.column++
 			} else {
 				return
 			}
@@ -175,12 +178,10 @@ func (s *Lexer) ws() {
 }
 
 // readComment from the input
-//
 // #[\u0009\u0020-\uFFFF]*
 func (s *Lexer) readComment() (Token, error) {
 	for s.end < len(s.Content) {
 		r, w := s.peek()
-
 		// SourceCharacter but not LineTerminator
 		if r > 0x001f || r == '\t' {
 			s.end += w
@@ -189,7 +190,6 @@ func (s *Lexer) readComment() (Token, error) {
 			break
 		}
 	}
-
 	return s.makeToken(Comment)
 }
 
@@ -271,11 +271,11 @@ func (s *Lexer) acceptDigits() int {
 	return consumed
 }
 
-// describeNext peeks at the input and returns a human readable string. This should will alloc
+// describeNext peeks at the input and returns a human-readable string. This should will alloc
 // and should only be used in errors
 func (s *Lexer) describeNext() string {
 	if s.end < len(s.Content) {
-		return `"` + string(s.Content[s.end]) + `"`
+		return strconv.Quote(string(s.Content[s.end]))
 	}
 	return "<EOF>"
 }
@@ -284,7 +284,7 @@ func (s *Lexer) describeNext() string {
 //
 // "([^"\\\u000A\u000D]|(\\(u[0-9a-fA-F]{4}|["\\/bfnrt])))*"
 func (s *Lexer) readString() (Token, error) {
-	inputLen := len(s.Content)
+	size := len(s.Content)
 
 	// this buffer is lazily created only if there are escape characters.
 	var buf *bytes.Buffer
@@ -293,7 +293,7 @@ func (s *Lexer) readString() (Token, error) {
 	s.start++
 	s.column++
 
-	for s.end < inputLen {
+	for s.end < size {
 		r := s.Content[s.end]
 		if r == '\n' || r == '\r' {
 			break
@@ -334,7 +334,7 @@ func (s *Lexer) readString() (Token, error) {
 			return t, err
 
 		case '\\':
-			if s.end+1 >= inputLen {
+			if s.end+1 >= size {
 				s.end++
 				s.column++
 				return s.makeError(`Invalid character escape sequence.`)
@@ -347,7 +347,7 @@ func (s *Lexer) readString() (Token, error) {
 			escape := s.Content[s.end+1]
 
 			if escape == 'u' {
-				if s.end+6 >= inputLen {
+				if s.end+6 >= size {
 					s.end++
 					s.column++
 					return s.makeError("Invalid character escape sequence: \\%s.", s.Content[s.end:])
@@ -394,7 +394,7 @@ func (s *Lexer) readString() (Token, error) {
 //
 // """("?"?(\\"""|\\(?!=""")|[^"\\]))*"""
 func (s *Lexer) readBlockString() (Token, error) {
-	inputLen := len(s.Content)
+	size := len(s.Content)
 
 	var buf bytes.Buffer
 
@@ -403,11 +403,11 @@ func (s *Lexer) readBlockString() (Token, error) {
 	s.end += 2
 	s.column += 3
 
-	for s.end < inputLen {
+	for s.end < size {
 		r := s.Content[s.end]
 
 		// Closing triple quote (""")
-		if r == '"' && s.end+3 <= inputLen && s.Content[s.end:s.end+3] == `"""` {
+		if r == '"' && s.end+3 <= size && s.Content[s.end:s.end+3] == `"""` {
 			t, err := s.makeValueToken(BlockString, blockStringValue(buf.String()))
 
 			// the token should not include the quotes in its value, but should cover them in its position
@@ -425,11 +425,11 @@ func (s *Lexer) readBlockString() (Token, error) {
 			return s.makeError(`Invalid character within String: "\u%04d".`, r)
 		}
 
-		if r == '\\' && s.end+4 <= inputLen && s.Content[s.end:s.end+4] == `\"""` {
+		if r == '\\' && s.end+4 <= size && s.Content[s.end:s.end+4] == `\"""` {
 			buf.WriteString(`"""`)
 			s.end += 4
 		} else if r == '\r' {
-			if s.end+1 < inputLen && s.Content[s.end+1] == '\n' {
+			if s.end+1 < size && s.Content[s.end+1] == '\n' {
 				s.end++
 			}
 
