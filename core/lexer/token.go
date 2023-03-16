@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"encoding/json"
 	"strconv"
 )
 
@@ -32,58 +33,8 @@ const (
 	BlockString
 )
 
-func (t Type) Name() string {
-	switch t {
-	case Invalid:
-		return "Invalid"
-	case EOF:
-		return "EOF"
-	case Bang:
-		return "Bang"
-	case Dollar:
-		return "Dollar"
-	case Amp:
-		return "Amp"
-	case ParenL:
-		return "ParenL"
-	case ParenR:
-		return "ParenR"
-	case Spread:
-		return "Spread"
-	case Colon:
-		return "Colon"
-	case Equals:
-		return "Equals"
-	case At:
-		return "At"
-	case BracketL:
-		return "BracketL"
-	case BracketR:
-		return "BracketR"
-	case BraceL:
-		return "BraceL"
-	case BraceR:
-		return "BraceR"
-	case Pipe:
-		return "Pipe"
-	case Name:
-		return "Name"
-	case Int:
-		return "Int"
-	case Float:
-		return "Float"
-	case String:
-		return "String"
-	case Comment:
-		return "Comment"
-	case BlockString:
-		return "BlockString"
-	}
-	return "Unknown " + strconv.Itoa(int(t))
-}
-
-func (t Type) String() string {
-	switch t {
+func (my Type) String() string {
+	switch my {
 	case Invalid:
 		return "<Invalid>"
 	case EOF:
@@ -129,7 +80,11 @@ func (t Type) String() string {
 	case BlockString:
 		return "BlockString"
 	}
-	return "Unknown " + strconv.Itoa(int(t))
+	return "Unknown " + strconv.Itoa(int(my))
+}
+
+func (my Type) MarshalJSON() ([]byte, error) {
+	return json.Marshal(my.String())
 }
 
 type Token struct {

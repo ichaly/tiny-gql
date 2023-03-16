@@ -48,24 +48,23 @@ func (s *Lexer) makeValueToken(kind Type, values ...string) (Token, error) {
 			Start:  s.start,
 			End:    s.end,
 			Line:   s.line,
-			Column: s.column + 1,
+			Column: s.column,
 			Src:    s.Input,
 		},
 	}, nil
 }
 
 func (s *Lexer) makeError(format string, args ...interface{}) (Token, error) {
-	column := s.column + 1
 	return Token{
 		Kind: Invalid,
 		Pos: Position{
 			Start:  s.start,
 			End:    s.end,
 			Line:   s.line,
-			Column: column,
+			Column: s.column,
 			Src:    s.Input,
 		},
-	}, ErrorLocf(s.Input.Name, s.line, column, format, args...)
+	}, ErrorLocf(s.Input.Name, s.line, s.column, format, args...)
 }
 
 // ReadToken gets the next token from the source starting at the given position.
