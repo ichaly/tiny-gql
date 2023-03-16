@@ -2,6 +2,7 @@ package parser
 
 import (
 	"github.com/ichaly/tiny-go/core/lexer"
+	"github.com/ichaly/tiny-go/core/schema"
 	"strconv"
 )
 
@@ -16,7 +17,7 @@ type parser struct {
 func ParseQuery(src *lexer.Input) (*QueryDocument, error) {
 	l := lexer.New(src)
 	p := parser{lexer: l}
-	var doc QueryDocument
+	doc := QueryDocument{}
 	for p.peek().Kind != lexer.EOF {
 		if p.err != nil {
 			break
@@ -378,7 +379,7 @@ func (p *parser) parseVariableDefinition() *VariableDefinition {
 
 	p.expect(lexer.Colon)
 
-	//def.Type = p.parseTypeReference()
+	def.Type = p.parseTypeReference()
 
 	if p.skip(lexer.Equals) {
 		def.DefaultValue = p.parseValueLiteral(true)
@@ -408,4 +409,18 @@ func (p *parser) parseDirective(isConst bool) *Directive {
 		Name:      p.parseName(),
 		Arguments: p.parseArguments(isConst),
 	}
+}
+
+func (p *parser) parseTypeReference() *schema.Type {
+	var typ schema.Type
+	if p.skip(lexer.BracketL) {
+		typ.Elem = p.parseTypeReference()
+		p.expect(lexer.BracketR)
+	} else {
+		typ.Name = p.parseName()
+	}
+	if p.skip(lexer.Bang) {
+		typ.NonNull = true
+	}
+	return &typ
 }

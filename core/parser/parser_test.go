@@ -12,13 +12,14 @@ func TestParseQuery(t *testing.T) {
 
 query ($orderStr: String, $targetType: Int) {
   getFollowUsersTraces(orderStr: $orderStr, targetType: $targetType) {
-	orderStr
+	orderStr:sort
 	unReadFollowUserTraceNum
   }
 }
 `
 	query, err := ParseQuery(&lexer.Input{Content: gql})
 	if err != nil {
+		println(err.Error())
 		return
 	}
 	output, err := sonic.Marshal(&query)

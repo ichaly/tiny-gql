@@ -1,5 +1,7 @@
 package parser
 
+import "github.com/ichaly/tiny-go/core/schema"
+
 type OperationType string
 
 const (
@@ -27,6 +29,7 @@ type Selection interface {
 
 type VariableDefinition struct {
 	Variable     string
+	Type         *schema.Type
 	Directives   []*Directive
 	DefaultValue *Value
 }
