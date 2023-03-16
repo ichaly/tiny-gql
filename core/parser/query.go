@@ -1,4 +1,4 @@
-package core
+package parser
 
 type OperationType string
 
@@ -14,11 +14,11 @@ type QueryDocument struct {
 }
 
 type OperationDefinition struct {
-	OperationType       OperationType
-	Name                string
-	VariablesDefinition []*VariableDefinition
-	Directives          []*Directive
-	SelectionSet        []Selection
+	OperationType        OperationType
+	Name                 string
+	VariablesDefinitions []*VariableDefinition
+	Directives           []*Directive
+	SelectionSet         []Selection
 }
 
 type Selection interface {
@@ -26,8 +26,9 @@ type Selection interface {
 }
 
 type VariableDefinition struct {
-	Variable   string
-	Directives []*Directive
+	Variable     string
+	Directives   []*Directive
+	DefaultValue *Value
 }
 
 type Directive struct {
