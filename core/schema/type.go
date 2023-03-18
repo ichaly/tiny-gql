@@ -18,12 +18,12 @@ type Type struct {
 	NonNull bool
 }
 
-func (t *Type) Strip() string {
+func (t *Type) Key() string {
 	if t.Name != "" {
 		return t.Name
 	}
 
-	return t.Elem.Strip()
+	return t.Elem.Key()
 }
 
 func (t *Type) String() string {
