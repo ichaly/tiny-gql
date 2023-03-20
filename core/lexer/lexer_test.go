@@ -17,7 +17,7 @@ query ($orderStr: String, $targetType: Int) {
 }
 `
 	var tokens []Token
-	l := New(&Input{Content: gql})
+	l := NewLexer(&Input{Content: gql})
 	for {
 		tok, err := l.ReadToken()
 		if err != nil {

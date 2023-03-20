@@ -1,4 +1,4 @@
-package schema
+package ast
 
 func NamedType(named string) *Type {
 	return &Type{Name: named, NonNull: false}
@@ -22,7 +22,6 @@ func (t *Type) Key() string {
 	if t.Name != "" {
 		return t.Name
 	}
-
 	return t.Elem.Key()
 }
 

@@ -19,7 +19,7 @@ type Lexer struct {
 	column int
 }
 
-func New(src *Input) Lexer {
+func NewLexer(src *Input) Lexer {
 	return Lexer{
 		Input: src,
 		line:  1,
@@ -31,15 +31,19 @@ func (s *Lexer) peek() (rune, int) {
 	return utf8.DecodeRuneInString(s.Content[s.end:])
 }
 
-func (s *Lexer) makeToken(kind Type) (Token, error) {
-	return s.makeValueToken(kind, s.Content[s.start:s.end])
-}
-
-func (s *Lexer) makeValueToken(kind Type, values ...string) (Token, error) {
+func (s *Lexer) makeToken(kind Kind, values ...string) (Token, error) {
 	var value string
 	for _, v := range values {
 		value = v
 		break
+	}
+	if len(value) == 0 {
+		switch kind {
+		case EOF, Comment, Float, Int, Name, String:
+			value = s.Content[s.start:s.end]
+		default:
+			value = kind.String()
+		}
 	}
 	return Token{
 		Kind:  kind,
@@ -56,7 +60,7 @@ func (s *Lexer) makeValueToken(kind Type, values ...string) (Token, error) {
 
 func (s *Lexer) makeError(format string, args ...interface{}) (Token, error) {
 	return Token{
-		Kind: Invalid,
+		Kind: ERR,
 		Pos: Position{
 			Start:  s.start,
 			End:    s.end,
@@ -84,39 +88,43 @@ func (s *Lexer) ReadToken() (token Token, err error) {
 	s.column++
 	switch {
 	case r == '!':
-		return s.makeValueToken(Bang)
+		return s.makeToken(Bang)
 	case r == '$':
-		return s.makeValueToken(Dollar)
+		return s.makeToken(Dollar)
 	case r == '&':
-		return s.makeValueToken(Amp)
+		return s.makeToken(Amp)
 	case r == '(':
-		return s.makeValueToken(ParenL)
+		return s.makeToken(ParenL)
 	case r == ')':
-		return s.makeValueToken(ParenR)
+		return s.makeToken(ParenR)
 	case r == '.':
 		if len(s.Content) > s.start+2 && s.Content[s.start:s.start+3] == "..." {
 			s.end += 2
 			s.column++
-			return s.makeValueToken(Spread)
+			return s.makeToken(Spread)
 		}
 	case r == ':':
-		return s.makeValueToken(Colon)
+		return s.makeToken(Colon)
 	case r == '=':
-		return s.makeValueToken(Equals)
+		return s.makeToken(Equals)
 	case r == '@':
-		return s.makeValueToken(At)
+		return s.makeToken(At)
 	case r == '[':
-		return s.makeValueToken(BracketL)
+		return s.makeToken(BracketL)
 	case r == ']':
-		return s.makeValueToken(BracketR)
+		return s.makeToken(BracketR)
 	case r == '{':
-		return s.makeValueToken(BraceL)
+		return s.makeToken(BraceL)
 	case r == '}':
-		return s.makeValueToken(BraceR)
+		return s.makeToken(BraceR)
 	case r == '|':
-		return s.makeValueToken(Pipe)
+		return s.makeToken(Pipe)
 	case r == '#':
-		return s.readComment()
+		// skip no error comments
+		if comment, err := s.readComment(); err != nil {
+			return comment, err
+		}
+		return s.ReadToken()
 	case r == '_' || (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z'):
 		return s.readName()
 	case r == '-' || ('0' <= r && r <= '9'):
@@ -407,7 +415,7 @@ func (s *Lexer) readBlockString() (Token, error) {
 
 		// Closing triple quote (""")
 		if r == '"' && s.end+3 <= size && s.Content[s.end:s.end+3] == `"""` {
-			t, err := s.makeValueToken(BlockString, blockStringValue(buf.String()))
+			t, err := s.makeToken(Block, blockStringValue(buf.String()))
 
 			// the token should not include the quotes in its value, but should cover them in its position
 			t.Pos.Start -= 3

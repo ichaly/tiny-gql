@@ -6,10 +6,10 @@ import (
 )
 
 // Kind represents a type of token. The types are predefined as constants.
-type Type int
+type Kind int
 
 const (
-	Invalid Type = iota
+	ERR Kind = iota
 	EOF
 	Bang
 	Dollar
@@ -28,15 +28,15 @@ const (
 	Name
 	Int
 	Float
+	Block
 	String
 	Comment
-	BlockString
 )
 
-func (my Type) String() string {
+func (my Kind) String() string {
 	switch my {
-	case Invalid:
-		return "<Invalid>"
+	case ERR:
+		return "<Err>"
 	case EOF:
 		return "<EOF>"
 	case Bang:
@@ -73,22 +73,22 @@ func (my Type) String() string {
 		return "Int"
 	case Float:
 		return "Float"
+	case Block:
+		return "Block"
 	case String:
 		return "String"
 	case Comment:
 		return "Comment"
-	case BlockString:
-		return "BlockString"
 	}
 	return "Unknown " + strconv.Itoa(int(my))
 }
 
-func (my Type) MarshalJSON() ([]byte, error) {
+func (my Kind) MarshalJSON() ([]byte, error) {
 	return json.Marshal(my.String())
 }
 
 type Token struct {
-	Kind  Type     // The token type.
+	Kind  Kind     // The token type.
 	Value string   // The literal value consumed.
 	Pos   Position // The file and line this token was read from
 }

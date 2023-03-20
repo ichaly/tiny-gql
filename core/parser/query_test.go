@@ -11,7 +11,7 @@ func TestParseQuery(t *testing.T) {
 #	查询粉丝的访问痕迹
 
 query ($orderStr: String, $targetType: Int) {
-  getFollowUsersTraces(orderStr: $orderStr, targetType: $targetType) {
+  getFollowUsersTraces(orderStr: 3, targetType: $targetType) {
 	orderStr:sort
 	unReadFollowUserTraceNum
   }
