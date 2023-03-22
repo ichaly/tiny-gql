@@ -120,9 +120,6 @@ func (my *Lexer) ReadToken() (Token, error) {
 	case r == '-' || ('0' <= r && r <= '9'):
 		return my.readNumber()
 	case r == '"':
-		if len(my.text) > my.start+2 && my.text[my.start:my.start+3] == `"""` {
-			return my.readBlockString()
-		}
 		return my.readString()
 	}
 	return my.makeError(`Cannot parse the unexpected character "%s".`, string(r))
@@ -235,11 +232,18 @@ func (my *Lexer) describeNext() string {
 // "([^"\\\u000A\u000D]|(\\(u[0-9a-fA-F]{4}|["\\/bfnrt])))*"
 func (my *Lexer) readString() (Token, error) {
 	size := len(my.text)
+	block := false
+	if size > my.start+2 && my.text[my.start:my.start+3] == `"""` {
+		block = true
+		// skip the opening quote
+		my.start += 3
+		my.end += 2
+	} else {
+		// skip the opening quote
+		my.start++
+	}
 	// this buffer is lazily created only if there are escape characters.
 	var buf *bytes.Buffer
-
-	// skip the opening quote
-	my.start++
 
 	for my.end < size {
 		r := my.text[my.end]
@@ -247,7 +251,6 @@ func (my *Lexer) readString() (Token, error) {
 		default:
 			var char = rune(r)
 			var w = 1
-
 			// skip unicode overhead if we are in the ascii range
 			if r >= 127 {
 				char, w = my.peek()
@@ -257,19 +260,33 @@ func (my *Lexer) readString() (Token, error) {
 			if buf != nil {
 				buf.WriteRune(char)
 			}
-		case r < ' ' && r != '\t': // SourceCharacter but not LineTerminator or Space
+		case r < ' ' && r != '\t' && (!block || (r != '\n' && r != '\r')): // SourceCharacter but not LineTerminator or Space
 			return my.makeError(`Invalid character within String: "\u%04d".`, r)
 		case r == '"':
-			t, err := my.makeToken(STRING)
-			// the token should not include the quotes in its value, but should cover them in its position
-			t.Pos.Start--
-			t.Pos.End++
-			if buf != nil {
-				t.Value = buf.String()
+			if !block {
+				t, err := my.makeToken(STRING)
+				// the token should not include the quotes in its value, but should cover them in its position
+				t.Pos.Start--
+				t.Pos.End++
+				if buf != nil {
+					t.Value = buf.String()
+				}
+				// skip the close quote
+				my.end++
+				return t, err
 			}
-			// skip the close quote
-			my.end++
-			return t, err
+			if block && my.end+2 < size && my.text[my.end:my.end+3] == `"""` {
+				t, err := my.makeToken(BLOCK, buf.String())
+
+				// the token should not include the quotes in its value, but should cover them in its position
+				t.Pos.Start -= 3
+				t.Pos.End += 3
+
+				// skip the close quote
+				my.end += 3
+				return t, err
+			}
+			return my.makeError(`block string cannot contain quotes.`)
 		case r == '\\':
 			if my.end+1 >= size {
 				my.end++
@@ -335,66 +352,4 @@ func unHex(b string) (v rune, ok bool) {
 		}
 	}
 	return v, true
-}
-
-// readBlockString from the input
-// """("?"?(\\"""|\\(?!=""")|[^"\\]))*"""
-func (my *Lexer) readBlockString() (Token, error) {
-	size := len(my.text)
-
-	var buf bytes.Buffer
-
-	// skip the opening quote
-	my.start += 3
-	my.end += 2
-
-	for my.end < size {
-		r := my.text[my.end]
-
-		// Closing triple quote (""")
-		if r == '"' && my.end+3 <= size && my.text[my.end:my.end+3] == `"""` {
-			t, err := my.makeToken(BLOCK, buf.String())
-
-			// the token should not include the quotes in its value, but should cover them in its position
-			t.Pos.Start -= 3
-			t.Pos.End += 3
-
-			// skip the close quote
-			my.end += 3
-			return t, err
-		}
-
-		// SourceCharacter
-		if r < ' ' && r != '\t' && r != '\n' && r != '\r' {
-			return my.makeError(`Invalid character within String: "\u%04d".`, r)
-		}
-
-		if r == '\\' && my.end+4 <= size && my.text[my.end:my.end+4] == `\"""` {
-			buf.WriteString(`"""`)
-			my.end += 4
-		} else if r == '\r' {
-			if my.end+1 < size && my.text[my.end+1] == '\n' {
-				my.end++
-			}
-
-			buf.WriteByte('\n')
-			my.end++
-			my.line++
-		} else {
-			var char = rune(r)
-			var w = 1
-
-			// skip unicode overhead if we are in the ascii range
-			if r >= 127 {
-				char, w = my.peek()
-			}
-			my.end += w
-			buf.WriteRune(char)
-			if r == '\n' {
-				my.line++
-			}
-		}
-	}
-
-	return my.makeError("Unterminated string.")
 }
